@@ -1,4 +1,4 @@
-package frame;
+package frame.brokerage.importing;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import components.CustomButton;
+import components.CustomTable;
 import model.BrokerageReportRegister;
 import process.BrokerageReportProcess;
 import setting.Design;
@@ -26,7 +27,16 @@ public class BrokerageReportImportFrame extends JFrame {
 	
 	private JPanel PNbrokerage;
 	private JScrollPane SPbrokerage;
-	private JButton BTimport;
+	
+	private CustomTable TBstock;	
+	
+	private JButton BTimport,BTsave;
+	
+	private TitlePanel PNtitlePanel;
+	private BusinessBriefingPanel PNbusinessBriefingPanel;
+	private ClearingPanel PNclearingPanel;	
+	private BrokerageExpensesPanel PNbrokerageExpensesPanel;
+	private StockPanel PNstockPanel;
 	
 	public BrokerageReportImportFrame() {
 		this.setTitle("NOTA DE CORRETAGEM IMPORT");
@@ -57,16 +67,34 @@ public class BrokerageReportImportFrame extends JFrame {
 		SPbrokerage = new JScrollPane();
 		SPbrokerage.add(PNbrokerage);
 		
+		TBstock = new CustomTable();
+		
 		BTimport = new CustomButton("IMPORT");
+		BTsave = new CustomButton("SALVAR");
+		
+		PNtitlePanel = new TitlePanel(500,200,10);
+		PNbusinessBriefingPanel = new BusinessBriefingPanel(325,185,9);
+		PNclearingPanel = new ClearingPanel(325,100,9);		
+		PNstockPanel = new StockPanel(325,100,9);
+		PNbrokerageExpensesPanel = new BrokerageExpensesPanel(325,185,9);
 	}
 	
 	private void initPosition() {
-		BTimport.setBounds(30,30,200,25);		
-		SPbrokerage.setBounds(30,70,200,600);
-		
+		BTimport.setBounds(30,30,200,25);
+		BTsave.setBounds(1140,650,100,25);	
+				
 		PNbrokerage.setLayout(null);
 		SPbrokerage.setViewportView(PNbrokerage);
 		SPbrokerage.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		SPbrokerage.setBounds(30,70,200,600);
+		
+		TBstock.setBounds(255,150,650,465);
+		
+		PNtitlePanel.setBounds(255,30,650,110);
+		PNbusinessBriefingPanel.setLocation(915,30);
+		PNclearingPanel.setLocation(915,220);
+		PNstockPanel.setLocation(915,325);
+		PNbrokerageExpensesPanel.setLocation(915,430);		
 	}
 	
 	private void initFormat() {
@@ -84,7 +112,16 @@ public class BrokerageReportImportFrame extends JFrame {
 	
 	private void initAdd() {
 		this.add(BTimport);
+		this.add(BTsave);
+		
 		this.add(SPbrokerage);
+		this.add(TBstock);
+		
+		this.add(PNtitlePanel);
+		this.add(PNbusinessBriefingPanel);
+		this.add(PNclearingPanel);
+		this.add(PNstockPanel);
+		this.add(PNbrokerageExpensesPanel);
 	}
 	
 	private void importBrokerage() {
@@ -100,7 +137,7 @@ public class BrokerageReportImportFrame extends JFrame {
 	            for (File file : selectedFiles) {
 	            	ArrayList<BrokerageReportRegister> r = process.get(file.getAbsolutePath());
 	            	for(BrokerageReportRegister t: r) {
-	            		registers.add(new BrokerageReportBriefing(t));
+	            		registers.add(new BrokerageReportBriefing(t,this));
 	            	}
 	            }
 	        }
@@ -126,6 +163,14 @@ public class BrokerageReportImportFrame extends JFrame {
 	    } catch (Exception e) {
 	        support.Message.Error(this.getClass().getName(), "setPanels", e);
 	    }
+	}
+	
+	protected void setRegister(BrokerageReportRegister register) {
+		PNtitlePanel.setRegister(register);
+		PNbusinessBriefingPanel.setRegister(register);
+		PNclearingPanel.setRegister(register);
+		PNstockPanel.setRegister(register);
+		PNbrokerageExpensesPanel.setRegister(register);
 	}
 	
 	private void windowsClosing() {

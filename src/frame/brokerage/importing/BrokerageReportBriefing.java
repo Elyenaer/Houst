@@ -1,8 +1,11 @@
-package frame;
+package frame.brokerage.importing;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,9 +22,12 @@ public class BrokerageReportBriefing extends JPanel {
 	
 	JLabel LBcustomerName,LBinvoiceNumber,LBdate,LBstockBrokerage;
 	JButton BTdelete,BTopen;
+	
+	private final BrokerageReportImportFrame brokerageReportImportFrame;
 
-	public BrokerageReportBriefing(BrokerageReportRegister register){
+	public BrokerageReportBriefing(BrokerageReportRegister register,BrokerageReportImportFrame brokerageReportImportFrame){
 		this.register = register;
+		this.brokerageReportImportFrame = brokerageReportImportFrame;
 		initComponents();	
 		setLayout(null);
 		this.setBackground(Design.componentsBackground);	
@@ -80,7 +86,12 @@ public class BrokerageReportBriefing extends JPanel {
 	}
 	
 	private void initEvent() {
-		
+		BTopen.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				brokerageReportImportFrame.setRegister(register);
+			}
+		});
 	}
 	
 	private void initAdd() {

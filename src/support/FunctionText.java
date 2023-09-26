@@ -1,5 +1,9 @@
 package support;
 
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,4 +95,13 @@ public class FunctionText {
         }
         return texto.substring(0, maximoCaracteres - 1);
     }
+
+    public static int getStringWidth(String title,Font font){
+        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        g.setFont(font);
+        FontMetrics fontMetrics = g.getFontMetrics();
+        g.dispose();
+        return fontMetrics.stringWidth(title);        
+	}
 }

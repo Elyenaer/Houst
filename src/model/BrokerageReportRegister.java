@@ -19,15 +19,17 @@ public class BrokerageReportRegister {
 	private BigDecimal forwardOperation;
 	private BigDecimal valueOfPublicSecuritiesOperation;
 	private BigDecimal operationValue;
-	//financial briefing
+	//clearing
 	private BigDecimal netValueOperation;
 	private BigDecimal settlementFee;
 	private BigDecimal registrationFee;
 	private BigDecimal totalCBLC;
+	//stock
 	private BigDecimal termOptionsFee;
 	private BigDecimal anaFee;
 	private BigDecimal emoluments;
 	private BigDecimal totalBovespa;
+	//Brokerage Expenses
 	private BigDecimal clearing;
 	private BigDecimal execution;
 	private BigDecimal inHouseExecution;

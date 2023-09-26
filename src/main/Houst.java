@@ -1,6 +1,6 @@
 package main;
 
-import frame.BrokerageReportImportFrame;
+import frame.brokerage.importing.BrokerageReportImportFrame;
 import process.BrokerageReportProcess;
 
 public class Houst {

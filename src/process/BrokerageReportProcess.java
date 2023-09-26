@@ -256,11 +256,11 @@ public class BrokerageReportProcess {
 						
 			//execution "execução"
 			if(lines[83].substring(0,1).equalsIgnoreCase("C")) {
-				register.setClearing(new BigDecimal(lines[82].substring(20,lines[82].length()).replace(".","").replace(",",".")));
+				register.setExecution(new BigDecimal(lines[82].substring(20,lines[82].length()).replace(".","").replace(",",".")));
 			}else {
-				register.setClearing(new BigDecimal("-"+lines[82].substring(20,lines[82].length()).replace(".","").replace(",",".")));
+				register.setExecution(new BigDecimal("-"+lines[82].substring(20,lines[82].length()).replace(".","").replace(",",".")));
 			}
-						
+									
 			//in house execution "execução casa"
 			if(lines[85].substring(0,1).equalsIgnoreCase("C")) {
 				register.setInHouseExecution(new BigDecimal(lines[84].substring(5,lines[84].length()).replace(".","").replace(",",".")));
