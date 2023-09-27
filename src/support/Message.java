@@ -4,6 +4,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 public class Message {
+	
     public static void Error(final String nameClass, final String nameMethod, final String message) {
         final String nmPackage = nameClass.substring(0, nameClass.indexOf("."));
         final String nmClass = nameClass.substring(nmPackage.length() + 1, nameClass.length());
@@ -65,4 +66,4 @@ public class Message {
         final int information = Options(options, message, title);
         return information == 1;
     }
-}
+    }

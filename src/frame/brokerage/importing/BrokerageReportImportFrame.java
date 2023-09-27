@@ -14,16 +14,19 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 import components.CustomButton;
 import components.CustomTable;
 import model.BrokerageReportRegister;
+import model.TitleRegister;
 import process.BrokerageReportProcess;
 import setting.Design;
+import support.LoadingDialog;
 
 public class BrokerageReportImportFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private ArrayList<BrokerageReportBriefing> registers;
+	protected ArrayList<BrokerageReportBriefing> registers;
 	
 	private JPanel PNbrokerage;
 	private JScrollPane SPbrokerage;
@@ -67,7 +70,16 @@ public class BrokerageReportImportFrame extends JFrame {
 		SPbrokerage = new JScrollPane();
 		SPbrokerage.add(PNbrokerage);
 		
-		TBstock = new CustomTable();
+		ArrayList<String> t = new ArrayList<String>();
+		t.add("NEGOCIAÇÃO");
+		t.add("C/V");
+		t.add("TIPO MERC.");
+		t.add("ESPECIFICAÇÃO DO TÍTULO");
+		t.add("QD");
+		t.add("PREÇO");
+		t.add("VALOR OPERAÇÃO");
+		t.add("D/C");
+		TBstock = new CustomTable(t);
 		
 		BTimport = new CustomButton("IMPORT");
 		BTsave = new CustomButton("SALVAR");
@@ -98,7 +110,14 @@ public class BrokerageReportImportFrame extends JFrame {
 	}
 	
 	private void initFormat() {
-		PNbrokerage.setBackground(Design.mainBackground);
+		PNbrokerage.setBackground(Design.mainBackground);	
+		TBstock.setColumnWidth(0,80);
+		TBstock.setColumnWidth(1,30);
+		TBstock.setColumnWidth(2,80);
+		TBstock.setColumnWidth(4,30);
+		TBstock.setColumnWidth(5,80);
+		TBstock.setColumnWidth(6,90);
+		TBstock.setColumnWidth(7,30);	
 	}
 	
 	private void initEvent() {
@@ -125,23 +144,30 @@ public class BrokerageReportImportFrame extends JFrame {
 	}
 	
 	private void importBrokerage() {
-		try {			
-			JFileChooser fileChooser = new JFileChooser();
-	        fileChooser.setMultiSelectionEnabled(true);
-	        FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos PDF", "pdf");
-	        fileChooser.setFileFilter(filter);
-	        int result = fileChooser.showOpenDialog(null);
-	        if (result == JFileChooser.APPROVE_OPTION) {
-	            File[] selectedFiles = fileChooser.getSelectedFiles();	            
-	            BrokerageReportProcess process = new BrokerageReportProcess();	            
-	            for (File file : selectedFiles) {
-	            	ArrayList<BrokerageReportRegister> r = process.get(file.getAbsolutePath());
-	            	for(BrokerageReportRegister t: r) {
-	            		registers.add(new BrokerageReportBriefing(t,this));
-	            	}
-	            }
-	        }
-	        setPanels();
+		try {				
+			LoadingDialog loadingDialog = new LoadingDialog(this);
+	        Thread loadingThread = new Thread(() -> {	            
+	            JFileChooser fileChooser = new JFileChooser();
+		        fileChooser.setMultiSelectionEnabled(true);
+		        FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos PDF", "pdf");
+		        fileChooser.setFileFilter(filter);
+		        int result = fileChooser.showOpenDialog(null);
+		        if (result == JFileChooser.APPROVE_OPTION) {
+		        	loadingDialog.showLoading();
+		            File[] selectedFiles = fileChooser.getSelectedFiles();	            
+		            BrokerageReportProcess process = new BrokerageReportProcess();	            
+		            for (File file : selectedFiles) {
+		            	ArrayList<BrokerageReportRegister> r = process.get(file.getAbsolutePath());
+		            	for(BrokerageReportRegister t: r) {
+		            		registers.add(new BrokerageReportBriefing(t,this));
+		            	}
+		            }
+		        }
+		        setPanels();
+	            loadingDialog.hideLoading();
+	        });
+	        
+	        loadingThread.start();    
 		}catch(Exception e) {
 			support.Message.Error(this.getClass().getName(),"importBrokerage",e);
 		}
@@ -154,8 +180,7 @@ public class BrokerageReportImportFrame extends JFrame {
 	        int totalHeight = height * registers.size() + registers.size() * 10;	        
 	        PNbrokerage.setPreferredSize(new Dimension(width, totalHeight));		        
 	        PNbrokerage.revalidate();
-	        PNbrokerage.repaint();
-	        
+	        PNbrokerage.repaint();	        
 	        for (int i = 0; i < registers.size(); i++) {
 	            registers.get(i).setBounds(registers.size()>5 ? 0 : 10,5 + i * height + i * 10,width,height);
 	            PNbrokerage.add(registers.get(i));
@@ -171,6 +196,25 @@ public class BrokerageReportImportFrame extends JFrame {
 		PNclearingPanel.setRegister(register);
 		PNstockPanel.setRegister(register);
 		PNbrokerageExpensesPanel.setRegister(register);
+		fillTable(register.getStocks());
+	}
+	
+	private void fillTable(ArrayList<TitleRegister> titles) {
+		DefaultTableModel dtm = (DefaultTableModel) TBstock.table.getModel();
+		dtm.setRowCount(0);
+		for (TitleRegister title : titles) {
+	        Object[] rowData = {
+	            title.getNegotiation(),
+	            title.getNegotiationType(),
+	            title.getMarketType(),
+	            title.getTitleName(),
+	            title.getQuantity(),
+	            title.getPrice(),
+	            title.getPriceTotal(),
+	            title.getOperationType()
+	        };
+	        dtm.addRow(rowData);
+	    }	
 	}
 	
 	private void windowsClosing() {

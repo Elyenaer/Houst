@@ -12,9 +12,10 @@ public class StockConnect {
 		
 	public ArrayList<StockRegister> get() {
 		try {
+			new ManagerAccess();
 			Map<String, String> parameters = Map.of(
-	                "db_user", ManagerAccess.dbUser,
-	                "db_pass", ManagerAccess.dbPass
+	                "db_user", ManagerAccess.getUser(),
+	                "db_pass", ManagerAccess.getPass()
 	            );
 	   	
 			String data = DatabaseConnect.get(table,parameters);	
@@ -28,8 +29,8 @@ public class StockConnect {
 	public StockRegister get(int id) {
 		try {
 			Map<String, String> parameters = Map.of(
-	                "db_user", ManagerAccess.dbUser,
-	                "db_pass", ManagerAccess.dbPass,
+					"db_user", ManagerAccess.getUser(),
+	                "db_pass", ManagerAccess.getPass(),
 	                "stock_id", id+""
 	            );
 	   	

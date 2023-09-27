@@ -19,6 +19,8 @@ public class Design {
 	
 	public static Color componentsBackground = new Color(0,0,0);
 	public static Color componentsForeground = new Color(255,255,255);	
+	public static Color componentsBackground2 = new Color(100,100,100);
+	public static Color componentsForeground2 = new Color(255,255,255);	
 	
 	public static Font getFont(int size,boolean bold) {
 		return new Font("SansSerif",bold ? Font.BOLD : Font.PLAIN,size);
@@ -35,6 +37,8 @@ public class Design {
 	public static Icon stockBrokerageIcon(StockBrokerageRegister stockBrokerageRegister) {
 		if(stockBrokerageRegister.getId()==1) {
 			return loadImageAsIcon("genial_investimentos.png");
+		}else if(stockBrokerageRegister.getId()==2) {
+			return loadImageAsIcon("xp_investimentos.png");
 		}
 		return new ImageIcon();
 	}

@@ -89,7 +89,7 @@ public class BrokerageReportBriefing extends JPanel {
 		BTopen.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				brokerageReportImportFrame.setRegister(register);
+				setSelected();
 			}
 		});
 	}
@@ -101,6 +101,23 @@ public class BrokerageReportBriefing extends JPanel {
 		this.add(LBdate);
 		this.add(BTdelete);
 		this.add(BTopen);		
+	}
+	
+	private void setSelected() {
+		brokerageReportImportFrame.setRegister(register);
+		for(BrokerageReportBriefing r: brokerageReportImportFrame.registers) {
+			r.setSelected(false);
+		}
+		this.setSelected(true);
+	}
+	
+	public void setSelected(boolean selected) {
+		if(selected) {
+			this.setBackground(Design.componentsBackground2);	
+		}else {
+			this.setBackground(Design.componentsBackground);	
+		}
+		this.repaint();
 	}
 
 }
