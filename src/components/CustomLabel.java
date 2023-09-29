@@ -12,5 +12,11 @@ public class CustomLabel extends JLabel{
 		setFont(Design.getFont(fontSize,bold));
 		setForeground(Design.componentsForeground);
 	}
+	
+	public CustomLabel(String text) {
+		setText(text);
+		setFont(Design.getFont(10,true));
+		setForeground(Design.componentsForeground);
+	}
 
 }

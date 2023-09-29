@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import model.StockBrokerageRegister;
+import model.register.StockBrokerageRegister;
 
 public class Design {
 	
@@ -19,7 +19,7 @@ public class Design {
 	
 	public static Color componentsBackground = new Color(0,0,0);
 	public static Color componentsForeground = new Color(255,255,255);	
-	public static Color componentsBackground2 = new Color(100,100,100);
+	public static Color componentsBackground2 = new Color(85,85,85);
 	public static Color componentsForeground2 = new Color(255,255,255);	
 	
 	public static Font getFont(int size,boolean bold) {
@@ -32,6 +32,26 @@ public class Design {
 	
 	public static Icon report() {
 		return loadImageAsIcon("report.png");
+	}
+	
+	public static Icon save() {
+		return loadImageAsIcon("save.png");
+	}
+	
+	public static Icon update() {
+		return loadImageAsIcon("update.png");
+	}
+	
+	public static Icon clear() {
+		return loadImageAsIcon("clear.png");
+	}
+	
+	public static Icon add() {
+		return loadImageAsIcon("add.png");
+	}
+	
+	public static Icon open() {
+		return loadImageAsIcon("open.png");
 	}
 	
 	public static Icon stockBrokerageIcon(StockBrokerageRegister stockBrokerageRegister) {

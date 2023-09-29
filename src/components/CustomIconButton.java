@@ -13,6 +13,12 @@ public class CustomIconButton extends JButton {
         setIcon(FunctionIcon.scaleIcon(icon,(int)(width*0.5),(int)(height*0.5)));
         setBackground(Design.componentsBackground);
     }
+    
+    public CustomIconButton(Icon icon,int width,int height,String toolTip) {
+        setIcon(FunctionIcon.scaleIcon(icon,(int)(width*0.5),(int)(height*0.5)));
+        setBackground(Design.componentsBackground);
+        setToolTipText(toolTip);
+    }
 }
 
 

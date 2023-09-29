@@ -18,10 +18,11 @@ import javax.swing.table.DefaultTableModel;
 
 import components.CustomButton;
 import components.CustomTable;
-import model.BrokerageReportRegister;
-import model.TitleRegister;
+import model.register.BrokerageReportRegister;
+import model.register.TitleRegister;
 import process.BrokerageReportProcess;
 import setting.Design;
+import support.FunctionCurrency;
 import support.LoadingDialog;
 
 public class BrokerageReportImportFrame extends JFrame {
@@ -77,7 +78,7 @@ public class BrokerageReportImportFrame extends JFrame {
 		t.add("ESPECIFICAÇÃO DO TÍTULO");
 		t.add("QD");
 		t.add("PREÇO");
-		t.add("VALOR OPERAÇÃO");
+		t.add("OPERAÇÃO");
 		t.add("D/C");
 		TBstock = new CustomTable(t);
 		
@@ -114,7 +115,7 @@ public class BrokerageReportImportFrame extends JFrame {
 		TBstock.setColumnWidth(0,80);
 		TBstock.setColumnWidth(1,30);
 		TBstock.setColumnWidth(2,80);
-		TBstock.setColumnWidth(4,30);
+		TBstock.setColumnWidth(4,40);
 		TBstock.setColumnWidth(5,80);
 		TBstock.setColumnWidth(6,90);
 		TBstock.setColumnWidth(7,30);	
@@ -165,8 +166,7 @@ public class BrokerageReportImportFrame extends JFrame {
 		        }
 		        setPanels();
 	            loadingDialog.hideLoading();
-	        });
-	        
+	        });	        
 	        loadingThread.start();    
 		}catch(Exception e) {
 			support.Message.Error(this.getClass().getName(),"importBrokerage",e);
@@ -177,14 +177,20 @@ public class BrokerageReportImportFrame extends JFrame {
 		try {	
 			int width = 175;
 	        int height = 100;
-	        int totalHeight = height * registers.size() + registers.size() * 10;	        
+	        int totalHeight = height * registers.size() + registers.size() * 10;	
+	        PNbrokerage.removeAll();
 	        PNbrokerage.setPreferredSize(new Dimension(width, totalHeight));		        
 	        PNbrokerage.revalidate();
 	        PNbrokerage.repaint();	        
-	        for (int i = 0; i < registers.size(); i++) {
+	        for(int i = 0; i < registers.size(); i++) {
 	            registers.get(i).setBounds(registers.size()>5 ? 0 : 10,5 + i * height + i * 10,width,height);
 	            PNbrokerage.add(registers.get(i));
+	            registers.get(i).revalidate();
+	            registers.get(i).repaint();
 	        }
+	        if(registers.size()>0) {
+	        	registers.get(0).setSelected();
+	        }	        
 	    } catch (Exception e) {
 	        support.Message.Error(this.getClass().getName(), "setPanels", e);
 	    }
@@ -199,6 +205,11 @@ public class BrokerageReportImportFrame extends JFrame {
 		fillTable(register.getStocks());
 	}
 	
+	protected void delete(BrokerageReportBriefing register) {
+		registers.remove(register);
+		setPanels();
+	}
+	
 	private void fillTable(ArrayList<TitleRegister> titles) {
 		DefaultTableModel dtm = (DefaultTableModel) TBstock.table.getModel();
 		dtm.setRowCount(0);
@@ -209,8 +220,8 @@ public class BrokerageReportImportFrame extends JFrame {
 	            title.getMarketType(),
 	            title.getTitleName(),
 	            title.getQuantity(),
-	            title.getPrice(),
-	            title.getPriceTotal(),
+	            FunctionCurrency.bigDecimalToCurrencyBR(title.getPrice()),
+	            FunctionCurrency.bigDecimalToCurrencyBR(title.getPriceTotal()),
 	            title.getOperationType()
 	        };
 	        dtm.addRow(rowData);

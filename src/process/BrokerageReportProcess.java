@@ -2,7 +2,7 @@ package process;
 
 import java.util.ArrayList;
 
-import model.BrokerageReportRegister;
+import model.register.BrokerageReportRegister;
 import support.PdfImport;
 
 public class BrokerageReportProcess {

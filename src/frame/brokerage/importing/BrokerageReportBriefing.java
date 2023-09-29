@@ -1,8 +1,11 @@
 package frame.brokerage.importing;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,12 +15,16 @@ import javax.swing.JPanel;
 import components.CustomIconButton;
 import components.CustomIconLabel;
 import components.CustomLabel;
-import model.BrokerageReportRegister;
+import model.register.BrokerageReportRegister;
 import setting.Design;
+import support.Message;
 
 public class BrokerageReportBriefing extends JPanel {
 	private static final long serialVersionUID = 1L;
 	BrokerageReportRegister register;
+	private boolean selected = false;
+	
+	private Color background = Design.componentsBackground;
 	private int cornerRadius = 20;
 	
 	JLabel LBcustomerName,LBinvoiceNumber,LBdate,LBstockBrokerage;
@@ -39,7 +46,15 @@ public class BrokerageReportBriefing extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setColor(Design.componentsBackground);
+        g2d.setColor(background);
+        
+        int borderWidth = 1;
+        if(selected) {
+        	borderWidth = 3;
+        }        
+        Stroke borderStroke = new BasicStroke(borderWidth);
+        g2d.setStroke(borderStroke);
+        
         g2d.fillRoundRect(0,0, getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius);
         g2d.setColor(Design.componentsForeground);
         g2d.drawRoundRect(0,0,getWidth() - 1, getHeight() - 1, cornerRadius, cornerRadius);
@@ -92,6 +107,12 @@ public class BrokerageReportBriefing extends JPanel {
 				setSelected();
 			}
 		});
+		BTdelete.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				delete();;
+			}
+		});
 	}
 	
 	private void initAdd() {
@@ -103,7 +124,7 @@ public class BrokerageReportBriefing extends JPanel {
 		this.add(BTopen);		
 	}
 	
-	private void setSelected() {
+	protected void setSelected() {
 		brokerageReportImportFrame.setRegister(register);
 		for(BrokerageReportBriefing r: brokerageReportImportFrame.registers) {
 			r.setSelected(false);
@@ -113,11 +134,29 @@ public class BrokerageReportBriefing extends JPanel {
 	
 	public void setSelected(boolean selected) {
 		if(selected) {
-			this.setBackground(Design.componentsBackground2);	
+			if(this.selected) {
+				return;
+			}else {
+				background = Design.componentsBackground2;
+				paintComponent(getGraphics());				
+			}	
 		}else {
-			this.setBackground(Design.componentsBackground);	
+			if(!this.selected) {
+				return;
+			}else {
+				background = Design.componentsBackground;
+				paintComponent(getGraphics());
+			}			
 		}
 		this.repaint();
+		this.revalidate();
+		this.selected = selected;		
+	}
+	
+	public void delete() {
+		if(Message.Options("DESEJA REALMENTE EXCLUIR A Nª " + register.getInvoiceNumber() + "?")) {
+			brokerageReportImportFrame.delete(this);
+		}		
 	}
 
 }

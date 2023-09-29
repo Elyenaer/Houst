@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 
 import components.CustomLabel;
 import components.CustomPanel;
-import model.BrokerageReportRegister;
+import model.register.BrokerageReportRegister;
 import setting.Design;
 import support.FunctionCurrency;
 

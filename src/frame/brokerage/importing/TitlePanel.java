@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 import components.CustomIconLabel;
 import components.CustomLabel;
-import model.BrokerageReportRegister;
+import model.register.BrokerageReportRegister;
 import setting.Design;
 
 public class TitlePanel extends JPanel{
@@ -76,7 +76,7 @@ public class TitlePanel extends JPanel{
     	LBinvoiceNumber.setText("Nº "+register.getInvoiceNumber());
     	LBtradingDate.setText("DATA: " + register.getTradingDate());
     	
-    	LBcustomerCode.setText("CÓDIGO: " + register.getCustomer().getCode());
+    	//LBcustomerCode.setText("CÓDIGO: " + register.getCustomer().getCode());
     	LBcustomerCpf.setText("CPF: "+ register.getCustomer().getCpf());
     	LBcustomerName.setText("CLIENTE: " + register.getCustomer().getName()); 
     	

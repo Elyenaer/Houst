@@ -15,7 +15,7 @@ public class CustomIconLabel extends JLabel {
         setPreferredSize(new Dimension(width, height));
         if(icon!=null) {
             this.changeIcon(icon);
-    	}   
+    	}  
     }
     
     public void changeIcon(Icon icon) {
@@ -24,5 +24,7 @@ public class CustomIconLabel extends JLabel {
         repaint();
         revalidate();
     }
+    
+    
 
 }

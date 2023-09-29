@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import model.BrokerageReportRegister;
-import model.CustomerRegister;
-import model.StockBrokerageRegister;
-import model.TitleRegister;
+import model.register.BrokerageReportRegister;
+import model.register.CustomerRegister;
+import model.register.StockBrokerageRegister;
+import model.register.TitleRegister;
 import support.FunctionText;
 
 public class BrokerageReportGenial {
