@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 import components.CustomIconLabel;
 import components.CustomLabel;
-import model.register.BrokerageReportRegister;
+import model.register.register.BrokerageReportRegister;
 import setting.Design;
 
 public class TitlePanel extends JPanel{

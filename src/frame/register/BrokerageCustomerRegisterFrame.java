@@ -10,11 +10,12 @@ import components.CustomFrame;
 import components.CustomIconButton;
 import components.CustomLabel;
 import components.CustomTextField;
-import model.connect.BrokerageCustomerConnect;
-import model.connect.StockBrokerageConnect;
-import model.register.BrokerageCustomerRegister;
-import model.register.CustomerRegister;
-import model.register.StockBrokerageRegister;
+import model.register.connect.BrokerageCustomerConnect;
+import model.register.connect.StockBrokerageConnect;
+import model.register.register.BrokerageCustomerRegister;
+import model.register.register.CustomerRegister;
+import model.register.register.StockBrokerageRegister;
+import model.view.register.BrokerageCustomerView;
 import setting.Design;
 import support.LoadingDialog;
 import support.Message;
@@ -26,43 +27,49 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
 	private CustomerRegister customerRegister;
 	private ArrayList<StockBrokerageRegister> stockBrokerageRegisters;
 	private BrokerageCustomerRegister register;
-	private boolean isSaving = false;
+	private boolean stateNewRegister = false;
 	
 	private CustomLabel LBstockBrokerage,LBcustomer,LBcode;
 	private CustomComboBox CBstockBrokerage;
 	private CustomTextField TFcode;	
 	private CustomIconButton BTsave,BTdelete;
 	
-	public BrokerageCustomerRegisterFrame(CustomerRegisterFrame frame,CustomerRegister customerRegister,BrokerageCustomerRegister register) {
+	public BrokerageCustomerRegisterFrame(CustomerRegisterFrame frame,CustomerRegister customerRegister,BrokerageCustomerView register) {
 		this.frame = frame;
-		this.customerRegister = customerRegister;
-		this.register = register;
+		this.customerRegister = customerRegister;		
+		init(register);		
+	}
+
+	public void init(BrokerageCustomerView register) {
 		setSize(400,240);
 		setTitle("CADASTRO DE CLIENTE NA CORRETORA");
 		setLocationRelativeTo(frame);
-	}
-
-	@Override
-	public void init() {
+		LBcustomer.setText(customerRegister.getCpf() + " - " + customerRegister.getName());
 		if(register!=null) {
-			isSaving = false;
+			this.register  = new BrokerageCustomerRegister();
+			this.register.setBrokerageCustomerId(register.getBrokerageCustomerId());
+			this.register.setCode(register.getCode());
+			this.register.setCustomerId(register.getCustomerId());
+			this.register.setStockBrokerageId(register.getStockBrokerageId());
+			stateNewRegister = false;
+			setRegister(this.register);
 		}else {
-			isSaving = true;
-		}
-		setRegister(register);
+			this.register = new BrokerageCustomerRegister();
+			stateNewRegister = true;
+		}		
 	}
 
 	@Override
 	public void initInitiation() {
 		LBstockBrokerage = new CustomLabel("CORRETORA:");
-		LBcustomer = new CustomLabel("060.236.879-06 - ELYENAER FARIAS DOS SANTOS");
+		LBcustomer = new CustomLabel("");
 		LBcode = new CustomLabel("CÓDIGO:");
 		
 		CBstockBrokerage = new CustomComboBox();
 		TFcode = new CustomTextField();	
 		
 		BTdelete = new CustomIconButton(Design.delete(),32,32);
-		if(!isSaving) {
+		if(!stateNewRegister) {
 			BTsave = new CustomIconButton(Design.save(),32,32);
 		}else {
 			BTsave = new CustomIconButton(Design.add(),32,32);
@@ -111,7 +118,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
 			new ActionListener() {				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(isSaving) {
+					if(stateNewRegister) {
 						save();
 					}else {
 						update();
@@ -149,19 +156,32 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
     }
 
     private void setRegister(BrokerageCustomerRegister register) {
-        this.register = register;
-        for (int i = 0; i < stockBrokerageRegisters.size(); i++) {
-            StockBrokerageRegister brokerage = stockBrokerageRegisters.get(i);
-            if (brokerage.getId() == register.getStockBrokerageId()) {
-                CBstockBrokerage.setSelectedIndex(i);
-                break;
-            }
-        }
-        TFcode.setText(register.getCode());
+        this.register = register;        
+        TFcode.setText(register.getCode());        
+        Thread loadingThread = new Thread(() -> {        	
+        	while(stockBrokerageRegisters==null) {
+        		try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+        	}
+			for (int i = 0; i < stockBrokerageRegisters.size(); i++) {
+			    StockBrokerageRegister brokerage = stockBrokerageRegisters.get(i);
+			    if (brokerage.getId() == register.getStockBrokerageId()) {
+			        CBstockBrokerage.setSelectedIndex(i);
+			        break;
+			    }
+			}		                
+        });	        
+        loadingThread.start(); 
     }	
 	
-	private void clear() {
-		
+    @Override
+	public void closeScreen() {
+		frame.fillTable();
+		frame.setEnabled(true);		
+		this.dispose();
 	}
 	
 	private void save() {
@@ -174,7 +194,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
                         if (new BrokerageCustomerConnect().post(register) > 0) {
                             loadingDialog.hideLoading();
                             Message.Success("CLIENTE NA CORRETORA CADASTRADO COM SUCESSO!");
-                            clear();
+                            closeScreen();
                         }
                     } catch (Exception e) {
                         Message.Error(this.getClass().getName(), "save", e);
@@ -200,7 +220,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
                         if (new BrokerageCustomerConnect().delete(register)) {
                             loadingDialog.hideLoading();
                             Message.Success("CLIENTE NA CORRETORA EXCLUÍDO COM SUCESSO!");
-                            clear();
+                            closeScreen();
                         }
                     } catch (Exception e) {
                         Message.Error(this.getClass().getName(), "delete", e);
@@ -223,7 +243,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
                         if (new BrokerageCustomerConnect().put(register)) {
                             loadingDialog.hideLoading();
                             Message.Success("CLIENTE NA CORRETORA ATUALIZADO COM SUCESSO!");
-                            clear();
+                            closeScreen();
                         }
                     } catch (Exception e) {
                         Message.Error(this.getClass().getName(), "update", e);
@@ -235,5 +255,5 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
             Message.Error(this.getClass().getName(), "update", e);
         }
     }
-
+       
 }

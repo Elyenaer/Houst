@@ -39,6 +39,14 @@ public class CustomTableRegister extends JDialog{
         super.paint(g);
         getContentPane().setBackground(Design.componentsBackground);
     }
+		
+	public void setColumnWidth(int column,int width) {
+		table.setColumnWidth(column, width);
+	}
+	
+	public Object getSelected() {
+		return selected;
+	}
 	
 	public void setRows(ArrayList<Object[]> rows) {
 		DefaultTableModel dtm = (DefaultTableModel) table.table.getModel();
@@ -46,14 +54,6 @@ public class CustomTableRegister extends JDialog{
 		for (Object[] row: rows) {
 	        dtm.addRow(row);
 		}
-	}
-	
-	public void setColumnWidth(int column,int width) {
-		table.setColumnWidth(column, width);
-	}
-	
-	public Object getSelected() {
-		return selected;
 	}
 	
 }

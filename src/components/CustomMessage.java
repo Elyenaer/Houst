@@ -67,12 +67,18 @@ public class CustomMessage extends JDialog {
         
         pack();   
         
-        Dimension preferredLabelSize = iconLabel.getPreferredSize();
-        int dialogWidth = preferredLabelSize.width + 150; 
-        int dialogHeight = preferredLabelSize.height + 80;
-        setSize(dialogWidth, dialogHeight);
-        
-        
+        if (type == MessageType.error) {
+        	 Dimension preferredLabelSize = iconLabel.getPreferredSize();
+             int dialogWidth = preferredLabelSize.width + 400; 
+             int dialogHeight = preferredLabelSize.height + 250;
+             setSize(dialogWidth, dialogHeight);
+        }else {
+        	 Dimension preferredLabelSize = iconLabel.getPreferredSize();
+             int dialogWidth = preferredLabelSize.width + 150; 
+             int dialogHeight = preferredLabelSize.height + 80;
+             setSize(dialogWidth, dialogHeight);
+        }
+               
         setLocationRelativeTo(null);
         setVisible(true);
         return response;

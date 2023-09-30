@@ -1,4 +1,4 @@
-package model.register;
+package model.register.register;
 
 public class StockRegister {
 	private int stockId;

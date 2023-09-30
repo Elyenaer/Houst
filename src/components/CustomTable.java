@@ -74,6 +74,12 @@ public class CustomTable extends JScrollPane{
     	table.getColumnModel().getColumn(column).setMinWidth(width);
     }
     
-    
+	public void setRows(ArrayList<Object[]> rows) {
+		DefaultTableModel dtm = (DefaultTableModel) table.getModel();
+		dtm.setRowCount(0);
+		for (Object[] row: rows) {
+	        dtm.addRow(row);
+		}
+	}
     
 }

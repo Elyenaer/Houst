@@ -1,4 +1,4 @@
-package model.connect;
+package model.register.connect;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import model.register.CustomerRegister;
+import model.register.register.CustomerRegister;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
 import support.FunctionApi;

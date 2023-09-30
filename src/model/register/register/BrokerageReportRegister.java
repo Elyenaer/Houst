@@ -1,4 +1,4 @@
-package model.register;
+package model.register.register;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

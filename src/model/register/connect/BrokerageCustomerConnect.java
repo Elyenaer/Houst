@@ -1,4 +1,4 @@
-package model.connect;
+package model.register.connect;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import model.register.BrokerageCustomerRegister;
+import model.register.register.BrokerageCustomerRegister;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
 import support.FunctionApi;
@@ -69,6 +69,38 @@ public class BrokerageCustomerConnect {
 
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertRecord(data);
+        } catch (Exception e) {
+            support.Message.Error(this.getClass().getName(), "get", e);
+            return null;
+        }
+    }
+    
+    public ArrayList<BrokerageCustomerRegister> getByCustomerId(int id) {
+        try {
+            Map<String, String> parameters = Map.of(
+                    "db_user", ma.getUser(),
+                    "db_pass", ma.getPass(),
+                    "customer_id", String.valueOf(id)
+            );
+
+            String data = DatabaseConnect.start(table, parameters, "get");
+            return convertArray(data);
+        } catch (Exception e) {
+            support.Message.Error(this.getClass().getName(), "get", e);
+            return null;
+        }
+    }
+    
+    public ArrayList<BrokerageCustomerRegister> getByStockBrokerage(int id) {
+        try {
+            Map<String, String> parameters = Map.of(
+                    "db_user", ma.getUser(),
+                    "db_pass", ma.getPass(),
+                    "stock_brokerage_id", String.valueOf(id)
+            );
+
+            String data = DatabaseConnect.start(table, parameters, "get");
+            return convertArray(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "get", e);
             return null;

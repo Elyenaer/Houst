@@ -11,17 +11,14 @@ public abstract class CustomFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	public CustomFrame() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setLayout(null);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		 getContentPane().setBackground(Design.mainBackground);
-        init();
         initComponents();        
     }
 	
-	public abstract void init();
-
 	private void initComponents() {
 		initInitiation();
 		initPosition();
@@ -36,7 +33,7 @@ public abstract class CustomFrame extends JFrame{
 	public abstract void initFormat();	
 	public abstract void initEvent();	
 	public abstract void initAdd();
-	
+		
 	private void windowsClosing() {
 		this.addWindowListener((WindowListener) new WindowListener() {			
 			public void windowOpened(WindowEvent e) {}			
@@ -57,7 +54,7 @@ public abstract class CustomFrame extends JFrame{
 		});
 	}
 		
-	private void closeScreen() {
+	public void closeScreen() {
 		this.dispose();
 	}
 }

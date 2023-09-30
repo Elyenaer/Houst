@@ -3,13 +3,14 @@ package frame.register;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
 
 import components.CustomFrame;
 import components.CustomIconButton;
@@ -17,12 +18,10 @@ import components.CustomLabel;
 import components.CustomTable;
 import components.CustomTableRegister;
 import components.CustomTextField;
-import model.connect.BrokerageCustomerConnect;
-import model.connect.CustomerConnect;
-import model.connect.StockBrokerageConnect;
-import model.register.BrokerageCustomerRegister;
-import model.register.CustomerRegister;
-import model.register.StockBrokerageRegister;
+import model.register.connect.CustomerConnect;
+import model.register.register.CustomerRegister;
+import model.view.connect.BrokerageCustomerViewConnect;
+import model.view.register.BrokerageCustomerView;
 import setting.Design;
 import setting.support.TextMask;
 import support.LoadingDialog;
@@ -32,25 +31,25 @@ import support.Valid;
 public class CustomerRegisterFrame extends CustomFrame{
 	private static final long serialVersionUID = 1L;
 	private CustomerRegister register;
-	private ArrayList<BrokerageCustomerRegister> brokerageCustomerRegisters;
+	private ArrayList<BrokerageCustomerView> brokerageCustomerRegisters;
 	
 	private JTextField TFname,TFcpf;
 	private JLabel LBname,LBcpf,LBbrokerageCustomer;
 	private CustomIconButton BTsave,BTdelete,BTclear,BTbrokerageCustomerAdd,BTopen;
 	private CustomTable TBbrokerageCustomer;
 	
-	private boolean  isSaving = true; //true is saving and false is updating
+	private boolean stateNewRegister = true; //true is saving and false is updating
 	
 	public CustomerRegisterFrame() {
 		super();
-		setTitle("CADASTRO DE CLIENTE");
-		this.setSize(new Dimension(415,465));
-		
+		init();
 	}
 	
-	@Override
 	public void init() {
-		register = new CustomerRegister();		
+		setTitle("CADASTRO DE CLIENTE");
+		this.setSize(new Dimension(415,465));
+		register = new CustomerRegister();	
+		reOrganize();
 	}
 	
 	@Override
@@ -89,24 +88,12 @@ public class CustomerRegisterFrame extends CustomFrame{
 		BTbrokerageCustomerAdd.setBounds(345,120,24,24);
 		TBbrokerageCustomer.setBounds(30,150,338,200);
 		
-		BTsave.setBounds(340,370,32,32);
 		BTdelete.setBounds(260,370,32,32);
-		BTclear.setBounds(300,370,32,32);	
-	};
+	}
 	
 	@Override
 	public void initFormat(){
-		TBbrokerageCustomer.setColumnWidth(1,100);
-		DefaultTableModel dtm = (DefaultTableModel) TBbrokerageCustomer.table.getModel();
-		dtm.setRowCount(0);
-		for(int i= 0;i<20;i++) {
-			Object[] rowData = {
-		            "test",
-		            "test",
-		        };
-			dtm.addRow(rowData);
-		}
-		BTdelete.setVisible(false);
+		TBbrokerageCustomer.setColumnWidth(1,100);		
 	};
 	
 	@Override
@@ -115,7 +102,7 @@ public class CustomerRegisterFrame extends CustomFrame{
 			new ActionListener() {					
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(isSaving) {
+					if(stateNewRegister) {
 						save();
 					}else {
 						update();
@@ -147,7 +134,25 @@ public class CustomerRegisterFrame extends CustomFrame{
 				}
 			}
 		);
-	};
+		BTbrokerageCustomerAdd.addActionListener(
+			new ActionListener() {					
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					openBrokerageCustomer(null);
+				}
+			}
+		);
+		TBbrokerageCustomer.table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                   
+                	openBrokerageCustomer(brokerageCustomerRegisters.get(TBbrokerageCustomer.table.getSelectedRow()));
+                	
+                }
+            }
+        });
+	}
 	
 	@Override
 	public void initAdd(){
@@ -168,23 +173,16 @@ public class CustomerRegisterFrame extends CustomFrame{
 	protected void fillTable() {
 		Thread loadingThread = new Thread(() -> {	        		        	
 			try {
-				
-				/*
-				 * 
-				 * 
-				 * 
-				 * 
-				 * 
-				 * fazer o brokeragecustomer buscar por customer
-				 * 
-				 * 
-				 * 
-				 * 
-				 */
-				
-				
-				
-				brokerageCustomerRegisters = new BrokerageCustomerConnect().get();
+				brokerageCustomerRegisters = new BrokerageCustomerViewConnect().getByCustomerId(register.getId());
+				ArrayList<Object[]> rows = new ArrayList<Object[]>();
+				for(BrokerageCustomerView b: brokerageCustomerRegisters) {
+					Object[] row = {						
+						b.getStockBrokerageName(),
+						b.getCode()
+					};
+					rows.add(row);
+				}
+				TBbrokerageCustomer.setRows(rows);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}		                
@@ -210,9 +208,34 @@ public class CustomerRegisterFrame extends CustomFrame{
 		this.register = register;
 		TFcpf.setText(register.getCpf());
 		TFname.setText(register.getName());
-		isSaving = false;
-		BTsave.changeIcon(Design.save());
-		BTdelete.setVisible(true);
+		stateNewRegister = false;
+		reOrganize();
+		fillTable();
+	}
+
+	private void clear() {
+		TFcpf.setText("");
+		TFname.setText("");
+		stateNewRegister = true;
+		reOrganize();
+	}
+	
+	private void reOrganize() {
+		if(stateNewRegister) {
+			this.setSize(new Dimension(415,200));			
+			BTsave.changeIcon(Design.add());			
+			BTsave.setBounds(340,110,32,32);
+			BTclear.setBounds(300,110,32,32);			
+		}else {
+			this.setSize(new Dimension(415,465));			
+			BTsave.changeIcon(Design.save());
+			BTsave.setBounds(340,370,32,32);
+			BTclear.setBounds(300,370,32,32);			
+		}		
+		BTdelete.setVisible(!stateNewRegister);
+		TBbrokerageCustomer.setVisible(!stateNewRegister);
+		BTbrokerageCustomerAdd.setVisible(!stateNewRegister);
+		LBbrokerageCustomer.setVisible(!stateNewRegister);
 	}
 	
 	private void save() {
@@ -221,12 +244,14 @@ public class CustomerRegisterFrame extends CustomFrame{
 				LoadingDialog loadingDialog = new LoadingDialog(this,"SALVANDO");
 		        Thread loadingThread = new Thread(() -> {	            
 			        loadingDialog.showLoading();
-			        try {			        	
-						if(new CustomerConnect().post(register)>0) {
+			        try {	
+			        	int id = new CustomerConnect().post(register);
+						if(id>0) {
 							loadingDialog.hideLoading(); 
 							Message.Success("CLIENTE CADASTRADO COM SUCESSO!");
-						}			
-						clear();					    
+							register.setId(id);
+							setRegister(register);
+						}								    
 			        }catch (Exception e) {
 			        	Message.Error(this.getClass().getName(),"save", e);
 					}			                
@@ -286,15 +311,7 @@ public class CustomerRegisterFrame extends CustomFrame{
 			Message.Error(this.getClass().getName(),"delete", e);
 		}
 	}
-	
-	private void clear() {
-		TFcpf.setText("");
-		TFname.setText("");
-		isSaving = true;
-		BTsave.changeIcon(Design.add());
-		BTdelete.setVisible(false);
-	}
-	
+		
 	private void openTable() {
 		ArrayList<String> titles = new ArrayList<String>();
 		titles.add("ID");
@@ -335,4 +352,15 @@ public class CustomerRegisterFrame extends CustomFrame{
         loadingThread.start();
 	}
 	
+	private void openBrokerageCustomer(BrokerageCustomerView brokerageCustomerRegister) {
+		Thread loadingThread = new Thread(() -> {	 
+	        try {
+	        	new BrokerageCustomerRegisterFrame(this,register,brokerageCustomerRegister).setVisible(true);
+	        	this.setEnabled(false);
+	        }catch(Exception e) {
+				Message.Error(this.getClass().getName(),"openBrokerageCustomer", e);
+			}            
+        });	        
+        loadingThread.start();
+	}
 }

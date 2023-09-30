@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import model.register.StockBrokerageRegister;
+import model.register.register.StockBrokerageRegister;
 
 public class Design {
 	

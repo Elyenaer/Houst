@@ -18,8 +18,8 @@ import javax.swing.table.DefaultTableModel;
 
 import components.CustomButton;
 import components.CustomTable;
-import model.register.BrokerageReportRegister;
-import model.register.TitleRegister;
+import model.register.register.BrokerageReportRegister;
+import model.register.register.TitleRegister;
 import process.BrokerageReportProcess;
 import setting.Design;
 import support.FunctionCurrency;

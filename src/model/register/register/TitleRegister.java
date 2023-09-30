@@ -1,10 +1,10 @@
-package model.register;
+package model.register.register;
 
 import java.math.BigDecimal;
 
 public class TitleRegister {
-	private int id;
-	private int brokerageId;
+	private int titleId;
+	private int brokerageReportId;	
 	private int customerId;
 	private char q;
 	private String negotiation;
@@ -17,11 +17,11 @@ public class TitleRegister {
 	private BigDecimal priceTotal;
 	private char operationType;
 	
-	public int getBrokerageId() {
-		return brokerageId;
+	public int getBrokerageReportId() {
+		return brokerageReportId;
 	}
-	public void setBrokerageId(int brokerageId) {
-		this.brokerageId = brokerageId;
+	public void setBrokerageReportId(int brokerageReportId) {
+		this.brokerageReportId = brokerageReportId;
 	}
 	public int getCustomerId() {
 		return customerId;
@@ -29,11 +29,11 @@ public class TitleRegister {
 	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
-	public int getId() {
-		return id;
+	public int getTitleId() {
+		return titleId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setTitleId(int id) {
+		this.titleId = id;
 	}
 	public char getQ() {
 		return q;
