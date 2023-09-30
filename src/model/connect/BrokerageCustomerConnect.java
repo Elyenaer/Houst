@@ -8,45 +8,46 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import model.register.CustomerRegister;
+import model.register.BrokerageCustomerRegister;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
 import support.FunctionApi;
 
-public class CustomerConnect { 
-	private ManagerAccess ma;
-    private final static String table = "customer";
-    
-    public CustomerConnect() throws FileNotFoundException, IOException {
-    	ma = new ManagerAccess();
+public class BrokerageCustomerConnect {
+    private ManagerAccess ma;
+    private final static String table = "brokerage_customer";
+
+    public BrokerageCustomerConnect() throws FileNotFoundException, IOException {
+        ma = new ManagerAccess();
     }
-    
-    private ArrayList<CustomerRegister> convertArray(String data) {
-        ArrayList<CustomerRegister> registers = new ArrayList<CustomerRegister>();
+
+    private ArrayList<BrokerageCustomerRegister> convertArray(String data) {
+        ArrayList<BrokerageCustomerRegister> records = new ArrayList<BrokerageCustomerRegister>();
         JSONArray jsonArray = new JSONArray(data);
         for (int i = 0; i < jsonArray.length(); i++) {
-            registers.add(convert(jsonArray.getJSONObject(i)));
+            records.add(convert(jsonArray.getJSONObject(i)));
         }
-        return registers;
+        return records;
     }
-    
-    private CustomerRegister convertRegister(String data) {
+
+    private BrokerageCustomerRegister convertRecord(String data) {
         JSONArray jsonArray = new JSONArray(data);
         return convert(jsonArray.getJSONObject(0));
     }
 
-    public CustomerRegister convert(JSONObject jsonObject) {
-        CustomerRegister register = new CustomerRegister();
-        register.setId(jsonObject.getInt("customer_id"));
-        register.setCpf(jsonObject.getString("cpf"));
-        register.setName(jsonObject.getString("name"));
-        return register;
+    public BrokerageCustomerRegister convert(JSONObject jsonObject) {
+        BrokerageCustomerRegister record = new BrokerageCustomerRegister();
+        record.setBrokerageCustomerId(jsonObject.getInt("brokerage_customer_id"));
+        record.setCustomerId(jsonObject.getInt("customer_id"));
+        record.setStockBrokerageId(jsonObject.getInt("stock_brokerage_id"));
+        record.setCode(jsonObject.getString("code"));
+        return record;
     }
 
-    public ArrayList<CustomerRegister> get() {
+    public ArrayList<BrokerageCustomerRegister> get() {
         try {
             Map<String, String> parameters = Map.of(
-            		"db_user", ma.getUser(),
+                    "db_user", ma.getUser(),
                     "db_pass", ma.getPass()
             );
 
@@ -58,31 +59,32 @@ public class CustomerConnect {
         }
     }
 
-    public CustomerRegister get(int id) {
+    public BrokerageCustomerRegister get(int id) {
         try {
             Map<String, String> parameters = Map.of(
-            		"db_user", ma.getUser(),
+                    "db_user", ma.getUser(),
                     "db_pass", ma.getPass(),
-                    "customer_id", String.valueOf(id)
+                    "brokerage_customer_id", String.valueOf(id)
             );
 
             String data = DatabaseConnect.start(table, parameters, "get");
-            return convertRegister(data);
+            return convertRecord(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
-  
-    public boolean put(CustomerRegister register) {
-        try {        	
+
+    public boolean put(BrokerageCustomerRegister record) {
+        try {
             Map<String, String> parameters = Map.of(
-            		"db_user", ma.getUser(),
+                    "db_user", ma.getUser(),
                     "db_pass", ma.getPass(),
-                    
-                    "name", register.getName(),
-                    "cpf", register.getCpf(),
-                    "customer_id", String.valueOf(register.getId())
+
+                    "customer_id", String.valueOf(record.getCustomerId()),
+                    "stock_brokerage_id", String.valueOf(record.getStockBrokerageId()),
+                    "code", record.getCode(),
+                    "brokerage_customer_id", String.valueOf(record.getBrokerageCustomerId())
             );
 
             String data = DatabaseConnect.start(table, parameters, "put");
@@ -92,15 +94,16 @@ public class CustomerConnect {
             return false;
         }
     }
-    
-    public int post(CustomerRegister register) {
+
+    public int post(BrokerageCustomerRegister record) {
         try {
             Map<String, String> parameters = Map.of(
                     "db_user", ma.getUser(),
                     "db_pass", ma.getPass(),
-                    
-                    "name", register.getName(),
-                    "cpf", register.getCpf()    
+
+                    "customer_id", String.valueOf(record.getCustomerId()),
+                    "stock_brokerage_id", String.valueOf(record.getStockBrokerageId()),
+                    "code", record.getCode()
             );
             String data = DatabaseConnect.start(table, parameters, "post");
             return FunctionApi.getId(data);
@@ -110,19 +113,18 @@ public class CustomerConnect {
         }
     }
 
-    public boolean delete(CustomerRegister register) {
+    public boolean delete(BrokerageCustomerRegister record) {
         try {
             Map<String, String> parameters = Map.of(
-            		"db_user", ma.getUser(),
+                    "db_user", ma.getUser(),
                     "db_pass", ma.getPass(),
-                    "customer_id", String.valueOf(register.getId())
+                    "brokerage_customer_id", String.valueOf(record.getBrokerageCustomerId())
             );
-            String data = DatabaseConnect.start(table,parameters,"delete");
+            String data = DatabaseConnect.start(table, parameters, "delete");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "delete", e);
             return false;
         }
     }
-
 }

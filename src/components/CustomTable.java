@@ -73,4 +73,7 @@ public class CustomTable extends JScrollPane{
     	table.getColumnModel().getColumn(column).setMaxWidth(width);
     	table.getColumnModel().getColumn(column).setMinWidth(width);
     }
+    
+    
+    
 }

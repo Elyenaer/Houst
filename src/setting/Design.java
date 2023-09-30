@@ -14,7 +14,7 @@ import model.register.StockBrokerageRegister;
 
 public class Design {
 	
-	public static Color mainBackground = new Color(10,10,10);
+	public static Color mainBackground = new Color(20,20,20);
 	public static Color mainForeground = new Color(255,255,255);	
 	
 	public static Color componentsBackground = new Color(0,0,0);
@@ -37,11 +37,7 @@ public class Design {
 	public static Icon save() {
 		return loadImageAsIcon("save.png");
 	}
-	
-	public static Icon update() {
-		return loadImageAsIcon("update.png");
-	}
-	
+		
 	public static Icon clear() {
 		return loadImageAsIcon("clear.png");
 	}

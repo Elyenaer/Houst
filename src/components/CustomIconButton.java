@@ -8,16 +8,28 @@ import support.FunctionIcon;
 
 public class CustomIconButton extends JButton {
     private static final long serialVersionUID = 1L;
+    private int width,height;
 
     public CustomIconButton(Icon icon,int width,int height) {
-        setIcon(FunctionIcon.scaleIcon(icon,(int)(width*0.5),(int)(height*0.5)));
-        setBackground(Design.componentsBackground);
+    	init(icon,width,height,null);
     }
     
     public CustomIconButton(Icon icon,int width,int height,String toolTip) {
-        setIcon(FunctionIcon.scaleIcon(icon,(int)(width*0.5),(int)(height*0.5)));
+    	init(icon,width,height,toolTip);
+    }
+    
+    private void init(Icon icon,int width,int height,String toolTip){
+    	this.width = width;
+    	this.height = height;
+    	setIcon(FunctionIcon.scaleIcon(icon,(int)(width*0.5),(int)(height*0.5)));
         setBackground(Design.componentsBackground);
-        setToolTipText(toolTip);
+        if(toolTip!=null) {
+        	setToolTipText(toolTip);
+        }        
+    }
+    
+    public void changeIcon(Icon icon) {
+    	setIcon(FunctionIcon.scaleIcon(icon,(int)(width*0.5),(int)(height*0.5)));
     }
 }
 

@@ -8,9 +8,19 @@ import setting.Design;
 public class LoadingDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JLabel loadingLabel;
+	private String message = "CARREGANDO";
 
     public LoadingDialog(JFrame parentFrame) {
-        loadingLabel = new JLabel("CARREGANDO...");
+        init(parentFrame,message);       
+    }
+    
+    public LoadingDialog(JFrame parentFrame,String message) {
+    	init(parentFrame,message);
+	}
+    
+    private void init(JFrame parentFrame,String message) {
+    	this.message = message;
+    	loadingLabel = new JLabel(message+"...");
         loadingLabel.setHorizontalAlignment(JLabel.CENTER);  
         
         getContentPane().setBackground(Design.componentsBackground2);
@@ -20,7 +30,7 @@ public class LoadingDialog extends JDialog {
         add(loadingLabel);        
         setSize(300, 100);
         setLocationRelativeTo(parentFrame);
-        setResizable(false);        
+        setResizable(false);
     }
     
     private void process() {
@@ -28,16 +38,16 @@ public class LoadingDialog extends JDialog {
     		int cont = 0;
     		while(this.isVisible()) {
     			if(cont==0) {
-    				loadingLabel.setText("CARREGANDO");
+    				loadingLabel.setText(message);
     				cont++;
     			}else if(cont==1) {
-    				loadingLabel.setText("CARREGANDO.");
+    				loadingLabel.setText(message+".");
     				cont++;
     			}else if(cont==2) {
-    				loadingLabel.setText("CARREGANDO..");
+    				loadingLabel.setText(message+"..");
     				cont++;
     			}else if(cont==3) {
-    				loadingLabel.setText("CARREGANDO...");
+    				loadingLabel.setText(message+"...");
     				cont++;
     			}else {
     				cont=0;
