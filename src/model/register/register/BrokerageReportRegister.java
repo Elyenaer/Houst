@@ -1,13 +1,11 @@
 package model.register.register;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 public class BrokerageReportRegister {
 	//brokerage data
-	private StockBrokerageRegister stockBrokerage;
-	private CustomerRegister customer;
-	private ArrayList<TitleRegister> stocks;
+	private int stockBrokerageId;
+	private int brokerageCustomerId;
 	private String invoiceNumber;
 	private String tradingDate;
 	//business briefing
@@ -41,23 +39,17 @@ public class BrokerageReportRegister {
 	private String netAmountForDate;
 	private BigDecimal netAmountFor;
 		
-	public StockBrokerageRegister getStockBrokerage() {
-		return stockBrokerage;
+	public int getStockBrokerageId() {
+		return stockBrokerageId;
 	}
-	public void setStockBrokerage(StockBrokerageRegister stockBrokerage) {
-		this.stockBrokerage = stockBrokerage;
+	public void setStockBrokerageId(int stockBrokerageId) {
+		this.stockBrokerageId = stockBrokerageId;
 	}
-	public CustomerRegister getCustomer() {
-		return customer;
+	public int getBrokerageCustomerId() {
+		return brokerageCustomerId;
 	}
-	public void setCustomer(CustomerRegister customer) {
-		this.customer = customer;
-	}
-	public ArrayList<TitleRegister> getStocks() {
-		return stocks;
-	}
-	public void setStocks(ArrayList<TitleRegister> stocks) {
-		this.stocks = stocks;
+	public void setBrokerageCustomerId(int customerId) {
+		this.brokerageCustomerId = customerId;
 	}
 	public String getInvoiceNumber() {
 		return invoiceNumber;

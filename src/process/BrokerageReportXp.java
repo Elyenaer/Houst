@@ -5,33 +5,37 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import model.register.register.BrokerageCustomerRegister;
 import model.register.register.BrokerageReportRegister;
 import model.register.register.CustomerRegister;
 import model.register.register.StockBrokerageRegister;
 import model.register.register.TitleRegister;
+import model.view.register.BrokerageReportView;
 import support.FunctionText;
 
 public class BrokerageReportXp {
 
-	public ArrayList<BrokerageReportRegister> get(ArrayList<String> text) {			
-		ArrayList<BrokerageReportRegister> registers = new ArrayList<BrokerageReportRegister>();	
+	public ArrayList<BrokerageReportView> get(ArrayList<String> text) {			
+		ArrayList<BrokerageReportView> registers = new ArrayList<BrokerageReportView>();	
 		for(String t: text) {
 			registers.add(getBrokerageReport(t));
 		}		
 		return registers;
 	}
 	
-	private BrokerageReportRegister getBrokerageReport(String text) {		
-		BrokerageReportRegister register = getBusinessBriefing(text);
-			
-		register.setCustomer(getCustomer(text));
-		register.setStocks(getTitles(text));
+	private BrokerageReportView getBrokerageReport(String text) {		
+		BrokerageReportView register = new BrokerageReportView();
+		
+		register.setBrokerageReportRegister(getBusinessBriefing(text));
+		register.setCustomerRegister(getCustomer(text));
+		register.setBrokerageCustomerRegister(getBrokerageCustomer(text));
+		register.setTitles(getTitles(text));
 				
 		//we need change for database
 		StockBrokerageRegister brokerageRegister = new StockBrokerageRegister();
 		brokerageRegister.setId(2);
 		brokerageRegister.setName("XP INVESTIMENTOS");		
-		register.setStockBrokerage(brokerageRegister);
+		register.setStockBrokerageRegister(brokerageRegister);
 		
 		return register;
 	}
@@ -42,10 +46,6 @@ public class BrokerageReportXp {
 			
 	        register.setName(text.split("\n")[10]);
 				        
-	        String regexCode = "(\\d{6}-\\d{1})";
-	        String code = FunctionText.extractInfo(text, regexCode);
-	        register.setCode(code);
-
 	        String regexCPF = "(\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2})";
 	        String cpf = FunctionText.extractInfo(text, regexCPF);
 	        register.setCpf(cpf.replace(".","").replace("-",""));
@@ -53,8 +53,29 @@ public class BrokerageReportXp {
 	        /*
 	        System.out.println("-----------Customer-------------");
 	        System.out.println("Nome do Cliente: " + register.getName());
-	        System.out.println("Código: ->" + register.getCode() + "<-");
 	        System.out.println("CPF: ->" + register.getCpf() + "<-");*/
+	        
+			return register;
+		}catch(Exception e) {
+			support.Message.Error(this.getClass().getName(),"getCustomer",e);
+			return null;
+		}
+	}
+ 	
+ 	private BrokerageCustomerRegister getBrokerageCustomer(String text) {
+		try {
+			BrokerageCustomerRegister register = new BrokerageCustomerRegister();
+			
+	        String regexCode = "(\\d{6}-\\d{1})";
+	        String code = FunctionText.extractInfo(text, regexCode);
+	        register.setCode(code);
+	        
+	        register.setStockBrokerageId(1); //XP INVESTIMENTOS
+
+	        
+	        /*
+	        System.out.println("-----------Brokerage Customer-------------");
+	        System.out.println("Código: ->" + register.getCode() + "<-");*/
 	        
 			return register;
 		}catch(Exception e) {

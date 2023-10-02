@@ -3,6 +3,7 @@ package model.register.connect;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -59,7 +60,7 @@ public class BrokerageCustomerConnect {
         }
     }
 
-    public BrokerageCustomerRegister get(int id) {
+    public BrokerageCustomerRegister getById(int id) {
         try {
             Map<String, String> parameters = Map.of(
                     "db_user", ma.getUser(),
@@ -70,7 +71,7 @@ public class BrokerageCustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertRecord(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            support.Message.Error(this.getClass().getName(), "getById", e);
             return null;
         }
     }
@@ -86,7 +87,7 @@ public class BrokerageCustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            support.Message.Error(this.getClass().getName(), "getByCustomerId", e);
             return null;
         }
     }
@@ -102,10 +103,53 @@ public class BrokerageCustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            support.Message.Error(this.getClass().getName(), "getByStockBrokerage", e);
             return null;
         }
     }
+    
+    public boolean checkRegister(BrokerageCustomerRegister register) {
+    	try {        	
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("db_user", ma.getUser());
+            parameters.put("db_pass", ma.getPass());            
+            parameters.put("stock_brokerage_id", String.valueOf(register.getStockBrokerageId()));            
+            parameters.put("code", register.getCode());
+            
+            String data = DatabaseConnect.start(table, parameters, "get");
+            if(convertArray(data).size()>0) {
+            	return true;
+            }
+            return false;
+        } catch (Exception e) {
+            return checkRegister(register,0);
+        }
+    }
+    
+    public boolean checkRegister(BrokerageCustomerRegister register,int cont) {
+    	String data = "";
+    	try {        	
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("db_user", ma.getUser());
+            parameters.put("db_pass", ma.getPass());
+            parameters.put("stock_brokerage_id", String.valueOf(register.getStockBrokerageId()));
+            parameters.put("code", register.getCode());
+            data = DatabaseConnect.start(table, parameters, "get");
+            if(convertArray(data).size()>0) {
+            	return true;
+            }
+            return false;
+        } catch (Exception e) {
+        	System.out.println("Connect Error -> " + data);
+            if(cont<10) {
+            	return checkRegister(register,cont++);
+            }else {
+            	support.Message.Error(this.getClass().getName(), "checkRegister", e);
+            	return false;
+            }            
+        }
+    }
+
 
     public boolean put(BrokerageCustomerRegister record) {
         try {

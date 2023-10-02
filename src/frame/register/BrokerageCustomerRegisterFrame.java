@@ -16,7 +16,7 @@ import model.register.register.BrokerageCustomerRegister;
 import model.register.register.CustomerRegister;
 import model.register.register.StockBrokerageRegister;
 import model.view.register.BrokerageCustomerView;
-import setting.Design;
+import setting.desing.DesignIcon;
 import support.LoadingDialog;
 import support.Message;
 
@@ -29,14 +29,19 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
 	private BrokerageCustomerRegister register;
 	private boolean stateNewRegister = false;
 	
+	private String code; //come to before frame
+	private int stockBrokerageId = 0; //come to before frame
+	
 	private CustomLabel LBstockBrokerage,LBcustomer,LBcode;
 	private CustomComboBox CBstockBrokerage;
 	private CustomTextField TFcode;	
 	private CustomIconButton BTsave,BTdelete;
 	
-	public BrokerageCustomerRegisterFrame(CustomerRegisterFrame frame,CustomerRegister customerRegister,BrokerageCustomerView register) {
+	public BrokerageCustomerRegisterFrame(CustomerRegisterFrame frame,CustomerRegister customerRegister,BrokerageCustomerView register,String code,int stockBrokerageId) {
 		this.frame = frame;
-		this.customerRegister = customerRegister;		
+		this.customerRegister = customerRegister;	
+		this.code = code;
+		this.stockBrokerageId = stockBrokerageId;
 		init(register);		
 	}
 
@@ -55,7 +60,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
 			setRegister(this.register);
 		}else {
 			this.register = new BrokerageCustomerRegister();
-			stateNewRegister = true;
+			stateNewRegister = true;					
 		}		
 	}
 
@@ -68,11 +73,11 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
 		CBstockBrokerage = new CustomComboBox();
 		TFcode = new CustomTextField();	
 		
-		BTdelete = new CustomIconButton(Design.delete(),32,32);
+		BTdelete = new CustomIconButton(DesignIcon.delete(),32,32);
 		if(!stateNewRegister) {
-			BTsave = new CustomIconButton(Design.save(),32,32);
+			BTsave = new CustomIconButton(DesignIcon.save(),32,32);
 		}else {
-			BTsave = new CustomIconButton(Design.add(),32,32);
+			BTsave = new CustomIconButton(DesignIcon.add(),32,32);
 		}		
 	}
 
@@ -97,6 +102,16 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
 				for(StockBrokerageRegister s: stockBrokerageRegisters) {
 					CBstockBrokerage.addItem(s.getName());
 				}
+				if(code!=null && stockBrokerageId>0) {
+					for (int i = 0; i < stockBrokerageRegisters.size(); i++) {
+					    StockBrokerageRegister brokerage = stockBrokerageRegisters.get(i);
+					    if (brokerage.getId() == stockBrokerageId) {
+					        CBstockBrokerage.setSelectedIndex(i);
+					        break;
+					    }
+					}	
+					TFcode.setText(code);
+				}	
 			} catch (IOException e) {
 				e.printStackTrace();
 			}		                

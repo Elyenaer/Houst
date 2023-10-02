@@ -7,7 +7,7 @@ import java.awt.RenderingHints;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import setting.Design;
+import setting.desing.Design;
 import support.FunctionText;
 
 public class CustomPanel extends JPanel{

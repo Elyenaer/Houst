@@ -10,24 +10,28 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import components.CustomButton;
+import components.CustomFrame;
 import components.CustomTable;
-import model.register.register.BrokerageReportRegister;
 import model.register.register.TitleRegister;
+import model.view.register.BrokerageReportView;
 import process.BrokerageReportProcess;
-import setting.Design;
+import setting.desing.Design;
 import support.FunctionCurrency;
 import support.LoadingDialog;
+import support.Message;
 
-public class BrokerageReportImportFrame extends JFrame {
+public class BrokerageReportImportFrame extends CustomFrame {
 	private static final long serialVersionUID = 1L;
 	protected ArrayList<BrokerageReportBriefing> registers;
+	
+	private ArrayList<helpCheck> checkInvoice; //help remove duplicate invoice
+	private ArrayList<String> removeInvoice; //show invoices removed
 	
 	private JPanel PNbrokerage;
 	private JScrollPane SPbrokerage;
@@ -50,23 +54,16 @@ public class BrokerageReportImportFrame extends JFrame {
 		this.setResizable(false);
 		 getContentPane().setBackground(Design.mainBackground);
 		init();
-        initComponents();
         windowsClosing();   
 	}
 	
-	private void init() {
+	public void init() {
 		registers = new ArrayList<BrokerageReportBriefing>();
-	}
+		checkInvoice = new ArrayList<helpCheck>();		
+	}	
 	
-	private void initComponents() {
-		initInitiation();
-		initPosition();
-		initFormat();
-		initEvent();	
-		initAdd();    	
-	}
-	
-	private void initInitiation() {
+	@Override
+	public void initInitiation() {
 		PNbrokerage = new JPanel();
 		SPbrokerage = new JScrollPane();
 		SPbrokerage.add(PNbrokerage);
@@ -92,7 +89,8 @@ public class BrokerageReportImportFrame extends JFrame {
 		PNbrokerageExpensesPanel = new BrokerageExpensesPanel(325,185,9);
 	}
 	
-	private void initPosition() {
+	@Override
+	public void initPosition() {
 		BTimport.setBounds(30,30,200,25);
 		BTsave.setBounds(1140,650,100,25);	
 				
@@ -110,7 +108,8 @@ public class BrokerageReportImportFrame extends JFrame {
 		PNbrokerageExpensesPanel.setLocation(915,430);		
 	}
 	
-	private void initFormat() {
+	@Override
+	public void initFormat() {
 		PNbrokerage.setBackground(Design.mainBackground);	
 		TBstock.setColumnWidth(0,80);
 		TBstock.setColumnWidth(1,30);
@@ -121,7 +120,8 @@ public class BrokerageReportImportFrame extends JFrame {
 		TBstock.setColumnWidth(7,30);	
 	}
 	
-	private void initEvent() {
+	@Override
+	public void initEvent() {
 		BTimport.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -130,7 +130,8 @@ public class BrokerageReportImportFrame extends JFrame {
 		});
 	}
 	
-	private void initAdd() {
+	@Override
+	public void initAdd() {
 		this.add(BTimport);
 		this.add(BTsave);
 		
@@ -145,7 +146,8 @@ public class BrokerageReportImportFrame extends JFrame {
 	}
 	
 	private void importBrokerage() {
-		try {				
+		try {		
+			removeInvoice = new ArrayList<String>();
 			LoadingDialog loadingDialog = new LoadingDialog(this);
 	        Thread loadingThread = new Thread(() -> {	            
 	            JFileChooser fileChooser = new JFileChooser();
@@ -158,14 +160,38 @@ public class BrokerageReportImportFrame extends JFrame {
 		            File[] selectedFiles = fileChooser.getSelectedFiles();	            
 		            BrokerageReportProcess process = new BrokerageReportProcess();	            
 		            for (File file : selectedFiles) {
-		            	ArrayList<BrokerageReportRegister> r = process.get(file.getAbsolutePath());
-		            	for(BrokerageReportRegister t: r) {
-		            		registers.add(new BrokerageReportBriefing(t,this));
+		            	ArrayList<BrokerageReportView> r = process.get(file.getAbsolutePath());
+		            	for(BrokerageReportView t: r) {	
+		            		String remove = "";
+		            		for(helpCheck h: checkInvoice) {
+		            			if(h.invoiceNumber.equalsIgnoreCase(t.getBrokerageReportRegister().getInvoiceNumber()) && h.stockBrokerage == t.getStockBrokerageRegister().getId()) {
+		            		 		remove = h.invoiceNumber;
+		            				break;
+		            			}
+		            		}
+		            		if(remove=="") {
+		            			registers.add(new BrokerageReportBriefing(t,this));
+		            			
+		            			helpCheck helpCheck = new helpCheck();
+		            			helpCheck.invoiceNumber = t.getBrokerageReportRegister().getInvoiceNumber();
+		            			helpCheck.stockBrokerage = t.getStockBrokerageRegister().getId();
+		            			
+		            			checkInvoice.add(helpCheck);
+		            		}else {
+		            			removeInvoice.add(remove);
+		            		}		            		
 		            	}
 		            }
 		        }
 		        setPanels();
 	            loadingDialog.hideLoading();
+	            if(removeInvoice.size()>0) {
+	            	String msg = "NOTAS DUPLICADAS:";
+	            	for(String s: removeInvoice) {
+	            		msg = msg + " " + s;
+	            	}
+	            	Message.Information(msg);
+	            }
 	        });	        
 	        loadingThread.start();    
 		}catch(Exception e) {
@@ -196,13 +222,19 @@ public class BrokerageReportImportFrame extends JFrame {
 	    }
 	}
 	
-	protected void setRegister(BrokerageReportRegister register) {
+	public void checkPanels() {
+		for(BrokerageReportBriefing b: registers) {
+			b.checking();
+		}
+	}
+	
+	protected void setRegister(BrokerageReportView register) {
 		PNtitlePanel.setRegister(register);
-		PNbusinessBriefingPanel.setRegister(register);
-		PNclearingPanel.setRegister(register);
-		PNstockPanel.setRegister(register);
-		PNbrokerageExpensesPanel.setRegister(register);
-		fillTable(register.getStocks());
+		PNbusinessBriefingPanel.setRegister(register.getBrokerageReportRegister());
+		PNclearingPanel.setRegister(register.getBrokerageReportRegister());
+		PNstockPanel.setRegister(register.getBrokerageReportRegister());
+		PNbrokerageExpensesPanel.setRegister(register.getBrokerageReportRegister());
+		fillTable(register.getTitles());
 	}
 	
 	protected void delete(BrokerageReportBriefing register) {
@@ -248,7 +280,13 @@ public class BrokerageReportImportFrame extends JFrame {
 		});
 	}
 	
-	private void closeScreen() {
-		this.dispose();
+	@Override
+	public void closeScreen() {
+		System.exit(0);
 	}
+}
+
+class helpCheck{
+	public int stockBrokerage;
+	public String invoiceNumber;
 }

@@ -3,7 +3,8 @@ package support;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import setting.Design;
+
+import setting.desing.Design;
 
 public class LoadingDialog extends JDialog {
 	private static final long serialVersionUID = 1L;

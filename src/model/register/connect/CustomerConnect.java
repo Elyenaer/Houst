@@ -36,11 +36,15 @@ public class CustomerConnect {
     }
 
     public CustomerRegister convert(JSONObject jsonObject) {
-        CustomerRegister register = new CustomerRegister();
-        register.setId(jsonObject.getInt("customer_id"));
-        register.setCpf(jsonObject.getString("cpf"));
-        register.setName(jsonObject.getString("name"));
-        return register;
+    	try {
+    		CustomerRegister register = new CustomerRegister();
+            register.setId(jsonObject.getInt("customer_id"));
+            register.setCpf(jsonObject.getString("cpf"));
+            register.setName(jsonObject.getString("name"));
+            return register;
+    	}catch (Exception e) {
+    		return null;
+    	}        
     }
 
     public ArrayList<CustomerRegister> get() {
@@ -67,6 +71,25 @@ public class CustomerConnect {
             );
 
             String data = DatabaseConnect.start(table, parameters, "get");
+            return convertRegister(data);
+        } catch (Exception e) {
+            support.Message.Error(this.getClass().getName(), "get", e);
+            return null;
+        }
+    }
+    
+    public CustomerRegister getByCpf(String cpf) {
+        try {
+            Map<String, String> parameters = Map.of(
+            		"db_user", ma.getUser(),
+                    "db_pass", ma.getPass(),
+                    "cpf", String.valueOf(cpf)
+            );
+
+            String data = DatabaseConnect.start(table, parameters, "get");            
+            if(data.equalsIgnoreCase("[]")) {
+            	return null;
+            }
             return convertRegister(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "get", e);

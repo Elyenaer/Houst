@@ -3,7 +3,7 @@ package components;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
-import setting.Design;
+import setting.desing.Design;
 import support.FunctionIcon;
 
 public class CustomIconButton extends JButton {

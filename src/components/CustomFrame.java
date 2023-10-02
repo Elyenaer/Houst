@@ -5,12 +5,14 @@ import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 
-import setting.Design;
+import setting.desing.Design;
+import setting.desing.DesignIcon;
 
 public abstract class CustomFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	public CustomFrame() {
+		this.setIconImage(DesignIcon.icon16x16());
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setLayout(null);
 		this.setLocationRelativeTo(null);

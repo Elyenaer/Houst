@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import components.CustomLabel;
 import components.CustomPanel;
 import model.register.register.BrokerageReportRegister;
-import setting.Design;
+import setting.desing.Design;
 import support.FunctionCurrency;
 
 public class BusinessBriefingPanel extends CustomPanel{

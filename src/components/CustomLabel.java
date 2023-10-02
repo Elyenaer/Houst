@@ -2,7 +2,7 @@ package components;
 
 import javax.swing.JLabel;
 
-import setting.Design;
+import setting.desing.Design;
 
 public class CustomLabel extends JLabel{
 	private static final long serialVersionUID = 1L;

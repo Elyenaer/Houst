@@ -1,7 +1,6 @@
 package main;
 
-import frame.register.CustomerRegisterFrame;
-
+import frame.brokerage.importing.BrokerageReportImportFrame;
 public class Houst {
 	
 	public static void main(String[] args) {
@@ -12,7 +11,7 @@ public class Houst {
                     break;
                 }
             }
-            new CustomerRegisterFrame().setVisible(true);
+            new BrokerageReportImportFrame().setVisible(true);
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(Houst.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {

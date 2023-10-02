@@ -8,37 +8,48 @@ import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import components.CustomButton;
 import components.CustomIconButton;
 import components.CustomIconLabel;
 import components.CustomLabel;
-import model.register.register.BrokerageReportRegister;
-import setting.Design;
+import frame.register.CustomerRegisterFrame;
+import model.register.connect.BrokerageCustomerConnect;
+import model.register.connect.CustomerConnect;
+import model.register.register.CustomerRegister;
+import model.view.register.BrokerageReportView;
+import setting.desing.Design;
+import setting.desing.DesignIcon;
+import support.LoadingDialog;
 import support.Message;
 
 public class BrokerageReportBriefing extends JPanel {
 	private static final long serialVersionUID = 1L;
-	BrokerageReportRegister register;
+	BrokerageReportView register;
 	private boolean selected = false;
+	private boolean isChecking = true;
 	
 	private Color background = Design.componentsBackground;
 	private int cornerRadius = 20;
 	
-	JLabel LBcustomerName,LBinvoiceNumber,LBdate,LBstockBrokerage;
-	JButton BTdelete,BTopen;
+	JLabel LBcustomerName,LBinvoiceNumber,LBdate,LBstockBrokerage,LBcheck;
+	JButton BTdelete,BTopen,BTcustomerRegister;
 	
 	private final BrokerageReportImportFrame brokerageReportImportFrame;
 
-	public BrokerageReportBriefing(BrokerageReportRegister register,BrokerageReportImportFrame brokerageReportImportFrame){
+	public BrokerageReportBriefing(BrokerageReportView register,BrokerageReportImportFrame brokerageReportImportFrame){
 		this.register = register;
 		this.brokerageReportImportFrame = brokerageReportImportFrame;
 		initComponents();	
 		setLayout(null);
 		this.setBackground(Design.componentsBackground);	
         setOpaque(false);
+        checking();
 	}
 	
 	@Override
@@ -78,26 +89,34 @@ public class BrokerageReportBriefing extends JPanel {
 	}
 	
 	private void initInitiation() {
-		LBcustomerName = new CustomLabel(register.getCustomer().getName(),8,true);
-		LBinvoiceNumber = new CustomLabel(register.getInvoiceNumber(),10,true);
-		LBdate = new CustomLabel(register.getTradingDate(),10,true);
-		LBstockBrokerage = new CustomIconLabel(Design.stockBrokerageIcon(register.getStockBrokerage()),80,30);
+		LBcustomerName = new CustomLabel(register.getCustomerRegister().getName(),8,true);
+		LBinvoiceNumber = new CustomLabel(register.getBrokerageReportRegister().getInvoiceNumber()+" ",9,true);
+		LBdate = new CustomLabel(register.getBrokerageReportRegister().getTradingDate()+" ",9,true);
+		LBstockBrokerage = new CustomIconLabel(DesignIcon.stockBrokerageIcon(register.getStockBrokerageRegister()),80,30);
 		
-		BTdelete = new CustomIconButton(Design.delete(),30,30);
-		BTopen = new CustomIconButton(Design.report(),30,30);
+		LBcheck = new CustomLabel("VALIDANDO...",9,false);
+		
+		BTdelete = new CustomIconButton(DesignIcon.delete16x16(),30,30);
+		BTopen = new CustomIconButton(DesignIcon.report16x16(),30,30);
+		BTcustomerRegister = new CustomButton("CLIENTE",9);
 	}
 	
 	private void initPosition() {
 		LBstockBrokerage.setBounds(10,10,80,30);
 		LBcustomerName.setBounds(10,40,150,20);
-		LBinvoiceNumber.setBounds(90,15,70,20);
-		LBdate.setBounds(10,75,100,20);
+		LBinvoiceNumber.setBounds(65,20,100,20);
+		LBdate.setBounds(65,10,100,20);
+		LBcheck.setBounds(10,75,90,16);
 		BTdelete.setBounds(105,65,30,30);
 		BTopen.setBounds(135,65,30,30);
+		BTcustomerRegister.setBounds(10,70,90,22);
 	}
 	
 	private void initFormat() {
 		LBinvoiceNumber.setHorizontalAlignment(JLabel.RIGHT);
+		LBdate.setHorizontalAlignment(JLabel.RIGHT);		
+		BTcustomerRegister.setIcon(DesignIcon.warning16x16());	
+		BTcustomerRegister.setHorizontalAlignment(JButton.LEFT);
 	}
 	
 	private void initEvent() {
@@ -110,7 +129,13 @@ public class BrokerageReportBriefing extends JPanel {
 		BTdelete.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				delete();;
+				delete();
+			}
+		});
+		BTcustomerRegister.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openCustomerRegister();
 			}
 		});
 	}
@@ -120,8 +145,58 @@ public class BrokerageReportBriefing extends JPanel {
 		this.add(LBcustomerName);
 		this.add(LBinvoiceNumber);
 		this.add(LBdate);
+		this.add(LBcheck);
 		this.add(BTdelete);
-		this.add(BTopen);		
+		this.add(BTopen);	
+		this.add(BTcustomerRegister);
+	}
+	
+	protected void checking() {		
+		BTcustomerRegister.setVisible(false);
+		LBcheck.setVisible(true);
+		Thread checkingThread = new Thread(() -> {	
+			try {
+				if(!new BrokerageCustomerConnect().checkRegister(register.getBrokerageCustomerRegister())) {
+					LBcheck.setVisible(false);
+					BTcustomerRegister.setVisible(true);					
+				}else {
+					LBcheck.setIcon(DesignIcon.checked16x16());
+					LBcheck.setText("");
+				}
+				isChecking = false;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			
+        });	        
+        
+		Thread loadingThread = new Thread(() -> {	
+			int cont = 0;
+			String message = "VALIDANDO";
+			while(isChecking){
+				if(cont==0) {
+					LBcheck.setText(message);
+					cont++;
+				}else if(cont==1) {
+					LBcheck.setText(message+".");
+					cont++;
+				}else if(cont==2) {
+					LBcheck.setText(message+"..");
+					cont++;
+				}else if(cont==3) {
+					LBcheck.setText(message+"...");
+					cont++;
+				}else {
+					cont=0;
+				}
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}			
+        });	        
+        loadingThread.start();
+        checkingThread.start();
 	}
 	
 	protected void setSelected() {
@@ -154,9 +229,28 @@ public class BrokerageReportBriefing extends JPanel {
 	}
 	
 	public void delete() {
-		if(Message.Options("DESEJA REALMENTE EXCLUIR A Nª " + register.getInvoiceNumber() + "?")) {
+		if(Message.Options("DESEJA REALMENTE EXCLUIR A Nª " + register.getBrokerageReportRegister().getInvoiceNumber() + "?")) {
 			brokerageReportImportFrame.delete(this);
 		}		
 	}
 
+	public void openCustomerRegister() {
+		LoadingDialog loadingDialog = new LoadingDialog(brokerageReportImportFrame);
+        Thread loadingThread = new Thread(() -> {	            
+	        loadingDialog.showLoading();
+	        try {
+				CustomerRegister r = new CustomerConnect().getByCpf(register.getCustomerRegister().getCpf());
+				if(r==null) {
+					r = register.getCustomerRegister();
+					r.setId(0);
+				}
+				new CustomerRegisterFrame(r,register.getBrokerageCustomerRegister().getCode(),register.getStockBrokerageRegister().getId(),brokerageReportImportFrame).setVisible(true);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	        
+            loadingDialog.hideLoading();
+        });	        
+        loadingThread.start();   
+	}
+	
 }

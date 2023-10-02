@@ -5,8 +5,9 @@ import javax.swing.JPanel;
 
 import components.CustomIconLabel;
 import components.CustomLabel;
-import model.register.register.BrokerageReportRegister;
-import setting.Design;
+import model.view.register.BrokerageReportView;
+import setting.desing.Design;
+import setting.desing.DesignIcon;
 
 public class TitlePanel extends JPanel{
 	private static final long serialVersionUID = 1L;
@@ -71,14 +72,14 @@ public class TitlePanel extends JPanel{
     	this.add(LBtradingDate);
     }
 
-    public void setRegister(BrokerageReportRegister register) {        
-        LBstockBrokerage.setIcon(Design.stockBrokerageIcon(register.getStockBrokerage()));
-    	LBinvoiceNumber.setText("Nº "+register.getInvoiceNumber());
-    	LBtradingDate.setText("DATA: " + register.getTradingDate());
+    public void setRegister(BrokerageReportView register) {        
+        LBstockBrokerage.setIcon(DesignIcon.stockBrokerageIcon(register.getStockBrokerageRegister()));
+    	LBinvoiceNumber.setText("Nº "+register.getBrokerageReportRegister().getInvoiceNumber());
+    	LBtradingDate.setText("DATA: " + register.getBrokerageReportRegister().getTradingDate());
     	
     	//LBcustomerCode.setText("CÓDIGO: " + register.getCustomer().getCode());
-    	LBcustomerCpf.setText("CPF: "+ register.getCustomer().getCpf());
-    	LBcustomerName.setText("CLIENTE: " + register.getCustomer().getName()); 
+    	LBcustomerCpf.setText("CPF: "+ register.getCustomerRegister().getCpf());
+    	LBcustomerName.setText("CLIENTE: " + register.getCustomerRegister().getName()); 
     	
         this.revalidate();
         this.repaint();

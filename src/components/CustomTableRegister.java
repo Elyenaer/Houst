@@ -8,7 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
-import setting.Design;
+import setting.desing.Design;
 
 public class CustomTableRegister extends JDialog{
 	private static final long serialVersionUID = 1L;

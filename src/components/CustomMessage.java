@@ -1,6 +1,7 @@
 package components;
 import javax.swing.*;
-import setting.Design;
+
+import setting.desing.Design;
 import setting.support.MessageType;
 import java.awt.*;
 import java.awt.event.ActionEvent;
