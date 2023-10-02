@@ -220,7 +220,5 @@ public class BrokerageReportRegister {
 	public void setNetAmountFor(BigDecimal netAmountFor) {
 		this.netAmountFor = netAmountFor;
 	}
-	
-	
-	
+		
 }

@@ -10,6 +10,7 @@ import components.CustomFrame;
 import components.CustomIconButton;
 import components.CustomLabel;
 import components.CustomTextField;
+import components.LoadingDialog;
 import model.register.connect.BrokerageCustomerConnect;
 import model.register.connect.StockBrokerageConnect;
 import model.register.register.BrokerageCustomerRegister;
@@ -17,7 +18,6 @@ import model.register.register.CustomerRegister;
 import model.register.register.StockBrokerageRegister;
 import model.view.register.BrokerageCustomerView;
 import setting.desing.DesignIcon;
-import support.LoadingDialog;
 import support.Message;
 
 public class BrokerageCustomerRegisterFrame extends CustomFrame{

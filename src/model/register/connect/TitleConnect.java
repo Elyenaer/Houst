@@ -41,7 +41,7 @@ public class TitleConnect {
         TitleRegister register = new TitleRegister();
         register.setTitleId(jsonObject.getInt("title_id"));
         register.setBrokerageReportId(jsonObject.getInt("brokerage_report_id"));
-        register.setCustomerId(jsonObject.getInt("customer_id"));
+        register.setBrokerageCustomerId(jsonObject.getInt("brokerage_customer_id"));
         register.setQ(jsonObject.getString("q").charAt(0)); 
         register.setNegotiation(jsonObject.getString("negotiation"));
         register.setNegotiationType(jsonObject.getString("negotiation_type").charAt(0)); 
@@ -92,7 +92,7 @@ public class TitleConnect {
             parameters.put("db_user", ma.getUser());
             parameters.put("db_pass", ma.getPass());
             parameters.put("brokerage_report_id", String.valueOf(register.getBrokerageReportId()));
-            parameters.put("customer_id", String.valueOf(register.getCustomerId()));
+            parameters.put("brokerage_customer_id", String.valueOf(register.getBrokerageCustomerId()));
             parameters.put("q", String.valueOf(register.getQ()));
             parameters.put("negotiation", register.getNegotiation());
             parameters.put("negotiation_type", String.valueOf(register.getNegotiationType()));
@@ -118,8 +118,9 @@ public class TitleConnect {
             Map<String, String> parameters = new HashMap<>();
             parameters.put("db_user", ma.getUser());
             parameters.put("db_pass", ma.getPass());
+            
             parameters.put("brokerage_report_id", String.valueOf(register.getBrokerageReportId()));
-            parameters.put("customer_id", String.valueOf(register.getCustomerId()));
+            parameters.put("brokerage_customer_id", String.valueOf(register.getBrokerageCustomerId()));
             parameters.put("q", String.valueOf(register.getQ()));
             parameters.put("negotiation", register.getNegotiation());
             parameters.put("negotiation_type", String.valueOf(register.getNegotiationType()));
@@ -130,8 +131,8 @@ public class TitleConnect {
             parameters.put("price", register.getPrice().toString());
             parameters.put("price_total", register.getPriceTotal().toString());
             parameters.put("operation_type", String.valueOf(register.getOperationType()));
-
-            String data = DatabaseConnect.start(table, parameters, "post");
+            
+            String data = DatabaseConnect.start(table, parameters, "post");            
             return FunctionApi.getId(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "post", e);

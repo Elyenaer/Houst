@@ -28,14 +28,15 @@ public class BrokerageReportXp {
 		
 		register.setBrokerageReportRegister(getBusinessBriefing(text));
 		register.setCustomerRegister(getCustomer(text));
-		register.setBrokerageCustomerRegister(getBrokerageCustomer(text));
+		register.setBrokerageCustomerRegister(getBrokerageCustomer(text));		
 		register.setTitles(getTitles(text));
 				
 		//we need change for database
 		StockBrokerageRegister brokerageRegister = new StockBrokerageRegister();
 		brokerageRegister.setId(2);
 		brokerageRegister.setName("XP INVESTIMENTOS");		
-		register.setStockBrokerageRegister(brokerageRegister);
+		register.setStockBrokerageRegister(brokerageRegister);		
+		register.getBrokerageReportRegister().setStockBrokerageId(brokerageRegister.getId());
 		
 		return register;
 	}

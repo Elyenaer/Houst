@@ -18,6 +18,7 @@ import components.CustomLabel;
 import components.CustomTable;
 import components.CustomTableRegister;
 import components.CustomTextField;
+import components.LoadingDialog;
 import frame.brokerage.importing.BrokerageReportImportFrame;
 import model.register.connect.CustomerConnect;
 import model.register.register.CustomerRegister;
@@ -25,7 +26,6 @@ import model.view.connect.BrokerageCustomerViewConnect;
 import model.view.register.BrokerageCustomerView;
 import setting.desing.DesignIcon;
 import setting.support.TextMask;
-import support.LoadingDialog;
 import support.Message;
 import support.Valid;
 

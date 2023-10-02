@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class TitleRegister {
 	private int titleId;
 	private int brokerageReportId;	
-	private int customerId;
+	private int brokerageCustomerId;
 	private char q;
 	private String negotiation;
 	private char negotiationType;
@@ -23,11 +23,11 @@ public class TitleRegister {
 	public void setBrokerageReportId(int brokerageReportId) {
 		this.brokerageReportId = brokerageReportId;
 	}
-	public int getCustomerId() {
-		return customerId;
+	public int getBrokerageCustomerId() {
+		return brokerageCustomerId;
 	}
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
+	public void setBrokerageCustomerId(int customerId) {
+		this.brokerageCustomerId = customerId;
 	}
 	public int getTitleId() {
 		return titleId;

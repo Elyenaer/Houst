@@ -108,7 +108,7 @@ public class BrokerageCustomerConnect {
         }
     }
     
-    public boolean checkRegister(BrokerageCustomerRegister register) {
+    public int checkRegister(BrokerageCustomerRegister register) {
     	try {        	
             Map<String, String> parameters = new HashMap<>();
             parameters.put("db_user", ma.getUser());
@@ -117,16 +117,21 @@ public class BrokerageCustomerConnect {
             parameters.put("code", register.getCode());
             
             String data = DatabaseConnect.start(table, parameters, "get");
-            if(convertArray(data).size()>0) {
-            	return true;
+            
+            JSONArray jsonArray = new JSONArray(data);
+            if (jsonArray.length() > 0) {
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                int brokerageCustomerId = jsonObject.getInt("brokerage_customer_id");
+                return brokerageCustomerId;
             }
-            return false;
+            
+            return 0;
         } catch (Exception e) {
             return checkRegister(register,0);
         }
     }
     
-    public boolean checkRegister(BrokerageCustomerRegister register,int cont) {
+    public int checkRegister(BrokerageCustomerRegister register,int cont) {
     	String data = "";
     	try {        	
             Map<String, String> parameters = new HashMap<>();
@@ -135,21 +140,24 @@ public class BrokerageCustomerConnect {
             parameters.put("stock_brokerage_id", String.valueOf(register.getStockBrokerageId()));
             parameters.put("code", register.getCode());
             data = DatabaseConnect.start(table, parameters, "get");
-            if(convertArray(data).size()>0) {
-            	return true;
+            JSONArray jsonArray = new JSONArray(data);
+            if (jsonArray.length() > 0) {
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                int brokerageCustomerId = jsonObject.getInt("brokerage_customer_id");
+                return brokerageCustomerId;
             }
-            return false;
+            
+            return 0;
         } catch (Exception e) {
         	System.out.println("Connect Error -> " + data);
             if(cont<10) {
             	return checkRegister(register,cont++);
             }else {
             	support.Message.Error(this.getClass().getName(), "checkRegister", e);
-            	return false;
+            	return 0;
             }            
         }
     }
-
 
     public boolean put(BrokerageCustomerRegister record) {
         try {

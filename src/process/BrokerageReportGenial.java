@@ -37,6 +37,8 @@ public class BrokerageReportGenial {
 		brokerageRegister.setName("GENIAL INVESTIMENTOS");	
 		register.setStockBrokerageRegister(brokerageRegister);
 		
+		register.getBrokerageReportRegister().setStockBrokerageId(brokerageRegister.getId());
+		
 		return register;
 	}
 	

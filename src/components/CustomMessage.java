@@ -2,6 +2,7 @@ package components;
 import javax.swing.*;
 
 import setting.desing.Design;
+import setting.desing.DesignIcon;
 import setting.support.MessageType;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,6 +20,7 @@ public class CustomMessage extends JDialog {
 
     public CustomMessage(String message, MessageType type) {
         super();
+        this.setIconImage(DesignIcon.icon16x16());
         this.type = type;
         this.message = message;
         setModal(true);

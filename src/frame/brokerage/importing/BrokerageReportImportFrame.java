@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -18,12 +19,16 @@ import javax.swing.table.DefaultTableModel;
 import components.CustomButton;
 import components.CustomFrame;
 import components.CustomTable;
+import components.LoadingDialog;
+import components.LoadingProgressBar;
+import model.register.connect.BrokerageReportConnect;
+import model.register.connect.TitleConnect;
 import model.register.register.TitleRegister;
 import model.view.register.BrokerageReportView;
 import process.BrokerageReportProcess;
 import setting.desing.Design;
+import setting.desing.DesignIcon;
 import support.FunctionCurrency;
-import support.LoadingDialog;
 import support.Message;
 
 public class BrokerageReportImportFrame extends CustomFrame {
@@ -38,7 +43,7 @@ public class BrokerageReportImportFrame extends CustomFrame {
 	
 	private CustomTable TBstock;	
 	
-	private JButton BTimport,BTsave;
+	private JButton BTimport,BTsave,BTdeleteDuplicate;
 	
 	private TitlePanel PNtitlePanel;
 	private BusinessBriefingPanel PNbusinessBriefingPanel;
@@ -81,6 +86,7 @@ public class BrokerageReportImportFrame extends CustomFrame {
 		
 		BTimport = new CustomButton("IMPORT");
 		BTsave = new CustomButton("SALVAR");
+		BTdeleteDuplicate = new CustomButton("EXCLUIR DUPLICADOS!");
 		
 		PNtitlePanel = new TitlePanel(500,200,10);
 		PNbusinessBriefingPanel = new BusinessBriefingPanel(325,185,9);
@@ -93,6 +99,7 @@ public class BrokerageReportImportFrame extends CustomFrame {
 	public void initPosition() {
 		BTimport.setBounds(30,30,200,25);
 		BTsave.setBounds(1140,650,100,25);	
+		BTdeleteDuplicate.setBounds(930,650,200,25);
 				
 		PNbrokerage.setLayout(null);
 		SPbrokerage.setViewportView(PNbrokerage);
@@ -118,6 +125,8 @@ public class BrokerageReportImportFrame extends CustomFrame {
 		TBstock.setColumnWidth(5,80);
 		TBstock.setColumnWidth(6,90);
 		TBstock.setColumnWidth(7,30);	
+		BTdeleteDuplicate.setIcon(DesignIcon.error16x16());
+		BTdeleteDuplicate.setVisible(false);
 	}
 	
 	@Override
@@ -128,12 +137,25 @@ public class BrokerageReportImportFrame extends CustomFrame {
 				importBrokerage();
 			}
 		});
+		BTsave.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				save();
+			}
+		});
+		BTdeleteDuplicate.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				deleteDuplicate();
+			}
+		});
 	}
 	
 	@Override
 	public void initAdd() {
 		this.add(BTimport);
 		this.add(BTsave);
+		this.add(BTdeleteDuplicate);
 		
 		this.add(SPbrokerage);
 		this.add(TBstock);
@@ -143,6 +165,17 @@ public class BrokerageReportImportFrame extends CustomFrame {
 		this.add(PNclearingPanel);
 		this.add(PNstockPanel);
 		this.add(PNbrokerageExpensesPanel);
+	}
+	
+	public void setBtDeleteDuplicatesVisible() {
+		BTdeleteDuplicate.setVisible(true);
+	}
+	
+	private void deleteDuplicate() {
+		for(BrokerageReportBriefing b: registers) {
+			b.deleteInvoice();
+		}
+		BTdeleteDuplicate.setVisible(false);
 	}
 	
 	private void importBrokerage() {
@@ -240,6 +273,45 @@ public class BrokerageReportImportFrame extends CustomFrame {
 	protected void delete(BrokerageReportBriefing register) {
 		registers.remove(register);
 		setPanels();
+	}
+	
+	private void save() {
+		ArrayList<BrokerageReportView> brokerageReportRegisters = new ArrayList<BrokerageReportView>();
+		for(BrokerageReportBriefing b: registers) {
+			if(b.getRegister()==null) {
+				Message.Warning("RESOLVA AS PENDÊNCIAS ANTES DE SALVAR",true);
+				return;
+			}else {
+				brokerageReportRegisters.add(b.getRegister());
+			}			
+		}
+		
+		if(brokerageReportRegisters.size()<1) {
+			Message.Warning("SEM NOTAS PARA SALVAR",true);
+			return;
+		}
+		
+		LoadingProgressBar slider = new LoadingProgressBar("SALVANDO NOTAS",brokerageReportRegisters.size(),this);
+		
+		Thread loadingThread = new Thread(() -> {	
+			slider.showDialog(true);
+			try {
+				BrokerageReportConnect connect = new BrokerageReportConnect();
+				TitleConnect titleConnect = new TitleConnect();
+				for(int i=0;i<brokerageReportRegisters.size();i++) {
+					slider.setValueOne();
+					int id = connect.post(brokerageReportRegisters.get(i).getBrokerageReportRegister());
+					for(TitleRegister t: brokerageReportRegisters.get(i).getTitles()) {
+						t.setBrokerageReportId(id);
+						titleConnect.post(t);
+					}
+				}
+				slider.showDialog(false);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			
+        });	        
+        loadingThread.start();
 	}
 	
 	private void fillTable(ArrayList<TitleRegister> titles) {

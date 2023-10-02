@@ -22,9 +22,9 @@ public class CustomPanel extends JPanel{
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setColor(Design.componentsBackground);
+        g2d.setColor(Design.mainBackground);
         g2d.fillRect(0,0, getWidth(), getHeight());
-        g2d.setColor(Design.componentsForeground);
+        g2d.setColor(Design.mainForeground);
         g2d.drawRect(10,10,getWidth() - 12, getHeight() - 12);
         g2d.dispose();
     }

@@ -1,10 +1,11 @@
-package support;
+package components;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import setting.desing.Design;
+import setting.desing.DesignIcon;
 
 public class LoadingDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -20,6 +21,7 @@ public class LoadingDialog extends JDialog {
 	}
     
     private void init(JFrame parentFrame,String message) {
+    	this.setIconImage(DesignIcon.icon16x16());
     	this.message = message;
     	loadingLabel = new JLabel(message+"...");
         loadingLabel.setHorizontalAlignment(JLabel.CENTER);  
@@ -70,5 +72,6 @@ public class LoadingDialog extends JDialog {
 
     public void hideLoading() {
         setVisible(false);
+        dispose();
     }
 }

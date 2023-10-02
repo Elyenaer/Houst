@@ -18,21 +18,24 @@ import components.CustomButton;
 import components.CustomIconButton;
 import components.CustomIconLabel;
 import components.CustomLabel;
+import components.LoadingDialog;
 import frame.register.CustomerRegisterFrame;
 import model.register.connect.BrokerageCustomerConnect;
+import model.register.connect.BrokerageReportConnect;
 import model.register.connect.CustomerConnect;
 import model.register.register.CustomerRegister;
 import model.view.register.BrokerageReportView;
 import setting.desing.Design;
 import setting.desing.DesignIcon;
-import support.LoadingDialog;
 import support.Message;
 
 public class BrokerageReportBriefing extends JPanel {
 	private static final long serialVersionUID = 1L;
-	BrokerageReportView register;
+	private BrokerageReportView register;
 	private boolean selected = false;
 	private boolean isChecking = true;
+	private boolean customerOk = false;
+	private boolean invoiceOk = false;
 	
 	private Color background = Design.componentsBackground;
 	private int cornerRadius = 20;
@@ -156,12 +159,25 @@ public class BrokerageReportBriefing extends JPanel {
 		LBcheck.setVisible(true);
 		Thread checkingThread = new Thread(() -> {	
 			try {
-				if(!new BrokerageCustomerConnect().checkRegister(register.getBrokerageCustomerRegister())) {
-					LBcheck.setVisible(false);
-					BTcustomerRegister.setVisible(true);					
+				if(new BrokerageReportConnect().checkRegister(register.getBrokerageReportRegister())) {
+					LBcheck.setIcon(DesignIcon.error16x16());
+					LBcheck.setText("JÁ SALVO!");		
+					brokerageReportImportFrame.setBtDeleteDuplicatesVisible();
 				}else {
-					LBcheck.setIcon(DesignIcon.checked16x16());
-					LBcheck.setText("");
+					invoiceOk = true;
+					int brokerageCustomerId = new BrokerageCustomerConnect().checkRegister(register.getBrokerageCustomerRegister());
+					if(brokerageCustomerId==0) {
+						LBcheck.setVisible(false);
+						BTcustomerRegister.setVisible(true);					
+					}else {
+						register.getBrokerageReportRegister().setBrokerageCustomerId(brokerageCustomerId);
+						for(int i=0;i<register.getTitles().size();i++) {
+							register.getTitles().get(i).setBrokerageCustomerId(brokerageCustomerId);
+						}
+						LBcheck.setIcon(DesignIcon.checked16x16());
+						LBcheck.setText("");
+						customerOk = true;
+					}
 				}
 				isChecking = false;
 			} catch (IOException e) {
@@ -207,6 +223,14 @@ public class BrokerageReportBriefing extends JPanel {
 		this.setSelected(true);
 	}
 	
+	public BrokerageReportView getRegister() {
+		if(customerOk && invoiceOk) {
+			return register;
+		}else {
+			return null;
+		}
+	}
+		
 	public void setSelected(boolean selected) {
 		if(selected) {
 			if(this.selected) {
@@ -226,6 +250,12 @@ public class BrokerageReportBriefing extends JPanel {
 		this.repaint();
 		this.revalidate();
 		this.selected = selected;		
+	}
+
+	public void deleteInvoice() {
+		if(!invoiceOk) {
+			brokerageReportImportFrame.delete(this);
+		}
 	}
 	
 	public void delete() {
