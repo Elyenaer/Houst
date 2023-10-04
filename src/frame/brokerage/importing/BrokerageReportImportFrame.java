@@ -193,27 +193,29 @@ public class BrokerageReportImportFrame extends CustomFrame {
 		            File[] selectedFiles = fileChooser.getSelectedFiles();	            
 		            BrokerageReportProcess process = new BrokerageReportProcess();	            
 		            for (File file : selectedFiles) {
-		            	ArrayList<BrokerageReportView> r = process.get(file.getAbsolutePath());
-		            	for(BrokerageReportView t: r) {	
-		            		String remove = "";
-		            		for(helpCheck h: checkInvoice) {
-		            			if(h.invoiceNumber.equalsIgnoreCase(t.getBrokerageReportRegister().getInvoiceNumber()) && h.stockBrokerage == t.getStockBrokerageRegister().getId()) {
-		            		 		remove = h.invoiceNumber;
-		            				break;
-		            			}
-		            		}
-		            		if(remove=="") {
-		            			registers.add(new BrokerageReportBriefing(t,this));
-		            			
-		            			helpCheck helpCheck = new helpCheck();
-		            			helpCheck.invoiceNumber = t.getBrokerageReportRegister().getInvoiceNumber();
-		            			helpCheck.stockBrokerage = t.getStockBrokerageRegister().getId();
-		            			
-		            			checkInvoice.add(helpCheck);
-		            		}else {
-		            			removeInvoice.add(remove);
-		            		}		            		
-		            	}
+		            	ArrayList<BrokerageReportView> r = process.get(file.getAbsolutePath());		            	
+		            	if(r!=null) {
+		            		for(BrokerageReportView t: r) {	
+			            		String remove = "";
+			            		for(helpCheck h: checkInvoice) {
+			            			if(h.invoiceNumber.equalsIgnoreCase(t.getBrokerageReportRegister().getInvoiceNumber()) && h.stockBrokerage == t.getStockBrokerageRegister().getId()) {
+			            		 		remove = h.invoiceNumber;
+			            				break;
+			            			}
+			            		}
+			            		if(remove=="") {
+			            			registers.add(new BrokerageReportBriefing(t,this));
+			            			
+			            			helpCheck helpCheck = new helpCheck();
+			            			helpCheck.invoiceNumber = t.getBrokerageReportRegister().getInvoiceNumber();
+			            			helpCheck.stockBrokerage = t.getStockBrokerageRegister().getId();
+			            			
+			            			checkInvoice.add(helpCheck);
+			            		}else {
+			            			removeInvoice.add(remove);
+			            		}		            		
+			            	}
+		            	}		            	
 		            }
 		        }
 		        setPanels();

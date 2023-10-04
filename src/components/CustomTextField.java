@@ -23,8 +23,8 @@ public class CustomTextField extends JFormattedTextField{
 	 }
 	 
 	 private void init(){
-		 setBackground(Design.componentsBackground2);
-			setForeground(Design.componentsForeground2);
+		setBackground(Design.componentsBackground2);
+		setForeground(Design.componentsForeground2);
 	 }
 
     private void setMask(String mask) {

@@ -106,7 +106,7 @@ public class BrokerageReportConnect {
     }
 
     public boolean checkRegister(BrokerageReportRegister register) {
-    	try {        	
+    	try {  	
             Map<String, String> parameters = new HashMap<>();
             parameters.put("db_user", ma.getUser());
             parameters.put("db_pass", ma.getPass());            
@@ -114,7 +114,7 @@ public class BrokerageReportConnect {
             parameters.put("invoice_number", register.getInvoiceNumber());
             
             String data = DatabaseConnect.start(table, parameters, "get");
-            
+                       
             JSONArray jsonArray = new JSONArray(data);
             if (jsonArray.length() > 0) {
                 return true;

@@ -35,9 +35,10 @@ public class BrokerageReportGenial {
 		StockBrokerageRegister brokerageRegister = new StockBrokerageRegister();
 		brokerageRegister.setId(1);
 		brokerageRegister.setName("GENIAL INVESTIMENTOS");	
-		register.setStockBrokerageRegister(brokerageRegister);
 		
+		register.setStockBrokerageRegister(brokerageRegister);		
 		register.getBrokerageReportRegister().setStockBrokerageId(brokerageRegister.getId());
+		register.getBrokerageCustomerRegister().setStockBrokerageId(brokerageRegister.getId());
 		
 		return register;
 	}
@@ -305,7 +306,12 @@ public class BrokerageReportGenial {
 				register.setNetAmountForDate(lines[103].split("\n")[1]);
 				
 				//net amount for value "liquido para valor"
-				register.setNetAmountFor(new BigDecimal(lines[104].replace(".","").replace(",",".")));
+				if(lines[105].split("\n")[0].equalsIgnoreCase("C")) {
+					register.setNetAmountFor(new BigDecimal(lines[104].replace(".","").replace(",",".")));
+				}else {
+					register.setNetAmountFor(new BigDecimal("-"+lines[104].replace(".","").replace(",",".")));
+				}
+				
 			}catch(Exception e) {
 				//try without
 						
@@ -329,7 +335,11 @@ public class BrokerageReportGenial {
 				register.setNetAmountForDate(lines[96].split("\n")[1]);
 				
 				//net amount for value "liquido para valor"
-				register.setNetAmountFor(new BigDecimal(lines[97].replace(".","").replace(",",".")));
+				if(lines[98].split("\n")[0].equalsIgnoreCase("C")) {
+					register.setNetAmountFor(new BigDecimal(lines[97].replace(".","").replace(",",".")));
+				}else {
+					register.setNetAmountFor(new BigDecimal("-"+lines[97].replace(".","").replace(",",".")));
+				}
 			}
 					
 			/*

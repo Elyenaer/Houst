@@ -11,16 +11,37 @@ import model.register.register.CustomerRegister;
 import model.register.register.StockBrokerageRegister;
 import model.register.register.TitleRegister;
 import model.view.register.BrokerageReportView;
+import support.FunctionCurrency;
 import support.FunctionText;
 
 public class BrokerageReportXp {
 
 	public ArrayList<BrokerageReportView> get(ArrayList<String> text) {			
-		ArrayList<BrokerageReportView> registers = new ArrayList<BrokerageReportView>();	
+		ArrayList<BrokerageReportView> registers = new ArrayList<BrokerageReportView>();
+		ArrayList<String> textHelp = new ArrayList<String>();
 		for(String t: text) {
-			registers.add(getBrokerageReport(t));
+			textHelp.add(t);
+			if(!checkMultiplePage(t)) {
+				BrokerageReportView view = getBrokerageReport(t);
+				ArrayList<TitleRegister> titles = new ArrayList<TitleRegister>();
+				for(String h: textHelp) {
+					titles.addAll(getTitles(h));
+				}
+				view.setTitles(titles);
+				registers.add(view);
+				textHelp.clear();
+			}
 		}		
 		return registers;
+	}
+	
+	private boolean checkMultiplePage(String text){		
+		String temp = text.substring(text.indexOf("cios Resumo Financeiro"),text.indexOf("(*) Observa"));
+		if(temp.contains("CONTINUA...")) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 	
 	private BrokerageReportView getBrokerageReport(String text) {		
@@ -29,14 +50,15 @@ public class BrokerageReportXp {
 		register.setBrokerageReportRegister(getBusinessBriefing(text));
 		register.setCustomerRegister(getCustomer(text));
 		register.setBrokerageCustomerRegister(getBrokerageCustomer(text));		
-		register.setTitles(getTitles(text));
 				
 		//we need change for database
 		StockBrokerageRegister brokerageRegister = new StockBrokerageRegister();
 		brokerageRegister.setId(2);
 		brokerageRegister.setName("XP INVESTIMENTOS");		
-		register.setStockBrokerageRegister(brokerageRegister);		
+		
+		register.setStockBrokerageRegister(brokerageRegister);			
 		register.getBrokerageReportRegister().setStockBrokerageId(brokerageRegister.getId());
+		register.getBrokerageCustomerRegister().setStockBrokerageId(brokerageRegister.getId());
 		
 		return register;
 	}
@@ -97,7 +119,7 @@ public class BrokerageReportXp {
 	            String[] lines = result.split("\\n");
 	            for (String line : lines) {
 	            	TitleRegister register = new TitleRegister();
-	            	
+	            		            	
 	                String[] parts = line.split(" ");
 	                
 	                //negotiation "1-BOVESPA"
@@ -112,14 +134,15 @@ public class BrokerageReportXp {
 	                //quantity
 	                for(int i=3;i<parts.length;i++) {
 	                	try {
-	                		register.setQuantity(Integer.parseInt(parts[i]));
+	                		register.setQuantity(Integer.parseInt(parts[i].replace(".","")));
 	                		break;
 	                	}catch(Exception e) {}
 	                }
-	                 
+	                
 	                //title name "MAGAZ LUIZA ON"
-	                String[] p = line.split(" "+register.getMarketType()+" | "+register.getQuantity()+" ");
+	                String[] p = line.split(" "+parts[2]+" | "+FunctionCurrency.bigDecimalToThousands(register.getQuantity())+" ");
 	                register.setTitleName(p[1]);
+	                
 	                
 	                String[] p2 = p[2].split(" ");
 	                
@@ -143,7 +166,8 @@ public class BrokerageReportXp {
 	                System.out.println("Title Name: " + register.getTitleName());
 	                System.out.println("Price: " + register.getPrice());
 	                System.out.println("Price Total: " + register.getPriceTotal());
-	                System.out.println("Operation Type: " + register.getOperationType());   */     
+	                System.out.println("Operation Type: " + register.getOperationType()); 
+	                System.out.println("\n\n"); */
 	            }	            
 	        }
 	        return registers;
@@ -280,24 +304,52 @@ public class BrokerageReportXp {
 					
 			//irrf
 			register.setIrrf(new BigDecimal(lines[91].split("\n")[0].replace(".","").replace(",",".")));
-						
-			//iss pis cofins / "outro"
-			if(lines[93].split("\n")[0].equalsIgnoreCase("C")) {
-				register.setIssPisCofins(new BigDecimal(lines[92].replace(".","").replace(",",".")));
-			}else {
-				register.setIssPisCofins(new BigDecimal("-"+lines[92].replace(".","").replace(",",".")));
-			}
-						
-			//total brokerage expenses "total corretagem despesas"
-			register.setTotalBrokerageExpenses(new BigDecimal(lines[97].replace(".","").replace(",",".")));
-						
-			//net amount for date "liquido para data"
-			register.setNetAmountForDate(lines[100]);
-			
-			//net amount for value "liquido para valor"
-			register.setNetAmountFor(new BigDecimal(lines[101].replace(".","").replace(",",".")));
-			
 					
+			try {
+				
+				//iss pis cofins / "outro"
+				if(lines[93].split("\n")[0].equalsIgnoreCase("C")) {
+					register.setIssPisCofins(new BigDecimal(lines[92].replace(".","").replace(",",".")));
+				}else {
+					register.setIssPisCofins(new BigDecimal("-"+lines[92].replace(".","").replace(",",".")));
+				}
+							
+				//total brokerage expenses "total corretagem despesas"
+				register.setTotalBrokerageExpenses(new BigDecimal(lines[97].replace(".","").replace(",",".")));
+							
+				//net amount for date "liquido para data"
+				register.setNetAmountForDate(lines[100]);
+				
+				//net amount for value "liquido para valor"
+				if(lines[102].split("\n")[0].equalsIgnoreCase("C")) {
+					register.setNetAmountFor(new BigDecimal(lines[101].replace(".","").replace(",",".")));
+				}else {
+					register.setNetAmountFor(new BigDecimal("-"+lines[101].replace(".","").replace(",",".")));
+				}
+			}catch(Exception e) {
+				
+				//iss pis cofins / "outro"
+				if(lines[94].split("\n")[0].equalsIgnoreCase("C")) {
+					register.setIssPisCofins(new BigDecimal(lines[93].replace(".","").replace(",",".")));
+				}else {
+					register.setIssPisCofins(new BigDecimal("-"+lines[93].replace(".","").replace(",",".")));
+				}
+							
+				//total brokerage expenses "total corretagem despesas"
+				register.setTotalBrokerageExpenses(new BigDecimal(lines[98].replace(".","").replace(",",".")));
+							
+				//net amount for date "liquido para data"
+				register.setNetAmountForDate(lines[101]);
+				
+				//net amount for value "liquido para valor"
+				if(lines[103].split("\n")[0].equalsIgnoreCase("C")) {
+					register.setNetAmountFor(new BigDecimal(lines[102].replace(".","").replace(",",".")));
+				}else {
+					register.setNetAmountFor(new BigDecimal("-"+lines[102].replace(".","").replace(",",".")));
+				}
+				
+			}
+			
 			/*
 			System.out.println("-----------Data-------------");
 			System.out.println("Debentures: " + register.getDebentures());
@@ -330,6 +382,7 @@ public class BrokerageReportXp {
 		}catch (Exception e) {
 			support.Message.Error(this.getClass().getName(),"getCustomer",e);
 			return null;
-		}	
+		}
 	}
+
 }

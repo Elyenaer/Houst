@@ -109,8 +109,8 @@ public class BrokerageCustomerConnect {
     }
     
     public int checkRegister(BrokerageCustomerRegister register) {
-    	try {        	
-            Map<String, String> parameters = new HashMap<>();
+    	try {    
+    		Map<String, String> parameters = new HashMap<>();
             parameters.put("db_user", ma.getUser());
             parameters.put("db_pass", ma.getPass());            
             parameters.put("stock_brokerage_id", String.valueOf(register.getStockBrokerageId()));            

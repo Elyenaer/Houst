@@ -103,7 +103,7 @@ public class BrokerageExpensesPanel extends CustomPanel {
     private void initPosition() {
         int y = 20;
         for (int i = 0; i < components.size(); i += 2) {
-            components.get(i).setBounds(20, y, 200, 15);
+            components.get(i).setBounds(12, y, 200, 15);
             components.get(i + 1).setBounds(215, y, 100, 15);
             y += 20;
         }
