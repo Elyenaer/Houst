@@ -236,12 +236,12 @@ public class CustomerRegisterFrame extends CustomFrame{
 	private void reOrganize() {
 		if(stateNewRegister) {
 			this.setSize(new Dimension(415,200));			
-			BTsave.changeIcon(DesignIcon.add());			
+			BTsave.setScaleIcon(DesignIcon.add());			
 			BTsave.setBounds(340,110,32,32);
 			BTclear.setBounds(300,110,32,32);			
 		}else {
 			this.setSize(new Dimension(415,465));			
-			BTsave.changeIcon(DesignIcon.save());
+			BTsave.setScaleIcon(DesignIcon.save());
 			BTsave.setBounds(340,370,32,32);
 			BTclear.setBounds(300,370,32,32);			
 		}		
@@ -305,7 +305,7 @@ public class CustomerRegisterFrame extends CustomFrame{
 				return;
 			}			
 			if(getRegister()) {				
-				LoadingDialog loadingDialog = new LoadingDialog(this,"SALVANDO");
+				LoadingDialog loadingDialog = new LoadingDialog(this,"EXCLUINDO");
 		        Thread loadingThread = new Thread(() -> {	            
 			        loadingDialog.showLoading();
 			        try {			        	

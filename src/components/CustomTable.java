@@ -21,7 +21,7 @@ public class CustomTable extends JScrollPane{
         init();
     }
 
-    private void init() {
+    private void init() {    	
     	this.setOpaque(false);
     	this.setBorder(new EmptyBorder(0, 0, 0, 0));
     	this.setBackground(new Color(0,0,0,0));

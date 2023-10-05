@@ -2,14 +2,19 @@ package frame.register;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Optional;
 
 import components.CustomFrame;
 import components.CustomIconButton;
 import components.CustomLabel;
 import components.CustomRadioButton;
+import components.CustomTableRegister;
 import components.CustomTextArea;
 import components.CustomTextField;
 import components.CustomToggleButton;
+import components.LoadingDialog;
+import model.register.connect.MetricConnect;
 import model.register.register.MetricRegister;
 import setting.desing.DesignIcon;
 import support.Message;
@@ -25,6 +30,7 @@ public class MetricRegisterFrame extends CustomFrame{
 	private CustomIconButton BTopen,BTsave,BTclear,BTdelete;	
 	
 	private boolean stateNewRegister = true;
+	private MetricRegister register;
 	
 	public MetricRegisterFrame() {
 		init();
@@ -34,6 +40,7 @@ public class MetricRegisterFrame extends CustomFrame{
 		this.setTitle("CADASTRO DE MÉTRICAS");
 		this.setSize(360,415);
 		this.setLocationRelativeTo(null);
+		register = new MetricRegister();
 	}
 
 	@Override
@@ -51,7 +58,7 @@ public class MetricRegisterFrame extends CustomFrame{
 		RBtype = new CustomRadioButton(110,80);
 		
 		BTopen = new CustomIconButton(DesignIcon.open(),32,32);
-		BTsave = new CustomIconButton(DesignIcon.save(),32,32);
+		BTsave = new CustomIconButton(DesignIcon.add(),32,32);
 		BTclear = new CustomIconButton(DesignIcon.clear(),32,32);
 		BTdelete = new CustomIconButton(DesignIcon.delete(),32,32);
 	}
@@ -74,8 +81,8 @@ public class MetricRegisterFrame extends CustomFrame{
 		TBstatus.setBounds(245,270,70,20);
 				
 		BTsave.setBounds(285,320,32,32);
-		BTclear.setBounds(205,320,32,32);
-		BTdelete.setBounds(245,320,32,32);
+		BTclear.setBounds(245,320,32,32);
+		BTdelete.setBounds(205,320,32,32);
 	}
 
 	@Override
@@ -83,6 +90,8 @@ public class MetricRegisterFrame extends CustomFrame{
 		RBtype.setTitle("TIPO");
 		RBtype.addButton("TEXTO");
 		RBtype.addButton("DECIMAL");
+		
+		BTdelete.setVisible(false);
 		
 		TBstatus.setSelected(true);//active
 	}
@@ -153,24 +162,28 @@ public class MetricRegisterFrame extends CustomFrame{
 		TAdescription.setText("");
 		TBstatus.setSelected(true);
 		RBtype.clear();
+		stateNewRegister = true;
+		
+		BTdelete.setVisible(false);
+		BTsave.setScaleIcon(DesignIcon.add());
 	}
 	
-	private MetricRegister getRegister() {
-		MetricRegister register = new MetricRegister();
+	private boolean getRegister() {
 		register.setName(TFname.getText());
+		register.setDescription(TAdescription.getText());
 		if(register.getName().equalsIgnoreCase("")) {
 			Message.Warning("NOME INVÁLIDO!",true);
-			return null;
+			return false;
 		}
 		register.setTitleImport(TFtitleImport.getText());
 		if(register.getTitleImport().equalsIgnoreCase("")) {
 			Message.Warning("TÍTULO IMPORT INVÁLIDO!",true);
-			return null;
+			return false;
 		}
 		String type = RBtype.getSelected();
 		if(type==null) {
 			Message.Warning("SELECIONE UM TIPO DE VARIÁVEL",true);
-			return null;			
+			return false;			
 		}else {
 			if(type.equalsIgnoreCase("TEXTO")) {
 				register.setType('t');
@@ -183,23 +196,147 @@ public class MetricRegisterFrame extends CustomFrame{
 		}else {
 			register.setStatus('i');
 		}
-		return register;
+		return true;
+	}
+	
+	private void setRegister(MetricRegister register) {
+		this.register = register;
+		
+		TFname.setText(register.getName());
+		TFtitleImport.setText(register.getTitleImport());
+		TAdescription.setText(register.getDescription());
+		
+		if(register.getStatus()=='a') {
+			TBstatus.setSelected(true);
+		}else {
+			TBstatus.setSelected(false);
+		}
+		
+		if(register.getType()=='t') {
+			RBtype.setSelectedByText("TEXTO");
+		}else if(register.getType()=='d') {
+			RBtype.setSelectedByText("DECIMAL");
+		}
+		
+		stateNewRegister = false;
+		
+		BTdelete.setVisible(true);
+		BTsave.setScaleIcon(DesignIcon.save());
 	}
 	
 	private void save() {
-		getRegister();
+		try {			
+			if(getRegister()) {				
+				LoadingDialog loadingDialog = new LoadingDialog(this,"SALVANDO");
+		        Thread loadingThread = new Thread(() -> {	            
+			        loadingDialog.showLoading();
+			        this.setEnabled(false);
+			        try {	
+			        	new MetricConnect().post(register);	
+			        	Message.Success("MÉTRICA SALVA COM SUCESSO!");
+			        	clear();
+			        }catch (Exception e) {
+			        	Message.Error(this.getClass().getName(),"save", e);
+					}	
+			        this.setEnabled(true);
+			        loadingDialog.hideLoading();
+		        });	        
+		        loadingThread.start(); 
+			}		
+		}catch (Exception e) {
+			Message.Error(this.getClass().getName(),"save", e);
+		}
 	}
 	
 	private void delete() {
-		
+		try {				
+			if(!Message.Options("CONFIRMA A EXCLUSÃO DA MÉTRICA " + register.getName() + "?")) {
+				return;
+			}					
+			LoadingDialog loadingDialog = new LoadingDialog(this,"EXCLUINDO");
+	        Thread loadingThread = new Thread(() -> {	            
+		        loadingDialog.showLoading();
+		        this.setEnabled(false);
+		        try {			        	
+					if(new MetricConnect().delete(register)) {							
+						Message.Success("CLIENTE EXCLUÍDO COM SUCESSO!");
+						clear();
+					}						    
+		        }catch (Exception e) {
+		        	Message.Error(this.getClass().getName(),"delete", e);
+				}	
+		        this.setEnabled(true);
+		        loadingDialog.hideLoading(); 
+	        });	        
+	        loadingThread.start();		
+		}catch (Exception e) {
+			Message.Error(this.getClass().getName(),"delete", e);
+		}
 	}
 	
 	private void update() {
-		
+		try {			
+			if(getRegister()) {				
+				LoadingDialog loadingDialog = new LoadingDialog(this,"SALVANDO");
+		        Thread loadingThread = new Thread(() -> {	            
+			        loadingDialog.showLoading();
+			        try {			        	
+						if(new MetricConnect().put(register)) {
+							loadingDialog.hideLoading(); 
+							Message.Success("MÉTRICA ATUALIZADA COM SUCESSO!");
+						}			
+						clear();					    
+			        }catch (Exception e) {
+			        	Message.Error(this.getClass().getName(),"update", e);
+					}			                
+		        });	        
+		        loadingThread.start(); 
+			}		
+		}catch (Exception e) {
+			Message.Error(this.getClass().getName(),"update", e);
+		}
 	}
 	
 	private void openTable() {
+		ArrayList<String> titles = new ArrayList<String>();
+		titles.add("ID");
+		titles.add("NOME");
+		titles.add("TÍTULO IMPORT");		
+		titles.add("STATUS");	
+		CustomTableRegister table = new CustomTableRegister(this,"MÉTRICAS",titles);
 		
+		LoadingDialog loadingDialog = new LoadingDialog(this,"BUSCANDO REGISTROS");
+        Thread loadingThread = new Thread(() -> {	            
+	        loadingDialog.showLoading();
+	        try {
+	        	ArrayList<MetricRegister> registers = new MetricConnect().get();				
+				ArrayList<Object[]> rows = new ArrayList<Object[]>();
+		        for(MetricRegister r: registers) {
+					Object[] rowData = {
+							r.getMetricId(),
+							r.getName(),
+							r.getTitleImport(),
+							r.getStatus()=='a' ? "ATIVO" : "INATIVO"
+					};
+					rows.add(rowData);				
+				}
+		        table.setRows(rows);	
+		        
+		        loadingDialog.hideLoading();					
+            
+	            table.setVisible(true);		
+	    		if(table.getSelected()!=null) {
+	    			int id = Integer.parseInt(table.getSelected().toString());    			
+	    			 Optional<MetricRegister> foundCustomer = registers.stream()
+	    			            .filter(customer -> customer.getMetricId() == id)
+	    			            .findFirst();
+	    			setRegister(foundCustomer.get());
+	    		}    		
+	        }catch(Exception e) {
+				Message.Error(this.getClass().getName(),"openTable", e);
+			}            
+        });	        
+        loadingThread.start();
 	}
 	
 }

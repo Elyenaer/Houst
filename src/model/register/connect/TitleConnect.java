@@ -145,7 +145,7 @@ public class TitleConnect {
             Map<String, String> parameters = Map.of(
                     "db_user", ma.getUser(),
                     "db_pass", ma.getPass(),
-                    "id", String.valueOf(register.getTitleId())
+                    "title_id", String.valueOf(register.getTitleId())
             );
             String data = DatabaseConnect.start(table, parameters, "delete");
             return FunctionApi.getSuccess(data);

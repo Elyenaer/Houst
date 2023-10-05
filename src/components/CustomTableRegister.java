@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
 import setting.desing.Design;
+import setting.desing.DesignIcon;
 
 public class CustomTableRegister extends JDialog{
 	private static final long serialVersionUID = 1L;
@@ -22,6 +23,7 @@ public class CustomTableRegister extends JDialog{
         setLocationRelativeTo(parent); 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);  
         setModal(true);
+        this.setIconImage(DesignIcon.icon16x16());
         add(table);        
         table.table.addMouseListener(new MouseAdapter() {
             @Override

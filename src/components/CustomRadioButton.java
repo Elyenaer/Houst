@@ -53,4 +53,12 @@ public class CustomRadioButton extends CustomPanel {
     	}
     	return null;
     }
+    
+    public void setSelectedByText(String selected) {
+    	for(JRadioButton r: buttons) {
+    		if(r.getText().equalsIgnoreCase(selected)) {
+    			r.setSelected(true);
+    		}
+    	}
+    }
 }

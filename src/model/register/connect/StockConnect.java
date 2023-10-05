@@ -9,21 +9,21 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import model.register.register.MetricRegister;
+import model.register.register.StockRegister;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
 import support.FunctionApi;
 
-public class MetricConnect {
+public class StockConnect {
     private ManagerAccess ma;
-    private final static String table = "metric";
+    private final static String table = "stock"; 
 
-    public MetricConnect() throws FileNotFoundException, IOException {
+    public StockConnect() throws FileNotFoundException, IOException {
         ma = new ManagerAccess();
     }
 
-    private ArrayList<MetricRegister> convertArray(String data) {
-        ArrayList<MetricRegister> registers = new ArrayList<MetricRegister>();
+    private ArrayList<StockRegister> convertArray(String data) {
+        ArrayList<StockRegister> registers = new ArrayList<StockRegister>();
         JSONArray jsonArray = new JSONArray(data);
         for (int i = 0; i < jsonArray.length(); i++) {
             registers.add(convert(jsonArray.getJSONObject(i)));
@@ -31,23 +31,20 @@ public class MetricConnect {
         return registers;
     }
 
-    private MetricRegister convertRegister(String data) {
+    private StockRegister convertRegister(String data) {
         JSONArray jsonArray = new JSONArray(data);
         return convert(jsonArray.getJSONObject(0));
     }
 
-    public MetricRegister convert(JSONObject jsonObject) {
-        MetricRegister register = new MetricRegister();
-        register.setMetricId(jsonObject.getInt("metric_id"));
-        register.setTitleImport(jsonObject.getString("title_import"));
-        register.setName(jsonObject.getString("name"));
-        register.setDescription(jsonObject.getString("description"));
-        register.setType(jsonObject.getString("type").charAt(0));
+    public StockRegister convert(JSONObject jsonObject) {
+        StockRegister register = new StockRegister();
+        register.setStockId(jsonObject.getInt("stock_id"));
+        register.setSymbol(jsonObject.getString("symbol"));
         register.setStatus(jsonObject.getString("status").charAt(0));
         return register;
     }
 
-    public ArrayList<MetricRegister> get() {
+    public ArrayList<StockRegister> get() {
         try {
             Map<String, String> parameters = Map.of(
                     "db_user", ma.getUser(),
@@ -62,12 +59,12 @@ public class MetricConnect {
         }
     }
 
-    public MetricRegister get(int id) {
+    public StockRegister get(int id) {
         try {
             Map<String, String> parameters = Map.of(
                     "db_user", ma.getUser(),
                     "db_pass", ma.getPass(),
-                    "metric_id", String.valueOf(id)
+                    "stock_id", String.valueOf(id)
             );
 
             String data = DatabaseConnect.start(table, parameters, "get");
@@ -78,17 +75,15 @@ public class MetricConnect {
         }
     }
 
-    public boolean put(MetricRegister register) {
+    public boolean put(StockRegister register) {
         try {
             Map<String, String> parameters = new HashMap<>();
             parameters.put("db_user", ma.getUser());
             parameters.put("db_pass", ma.getPass());
-            parameters.put("title_import", register.getTitleImport());
-            parameters.put("name", register.getName());
-            parameters.put("description", register.getDescription());
-            parameters.put("type", String.valueOf(register.getType()));
+            parameters.put("symbol", register.getSymbol());
             parameters.put("status", String.valueOf(register.getStatus()));
-            parameters.put("metric_id", String.valueOf(register.getMetricId()));
+            parameters.put("stock_id", String.valueOf(register.getStockId()));
+
             String data = DatabaseConnect.start(table, parameters, "put");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
@@ -97,18 +92,15 @@ public class MetricConnect {
         }
     }
 
-    public int post(MetricRegister register) {
+    public int post(StockRegister register) {
         try {
             Map<String, String> parameters = new HashMap<>();
             parameters.put("db_user", ma.getUser());
             parameters.put("db_pass", ma.getPass());
-            parameters.put("title_import", register.getTitleImport());
-            parameters.put("name", register.getName());
-            parameters.put("description", register.getDescription());
-            parameters.put("type", String.valueOf(register.getType()));
+            parameters.put("symbol", register.getSymbol());
             parameters.put("status", String.valueOf(register.getStatus()));
-
-            String data = DatabaseConnect.start(table, parameters, "post");
+            
+            String data = DatabaseConnect.start(table, parameters, "post");            
             return FunctionApi.getId(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "post", e);
@@ -116,25 +108,14 @@ public class MetricConnect {
         }
     }
 
-    public boolean delete(MetricRegister register) {
+    public boolean delete(StockRegister register) {
         try {
-        	
-        	System.out.println("->" + register.getMetricId());
-        	
             Map<String, String> parameters = Map.of(
                     "db_user", ma.getUser(),
                     "db_pass", ma.getPass(),
-                    "metric_id", String.valueOf(register.getMetricId())
+                    "stock_id", String.valueOf(register.getStockId())
             );
             String data = DatabaseConnect.start(table, parameters, "delete");
-            
-            
-            
-            System.out.println(data);
-            
-            
-            
-            
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "delete", e);

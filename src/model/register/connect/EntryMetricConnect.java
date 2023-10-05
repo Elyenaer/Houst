@@ -9,21 +9,21 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import model.register.register.MetricRegister;
+import model.register.register.EntryMetricRegister;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
 import support.FunctionApi;
 
-public class MetricConnect {
+public class EntryMetricConnect {
     private ManagerAccess ma;
-    private final static String table = "metric";
+    private final static String table = "entry_metric"; 
 
-    public MetricConnect() throws FileNotFoundException, IOException {
+    public EntryMetricConnect() throws FileNotFoundException, IOException {
         ma = new ManagerAccess();
     }
 
-    private ArrayList<MetricRegister> convertArray(String data) {
-        ArrayList<MetricRegister> registers = new ArrayList<MetricRegister>();
+    private ArrayList<EntryMetricRegister> convertArray(String data) {
+        ArrayList<EntryMetricRegister> registers = new ArrayList<EntryMetricRegister>();
         JSONArray jsonArray = new JSONArray(data);
         for (int i = 0; i < jsonArray.length(); i++) {
             registers.add(convert(jsonArray.getJSONObject(i)));
@@ -31,23 +31,24 @@ public class MetricConnect {
         return registers;
     }
 
-    private MetricRegister convertRegister(String data) {
+    private EntryMetricRegister convertRegister(String data) {
         JSONArray jsonArray = new JSONArray(data);
         return convert(jsonArray.getJSONObject(0));
     }
 
-    public MetricRegister convert(JSONObject jsonObject) {
-        MetricRegister register = new MetricRegister();
+    public EntryMetricRegister convert(JSONObject jsonObject) {
+        EntryMetricRegister register = new EntryMetricRegister();
+        register.setEntryMetricId(jsonObject.getInt("entry_metric_id"));
         register.setMetricId(jsonObject.getInt("metric_id"));
-        register.setTitleImport(jsonObject.getString("title_import"));
-        register.setName(jsonObject.getString("name"));
-        register.setDescription(jsonObject.getString("description"));
-        register.setType(jsonObject.getString("type").charAt(0));
-        register.setStatus(jsonObject.getString("status").charAt(0));
+        register.setStockId(jsonObject.getInt("stock_id"));
+        // Aqui você precisa adaptar para a data e o valor apropriados
+        // Exemplo:
+        // register.setDate(LocalDate.parse(jsonObject.getString("date")));
+        // register.setValue(jsonObject.getDouble("value"));
         return register;
     }
 
-    public ArrayList<MetricRegister> get() {
+    public ArrayList<EntryMetricRegister> get() {
         try {
             Map<String, String> parameters = Map.of(
                     "db_user", ma.getUser(),
@@ -62,12 +63,12 @@ public class MetricConnect {
         }
     }
 
-    public MetricRegister get(int id) {
+    public EntryMetricRegister get(int id) {
         try {
             Map<String, String> parameters = Map.of(
                     "db_user", ma.getUser(),
                     "db_pass", ma.getPass(),
-                    "metric_id", String.valueOf(id)
+                    "entry_metric_id", String.valueOf(id)
             );
 
             String data = DatabaseConnect.start(table, parameters, "get");
@@ -78,17 +79,19 @@ public class MetricConnect {
         }
     }
 
-    public boolean put(MetricRegister register) {
+    public boolean put(EntryMetricRegister register) {
         try {
             Map<String, String> parameters = new HashMap<>();
             parameters.put("db_user", ma.getUser());
             parameters.put("db_pass", ma.getPass());
-            parameters.put("title_import", register.getTitleImport());
-            parameters.put("name", register.getName());
-            parameters.put("description", register.getDescription());
-            parameters.put("type", String.valueOf(register.getType()));
-            parameters.put("status", String.valueOf(register.getStatus()));
             parameters.put("metric_id", String.valueOf(register.getMetricId()));
+            parameters.put("stock_id", String.valueOf(register.getStockId()));
+            // Aqui você precisa adaptar para a data e o valor apropriados
+            // Exemplo:
+            // parameters.put("date", register.getDate().toString());
+            // parameters.put("value", String.valueOf(register.getValue()));
+            parameters.put("entry_metric_id", String.valueOf(register.getEntryMetricId()));
+
             String data = DatabaseConnect.start(table, parameters, "put");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
@@ -97,44 +100,34 @@ public class MetricConnect {
         }
     }
 
-    public int post(MetricRegister register) {
+    public int post(EntryMetricRegister register) {
         try {
             Map<String, String> parameters = new HashMap<>();
             parameters.put("db_user", ma.getUser());
             parameters.put("db_pass", ma.getPass());
-            parameters.put("title_import", register.getTitleImport());
-            parameters.put("name", register.getName());
-            parameters.put("description", register.getDescription());
-            parameters.put("type", String.valueOf(register.getType()));
-            parameters.put("status", String.valueOf(register.getStatus()));
+            parameters.put("metric_id", String.valueOf(register.getMetricId()));
+            parameters.put("stock_id", String.valueOf(register.getStockId()));
+            // Aqui você precisa adaptar para a data e o valor apropriados
+            // Exemplo:
+            // parameters.put("date", register.getDate().toString());
+            // parameters.put("value", String.valueOf(register.getValue()));
 
-            String data = DatabaseConnect.start(table, parameters, "post");
+            String data = DatabaseConnect.start(table, parameters, "post");            
             return FunctionApi.getId(data);
-        } catch (Exception e) {
+        catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "post", e);
             return 0;
         }
     }
 
-    public boolean delete(MetricRegister register) {
+    public boolean delete(EntryMetricRegister register) {
         try {
-        	
-        	System.out.println("->" + register.getMetricId());
-        	
             Map<String, String> parameters = Map.of(
                     "db_user", ma.getUser(),
                     "db_pass", ma.getPass(),
-                    "metric_id", String.valueOf(register.getMetricId())
+                    "id", String.valueOf(register.getEntryMetricId())
             );
             String data = DatabaseConnect.start(table, parameters, "delete");
-            
-            
-            
-            System.out.println(data);
-            
-            
-            
-            
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "delete", e);
