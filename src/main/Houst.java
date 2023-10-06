@@ -1,10 +1,12 @@
 package main;
 
-import frame.register.MetricRegisterFrame;
+import java.io.IOException;
+
+import frame.stock.importing.StockDataImportFrame;
 
 public class Houst {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -12,7 +14,8 @@ public class Houst {
                     break;
                 }
             }
-            new MetricRegisterFrame().setVisible(true);
+            new StockDataImportFrame().setVisible(true);
+            //new MetricRegisterFrame().setVisible(true);
             //new BrokerageReportImportFrame().setVisible(true);
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(Houst.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);

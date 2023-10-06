@@ -25,7 +25,7 @@ import model.register.connect.BrokerageReportConnect;
 import model.register.connect.TitleConnect;
 import model.register.register.TitleRegister;
 import model.view.register.BrokerageReportView;
-import process.BrokerageReportProcess;
+import process.brokerageReport.BrokerageReportProcess;
 import setting.desing.Design;
 import setting.desing.DesignIcon;
 import support.FunctionCurrency;

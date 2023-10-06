@@ -1,4 +1,4 @@
-package process;
+package process.brokerageReport;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -11,32 +11,52 @@ import model.register.register.CustomerRegister;
 import model.register.register.StockBrokerageRegister;
 import model.register.register.TitleRegister;
 import model.view.register.BrokerageReportView;
+import support.FunctionCurrency;
 import support.FunctionText;
 
-public class BrokerageReportGenial {
-	
-	public ArrayList<BrokerageReportView> get(ArrayList<String> text) {
+public class BrokerageReportXp {
+
+	public ArrayList<BrokerageReportView> get(ArrayList<String> text) {			
 		ArrayList<BrokerageReportView> registers = new ArrayList<BrokerageReportView>();
+		ArrayList<String> textHelp = new ArrayList<String>();
 		for(String t: text) {
-			registers.add(getBrokerageReport(t));
+			textHelp.add(t);
+			if(!checkMultiplePage(t)) {
+				BrokerageReportView view = getBrokerageReport(t);
+				ArrayList<TitleRegister> titles = new ArrayList<TitleRegister>();
+				for(String h: textHelp) {
+					titles.addAll(getTitles(h));
+				}
+				view.setTitles(titles);
+				registers.add(view);
+				textHelp.clear();
+			}
 		}		
 		return registers;
+	}
+	
+	private boolean checkMultiplePage(String text){		
+		String temp = text.substring(text.indexOf("cios Resumo Financeiro"),text.indexOf("(*) Observa"));
+		if(temp.contains("CONTINUA...")) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 	
 	private BrokerageReportView getBrokerageReport(String text) {		
 		BrokerageReportView register = new BrokerageReportView();
 		
 		register.setBrokerageReportRegister(getBusinessBriefing(text));
-		register.setBrokerageCustomerRegister(getBrokerageCustomer(text));
 		register.setCustomerRegister(getCustomer(text));
-		register.setTitles(getTitles(text));
+		register.setBrokerageCustomerRegister(getBrokerageCustomer(text));		
 				
 		//we need change for database
 		StockBrokerageRegister brokerageRegister = new StockBrokerageRegister();
-		brokerageRegister.setId(1);
-		brokerageRegister.setName("GENIAL INVESTIMENTOS");	
+		brokerageRegister.setId(2);
+		brokerageRegister.setName("XP INVESTIMENTOS");		
 		
-		register.setStockBrokerageRegister(brokerageRegister);		
+		register.setStockBrokerageRegister(brokerageRegister);			
 		register.getBrokerageReportRegister().setStockBrokerageId(brokerageRegister.getId());
 		register.getBrokerageCustomerRegister().setStockBrokerageId(brokerageRegister.getId());
 		
@@ -44,13 +64,11 @@ public class BrokerageReportGenial {
 	}
 	
  	private CustomerRegister getCustomer(String text) {
-		try {			
+		try {
 			CustomerRegister register = new CustomerRegister();		
 			
-			String regexName = "\\d{6}-\\d\\s([A-ZÁÉÍÓÚÇÃ][A-ZÁÉÍÓÚÇÃ a-záéíóúçã]+\\s[A-ZÁÉÍÓÚÇÃ][A-ZÁÉÍÓÚÇÃ a-záéíóúçã]+)\\s\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}";
-	        String name = FunctionText.extractInfo(text, regexName);
-	        register.setName(name);
-	        
+	        register.setName(text.split("\n")[10]);
+				        
 	        String regexCPF = "(\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2})";
 	        String cpf = FunctionText.extractInfo(text, regexCPF);
 	        register.setCpf(cpf.replace(".","").replace("-",""));
@@ -58,7 +76,7 @@ public class BrokerageReportGenial {
 	        /*
 	        System.out.println("-----------Customer-------------");
 	        System.out.println("Nome do Cliente: " + register.getName());
-	        System.out.println("CPF: " + register.getCpf());*/
+	        System.out.println("CPF: ->" + register.getCpf() + "<-");*/
 	        
 			return register;
 		}catch(Exception e) {
@@ -69,18 +87,18 @@ public class BrokerageReportGenial {
  	
  	private BrokerageCustomerRegister getBrokerageCustomer(String text) {
 		try {
+			BrokerageCustomerRegister register = new BrokerageCustomerRegister();
 			
-			BrokerageCustomerRegister register = new BrokerageCustomerRegister();		
-			
-			register.setStockBrokerageId(1); // GENIAL INVESTIMENTOS
-	        
 	        String regexCode = "(\\d{6}-\\d{1})";
 	        String code = FunctionText.extractInfo(text, regexCode);
 	        register.setCode(code);
+	        
+	        register.setStockBrokerageId(1); //XP INVESTIMENTOS
 
+	        
 	        /*
 	        System.out.println("-----------Brokerage Customer-------------");
-	        System.out.println("Código: " + register.getCode());*/
+	        System.out.println("Código: ->" + register.getCode() + "<-");*/
 	        
 			return register;
 		}catch(Exception e) {
@@ -101,7 +119,7 @@ public class BrokerageReportGenial {
 	            String[] lines = result.split("\\n");
 	            for (String line : lines) {
 	            	TitleRegister register = new TitleRegister();
-	            	
+	            		            	
 	                String[] parts = line.split(" ");
 	                
 	                //negotiation "1-BOVESPA"
@@ -116,14 +134,15 @@ public class BrokerageReportGenial {
 	                //quantity
 	                for(int i=3;i<parts.length;i++) {
 	                	try {
-	                		register.setQuantity(Integer.parseInt(parts[i]));
+	                		register.setQuantity(Integer.parseInt(parts[i].replace(".","")));
 	                		break;
 	                	}catch(Exception e) {}
 	                }
-	                 
+	                
 	                //title name "MAGAZ LUIZA ON"
-	                String[] p = line.split(" "+register.getMarketType()+" | "+register.getQuantity()+" ");
+	                String[] p = line.split(" "+parts[2]+" | "+FunctionCurrency.bigDecimalToThousands(register.getQuantity())+" ");
 	                register.setTitleName(p[1]);
+	                
 	                
 	                String[] p2 = p[2].split(" ");
 	                
@@ -147,7 +166,8 @@ public class BrokerageReportGenial {
 	                System.out.println("Title Name: " + register.getTitleName());
 	                System.out.println("Price: " + register.getPrice());
 	                System.out.println("Price Total: " + register.getPriceTotal());
-	                System.out.println("Operation Type: " + register.getOperationType());    */         
+	                System.out.println("Operation Type: " + register.getOperationType()); 
+	                System.out.println("\n\n"); */
 	            }	            
 	        }
 	        return registers;
@@ -169,7 +189,7 @@ public class BrokerageReportGenial {
 			register.setTradingDate(text.split("\n")[2].split(" ")[2]);
 			
 			//get part of text with data
-			text = text.substring(text.indexOf("Resumo dos Negócios Resumo Financeiro D/C"),text.indexOf("(*) - Observ"));
+			text = text.substring(text.indexOf("cios Resumo Financeiro"),text.indexOf("(*) Observa"));
 			
 			String[] lines = text.split(" ");
 			
@@ -180,168 +200,156 @@ public class BrokerageReportGenial {
 			}*/
 			
 			//debentures
-			register.setDebentures(new BigDecimal(lines[6].replace(".","").replace(",",".")));
+			register.setDebentures(new BigDecimal(lines[3].replace(".","").replace(",",".")));
 			
 			//spotSales "venda a vista"
-			register.setSpotSales(new BigDecimal(lines[10].replace(".","").replace(",",".")));
+			register.setSpotSales(new BigDecimal(lines[7].replace(".","").replace(",",".")));
 			
 			//spotPurchases "compra a vista"
-			register.setSpotPurchases(new BigDecimal(lines[19].replace(".","").replace(",",".")));
+			register.setSpotPurchases(new BigDecimal(lines[16].replace(".","").replace(",",".")));
 			
 			//spotPurchases "opcao compra"
-			register.setOptionsPurchases(new BigDecimal(lines[27].replace(".","").replace(",",".")));
+			register.setOptionsPurchases(new BigDecimal(lines[24].replace(".","").replace(",",".")));
 			
 			//spotSales "opcao venda"
-			register.setOptionsSales(new BigDecimal(lines[35].replace(".","").replace(",",".")));
+			register.setOptionsSales(new BigDecimal(lines[32].replace(".","").replace(",",".")));
 			
 			//forward operation "operações a termo"
-			register.setForwardOperation(new BigDecimal(lines[42].replace(".","").replace(",",".")));
+			register.setForwardOperation(new BigDecimal(lines[39].split("\n")[0].replace(".","").replace(",",".")));
 			
 			//value of public securities operation "Valor das oper. c/ títulos públ. (v. nom."
-			register.setValueOfPublicSecuritiesOperation(new BigDecimal(lines[51].replace(".","").replace(",",".")));
+			register.setValueOfPublicSecuritiesOperation(new BigDecimal(lines[51].split("\n")[0].replace(".","").replace(",",".")));
 			
 			//operation value
-			register.setOperationValue(new BigDecimal(lines[60].replace("A.N.A.\n","").replace(".","").replace(",",".")));	
-			
+			register.setOperationValue(new BigDecimal(lines[54].replace(".","").replace(",",".")));	
+				
 			//net value operation "Valor líquido das operações"
-			if(lines[16].replace("Compras\n","").equalsIgnoreCase("C")) {
-				register.setNetValueOperation(new BigDecimal(lines[15].replace(".","").replace(",",".")));
+			if(lines[13].split("\n")[0].equalsIgnoreCase("C")) {
+				register.setNetValueOperation(new BigDecimal(lines[12].replace(".","").replace(",",".")));
 			}else {
-				register.setNetValueOperation(new BigDecimal("-"+lines[15].replace(".","").replace(",",".")));
+				register.setNetValueOperation(new BigDecimal("-"+lines[12].replace(".","").replace(",",".")));
 			}			
 			
 			//settlement fee "Taxa de liquidação"
-			if(lines[24].substring(0,1).equalsIgnoreCase("C")) {
-				register.setSettlementFee(new BigDecimal(lines[23].replace(".","").replace(",",".")));
+			if(lines[21].split("\n")[0].equalsIgnoreCase("C")) {
+				register.setSettlementFee(new BigDecimal(lines[20].replace(".","").replace(",",".")));
 			}else {
-				register.setSettlementFee(new BigDecimal("-"+lines[23].replace(".","").replace(",",".")));
+				register.setSettlementFee(new BigDecimal("-"+lines[20].replace(".","").replace(",",".")));
 			}
 			
 			//registration fee "taxa de registro"
-			if(lines[32].substring(0,1).equalsIgnoreCase("C")) {
-				register.setRegistrationFee(new BigDecimal(lines[31].replace(".","").replace(",",".")));
+			if(lines[29].split("\n")[0].equalsIgnoreCase("C")) {
+				register.setRegistrationFee(new BigDecimal(lines[28].replace(".","").replace(",",".")));
 			}else {
-				register.setRegistrationFee(new BigDecimal("-"+lines[31].replace(".","").replace(",",".")));
+				register.setRegistrationFee(new BigDecimal("-"+lines[28].replace(".","").replace(",",".")));
 			}			
 			
 			//total cbcl
-			if(lines[39].substring(0,1).equalsIgnoreCase("C")) {
-				register.setTotalCBLC(new BigDecimal(lines[38].replace(".","").replace(",",".")));
+			if(lines[36].split("\n")[0].equalsIgnoreCase("C")) {
+				register.setTotalCBLC(new BigDecimal(lines[35].replace(".","").replace(",",".")));
 			}else {
-				register.setTotalCBLC(new BigDecimal("-"+lines[38].replace(".","").replace(",",".")));
+				register.setTotalCBLC(new BigDecimal("-"+lines[35].replace(".","").replace(",",".")));
 			}
 			
 			//term Options Fee "taxa de termo / opcoes"
-			if(lines[56].substring(0,1).equalsIgnoreCase("C")) {
-				register.setTermOptionsFee(new BigDecimal(lines[55].replace(".","").replace(",",".")));
+			if(lines[43].split("\n")[0].equalsIgnoreCase("C")) {
+				register.setTermOptionsFee(new BigDecimal(lines[42].replace(".","").replace(",",".")));
 			}else {
-				register.setTermOptionsFee(new BigDecimal("-"+lines[55].replace(".","").replace(",",".")));
+				register.setTermOptionsFee(new BigDecimal("-"+lines[42].replace(".","").replace(",",".")));
 			}
 			
 			//A.N.A. FEE "taxa ANA"
-			if(lines[62].substring(0,1).equalsIgnoreCase("C")) {
-				register.setAnaFee(new BigDecimal(lines[61].replace(".","").replace(",",".")));
+			if(lines[58].split("\n")[0].equalsIgnoreCase("C")) {
+				register.setAnaFee(new BigDecimal(lines[57].replace(".","").replace(",",".")));
 			}else {
-				register.setAnaFee(new BigDecimal("-"+lines[61].replace(".","").replace(",",".")));
+				register.setAnaFee(new BigDecimal("-"+lines[57].replace(".","").replace(",",".")));
 			}
 			
 			//emoluments "emolumentos"
-			if(lines[64].substring(0,1).equalsIgnoreCase("C")) {
-				register.setEmoluments(new BigDecimal(lines[63].replace(".","").replace(",",".")));
+			if(lines[60].split("\n")[0].equalsIgnoreCase("C")) {
+				register.setEmoluments(new BigDecimal(lines[59].replace(".","").replace(",",".")));
 			}else {  
-				register.setEmoluments(new BigDecimal("-"+lines[63].replace(".","").replace(",",".")));
+				register.setEmoluments(new BigDecimal("-"+lines[59].replace(".","").replace(",",".")));
 			}
 						
 			//total bovespa
-			if(lines[69].substring(0,1).equalsIgnoreCase("C")) {
-				register.setTotalBovespa(new BigDecimal(lines[68].replace(".","").replace(",",".")));
+			if(lines[65].split("\n")[0].equalsIgnoreCase("C")) {
+				register.setTotalBovespa(new BigDecimal(lines[64].replace(".","").replace(",",".")));
 			}else {
-				register.setTotalBovespa(new BigDecimal("-"+lines[68].replace(".","").replace(",",".")));
+				register.setTotalBovespa(new BigDecimal("-"+lines[64].replace(".","").replace(",",".")));
 			}
-									
-			//clearing
-			if(lines[82].substring(0,1).equalsIgnoreCase("C")) {
-				register.setClearing(new BigDecimal(lines[81].substring(13,lines[81].length()).replace(".","").replace(",",".")));
+												
+			//clearing "taxa operacional"
+			if(lines[72].split("\n")[0].equalsIgnoreCase("C")) {
+				register.setClearing(new BigDecimal(lines[71].replace(".","").replace(",",".")));
 			}else {
-				register.setClearing(new BigDecimal("-"+lines[81].substring(13,lines[81].length()).replace(".","").replace(",",".")));
+				register.setClearing(new BigDecimal("-"+lines[71].replace(".","").replace(",",".")));
 			}
 						
 			//execution "execução"
-			if(lines[83].substring(0,1).equalsIgnoreCase("C")) {
-				register.setExecution(new BigDecimal(lines[82].substring(20,lines[82].length()).replace(".","").replace(",",".")));
+			register.setExecution(new BigDecimal(lines[73].split("\n")[0].replace(".","").replace(",",".")));
+												
+			//in house execution "execução casa"/"taxa custodia"
+			if(lines[86].split("\n")[0].equalsIgnoreCase("C")) {
+				register.setInHouseExecution(new BigDecimal(lines[84].split("\n")[0].replace(".","").replace(",",".")));
 			}else {
-				register.setExecution(new BigDecimal("-"+lines[82].substring(20,lines[82].length()).replace(".","").replace(",",".")));
-			}
-									
-			//in house execution "execução casa"
-			if(lines[85].substring(0,1).equalsIgnoreCase("C")) {
-				register.setInHouseExecution(new BigDecimal(lines[84].substring(5,lines[84].length()).replace(".","").replace(",",".")));
-			}else {
-				register.setInHouseExecution(new BigDecimal("-"+lines[84].substring(5,lines[84].length()).replace(".","").replace(",",".")));
+				register.setInHouseExecution(new BigDecimal("-"+lines[84].split("\n")[0].replace(".","").replace(",",".")));
 			}
 			
-			//iss sao paulo
-			register.setIss(new BigDecimal("-"+lines[90].split("\n")[0].replace(".","").replace(",",".")));
-						
-			//there is a brokerage with "I.R.R.F s/ operações, base R$ 2.603,70 0,13" and without
-			//try first with
-			try {
-				//irrf base
-				register.setIrrfBase(new BigDecimal(lines[95].replace(".","").replace(",",".")));
-						
-				//irrf
-				register.setIrrf(new BigDecimal(lines[96].replace(".","").replace(",",".")));
-							
-				//iss pis cofins
-				if(lines[100].substring(0,1).equalsIgnoreCase("C")) {
-					register.setIssPisCofins(new BigDecimal(lines[99].replace(".","").replace(",",".")));
-				}else {
-					register.setIssPisCofins(new BigDecimal("-"+lines[99].replace(".","").replace(",",".")));
-				}
-							
-				//total brokerage expenses "total corretagem despesas"
-				register.setTotalBrokerageExpenses(new BigDecimal(lines[100].split("\n")[1].replace(".","").replace(",",".")));
-							
-				//net amount for date "liquido para data"
-				register.setNetAmountForDate(lines[103].split("\n")[1]);
-				
-				//net amount for value "liquido para valor"
-				if(lines[105].split("\n")[0].equalsIgnoreCase("C")) {
-					register.setNetAmountFor(new BigDecimal(lines[104].replace(".","").replace(",",".")));
-				}else {
-					register.setNetAmountFor(new BigDecimal("-"+lines[104].replace(".","").replace(",",".")));
-				}
-				
-			}catch(Exception e) {
-				//try without
-						
-				//irrf base
-				register.setIrrfBase(new BigDecimal("0"));
-					
-				//irrf
-				register.setIrrf(new BigDecimal("0"));
+			//iss sao paulo "imposto"
+			register.setIss(new BigDecimal("-"+lines[85].split("\n")[0].replace(".","").replace(",",".")));
 									
-				//iss pis cofins
-				if(lines[93].substring(0,1).equalsIgnoreCase("C")) {
+			//irrf base
+			register.setIrrfBase(new BigDecimal(lines[90].replace("R$","").replace(".","").replace(",",".")));
+					
+			//irrf
+			register.setIrrf(new BigDecimal(lines[91].split("\n")[0].replace(".","").replace(",",".")));
+					
+			try {
+				
+				//iss pis cofins / "outro"
+				if(lines[93].split("\n")[0].equalsIgnoreCase("C")) {
 					register.setIssPisCofins(new BigDecimal(lines[92].replace(".","").replace(",",".")));
 				}else {
 					register.setIssPisCofins(new BigDecimal("-"+lines[92].replace(".","").replace(",",".")));
 				}
-				
+							
 				//total brokerage expenses "total corretagem despesas"
-				register.setTotalBrokerageExpenses(new BigDecimal(lines[93].split("\n")[1].replace(".","").replace(",",".")));
-						
+				register.setTotalBrokerageExpenses(new BigDecimal(lines[97].replace(".","").replace(",",".")));
+							
 				//net amount for date "liquido para data"
-				register.setNetAmountForDate(lines[96].split("\n")[1]);
+				register.setNetAmountForDate(lines[100]);
 				
 				//net amount for value "liquido para valor"
-				if(lines[98].split("\n")[0].equalsIgnoreCase("C")) {
-					register.setNetAmountFor(new BigDecimal(lines[97].replace(".","").replace(",",".")));
+				if(lines[102].split("\n")[0].equalsIgnoreCase("C")) {
+					register.setNetAmountFor(new BigDecimal(lines[101].replace(".","").replace(",",".")));
 				}else {
-					register.setNetAmountFor(new BigDecimal("-"+lines[97].replace(".","").replace(",",".")));
+					register.setNetAmountFor(new BigDecimal("-"+lines[101].replace(".","").replace(",",".")));
 				}
+			}catch(Exception e) {
+				
+				//iss pis cofins / "outro"
+				if(lines[94].split("\n")[0].equalsIgnoreCase("C")) {
+					register.setIssPisCofins(new BigDecimal(lines[93].replace(".","").replace(",",".")));
+				}else {
+					register.setIssPisCofins(new BigDecimal("-"+lines[93].replace(".","").replace(",",".")));
+				}
+							
+				//total brokerage expenses "total corretagem despesas"
+				register.setTotalBrokerageExpenses(new BigDecimal(lines[98].replace(".","").replace(",",".")));
+							
+				//net amount for date "liquido para data"
+				register.setNetAmountForDate(lines[101]);
+				
+				//net amount for value "liquido para valor"
+				if(lines[103].split("\n")[0].equalsIgnoreCase("C")) {
+					register.setNetAmountFor(new BigDecimal(lines[102].replace(".","").replace(",",".")));
+				}else {
+					register.setNetAmountFor(new BigDecimal("-"+lines[102].replace(".","").replace(",",".")));
+				}
+				
 			}
-					
+			
 			/*
 			System.out.println("-----------Data-------------");
 			System.out.println("Debentures: " + register.getDebentures());
@@ -374,6 +382,7 @@ public class BrokerageReportGenial {
 		}catch (Exception e) {
 			support.Message.Error(this.getClass().getName(),"getCustomer",e);
 			return null;
-		}	
+		}
 	}
+
 }

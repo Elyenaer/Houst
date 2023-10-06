@@ -1,6 +1,6 @@
 package model.register.register;
 
-public class EntryMetricTextRegister {
+public class EntryMetricTextRegister extends EntryMetricRegister {
 	private String value;
 
 	public String getValue() {

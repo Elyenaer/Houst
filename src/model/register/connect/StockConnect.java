@@ -58,6 +58,23 @@ public class StockConnect {
             return null;
         }
     }
+    
+    public ArrayList<StockRegister> getActive() {
+        try {
+            Map<String, String> parameters = Map.of(
+                    "db_user", ma.getUser(),
+                    "db_pass", ma.getPass(),
+                    
+                    "status", "a"
+            );
+
+            String data = DatabaseConnect.start(table, parameters, "get");
+            return convertArray(data);
+        } catch (Exception e) {
+            support.Message.Error(this.getClass().getName(), "get", e);
+            return null;
+        }
+    }
 
     public StockRegister get(int id) {
         try {
