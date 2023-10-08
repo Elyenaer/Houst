@@ -61,6 +61,23 @@ public class MetricConnect {
             return null;
         }
     }
+    
+    public ArrayList<MetricRegister> getActive() {
+        try {
+            Map<String, String> parameters = Map.of(
+                    "db_user", ma.getUser(),
+                    "db_pass", ma.getPass(),
+                    
+                    "status", String.valueOf('a')
+            );
+
+            String data = DatabaseConnect.start(table, parameters, "get");
+            return convertArray(data);
+        } catch (Exception e) {
+            support.Message.Error(this.getClass().getName(), "get", e);
+            return null;
+        }
+    }
 
     public MetricRegister get(int id) {
         try {
@@ -83,12 +100,13 @@ public class MetricConnect {
             Map<String, String> parameters = new HashMap<>();
             parameters.put("db_user", ma.getUser());
             parameters.put("db_pass", ma.getPass());
-            parameters.put("title_import", register.getTitleImport());
-            parameters.put("name", register.getName());
-            parameters.put("description", register.getDescription());
+            parameters.put("title_import",register.getTitleImport());
+            parameters.put("name",register.getName());
+            parameters.put("description",register.getDescription());
             parameters.put("type", String.valueOf(register.getType()));
             parameters.put("status", String.valueOf(register.getStatus()));
             parameters.put("metric_id", String.valueOf(register.getMetricId()));
+                        
             String data = DatabaseConnect.start(table, parameters, "put");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
@@ -118,23 +136,13 @@ public class MetricConnect {
 
     public boolean delete(MetricRegister register) {
         try {
-        	
-        	System.out.println("->" + register.getMetricId());
-        	
             Map<String, String> parameters = Map.of(
                     "db_user", ma.getUser(),
                     "db_pass", ma.getPass(),
                     "metric_id", String.valueOf(register.getMetricId())
             );
             String data = DatabaseConnect.start(table, parameters, "delete");
-            
-            
-            
-            System.out.println(data);
-            
-            
-            
-            
+
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "delete", e);

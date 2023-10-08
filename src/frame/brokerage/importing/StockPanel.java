@@ -8,7 +8,7 @@ import components.CustomLabel;
 import components.CustomPanel;
 import model.register.register.BrokerageReportRegister;
 import setting.desing.Design;
-import support.FunctionCurrency;
+import support.FunctionBigDecimal;
 
 public class StockPanel extends CustomPanel {
     private static final long serialVersionUID = 1L;
@@ -95,10 +95,10 @@ public class StockPanel extends CustomPanel {
 	}
 
 	public void setRegister(BrokerageReportRegister register) {
-	    LBtermOptionsFeeV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getTermOptionsFee()));
-	    LBanaFeeV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getAnaFee()));
-	    LBemolumentsV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getEmoluments()));
-	    LBtotalBovespaV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getTotalBovespa()));	    
+	    LBtermOptionsFeeV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getTermOptionsFee()));
+	    LBanaFeeV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getAnaFee()));
+	    LBemolumentsV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getEmoluments()));
+	    LBtotalBovespaV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getTotalBovespa()));	    
 	    this.revalidate();
 	    this.repaint();
 	}

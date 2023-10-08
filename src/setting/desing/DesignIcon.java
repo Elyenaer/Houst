@@ -60,6 +60,10 @@ public class DesignIcon {
 		return loadImageAsIcon("warning16x16.png");
 	}
 	
+	public static BufferedImage backgroundImage() {
+		return loadImage("backgroundImage.png");
+	}
+	
 	public static Icon stockBrokerageIcon(StockBrokerageRegister stockBrokerageRegister) {
 		if(stockBrokerageRegister.getId()==1) {
 			return loadImageAsIcon("genial_investimentos.png");

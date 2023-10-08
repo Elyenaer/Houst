@@ -8,7 +8,7 @@ import components.CustomLabel;
 import components.CustomPanel;
 import model.register.register.BrokerageReportRegister;
 import setting.desing.Design;
-import support.FunctionCurrency;
+import support.FunctionBigDecimal;
 
 public class BrokerageExpensesPanel extends CustomPanel {
     private static final long serialVersionUID = 1L;
@@ -124,16 +124,16 @@ public class BrokerageExpensesPanel extends CustomPanel {
     }
 
     public void setRegister(BrokerageReportRegister register) {
-    	LBclearingV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getClearing()));
-        LBexecutionV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getExecution()));
-        LBinHouseExecutionV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getInHouseExecution()));
-        LBissV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getIss()));
-        LBirrfT.setText("I.R.R.F s/ operações, base "+FunctionCurrency.bigDecimalToCurrencyBR(register.getIrrfBase()));
-        LBirrfV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getIrrf()));
-        LBissPisCofinsV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getIssPisCofins()));
-        LBtotalBrokerageExpensesV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getTotalBrokerageExpenses()));
+    	LBclearingV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getClearing()));
+        LBexecutionV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getExecution()));
+        LBinHouseExecutionV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getInHouseExecution()));
+        LBissV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getIss()));
+        LBirrfT.setText("I.R.R.F s/ operações, base "+FunctionBigDecimal.bigDecimalToCurrencyBR(register.getIrrfBase()));
+        LBirrfV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getIrrf()));
+        LBissPisCofinsV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getIssPisCofins()));
+        LBtotalBrokerageExpensesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getTotalBrokerageExpenses()));
         LBnetAmountForT.setText("Líquido para "+register.getNetAmountForDate());
-        LBnetAmountForV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getNetAmountFor()));
+        LBnetAmountForV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getNetAmountFor()));
 
         this.revalidate();
         this.repaint();

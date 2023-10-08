@@ -8,7 +8,7 @@ import components.CustomLabel;
 import components.CustomPanel;
 import model.register.register.BrokerageReportRegister;
 import setting.desing.Design;
-import support.FunctionCurrency;
+import support.FunctionBigDecimal;
 
 public class BusinessBriefingPanel extends CustomPanel{
 	private static final long serialVersionUID = 1L;
@@ -125,14 +125,14 @@ public class BusinessBriefingPanel extends CustomPanel{
 	}
 	
 	public void setRegister(BrokerageReportRegister register) {			
-		LBdebenturesV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getDebentures()));		
-		LBspotSalesV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getSpotSales()));		
-		LBspotPurchasesV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getSpotPurchases()));		
-		LBoptionsPurchasesV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getOptionsPurchases()));					
-		LBoptionsSalesV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getOptionsSales()));			
-		LBforwardOperationV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getForwardOperation()));				
-		LBvalueOfPublicSecuritiesOperationV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getValueOfPublicSecuritiesOperation()));		
-		LBoperationValueV.setText(FunctionCurrency.bigDecimalToCurrencyBR(register.getOperationValue()));			
+		LBdebenturesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getDebentures()));		
+		LBspotSalesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getSpotSales()));		
+		LBspotPurchasesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getSpotPurchases()));		
+		LBoptionsPurchasesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getOptionsPurchases()));					
+		LBoptionsSalesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getOptionsSales()));			
+		LBforwardOperationV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getForwardOperation()));				
+		LBvalueOfPublicSecuritiesOperationV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getValueOfPublicSecuritiesOperation()));		
+		LBoperationValueV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getOperationValue()));			
 		this.revalidate();
 		this.repaint();
 	}

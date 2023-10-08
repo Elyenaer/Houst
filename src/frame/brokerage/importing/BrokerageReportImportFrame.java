@@ -28,7 +28,7 @@ import model.view.register.BrokerageReportView;
 import process.brokerageReport.BrokerageReportProcess;
 import setting.desing.Design;
 import setting.desing.DesignIcon;
-import support.FunctionCurrency;
+import support.FunctionBigDecimal;
 import support.Message;
 
 public class BrokerageReportImportFrame extends CustomFrame {
@@ -326,8 +326,8 @@ public class BrokerageReportImportFrame extends CustomFrame {
 	            title.getMarketType(),
 	            title.getTitleName(),
 	            title.getQuantity(),
-	            FunctionCurrency.bigDecimalToCurrencyBR(title.getPrice()),
-	            FunctionCurrency.bigDecimalToCurrencyBR(title.getPriceTotal()),
+	            FunctionBigDecimal.bigDecimalToCurrencyBR(title.getPrice()),
+	            FunctionBigDecimal.bigDecimalToCurrencyBR(title.getPriceTotal()),
 	            title.getOperationType()
 	        };
 	        dtm.addRow(rowData);
@@ -354,10 +354,6 @@ public class BrokerageReportImportFrame extends CustomFrame {
 		});
 	}
 	
-	@Override
-	public void closeScreen() {
-		System.exit(0);
-	}
 }
 
 class helpCheck{

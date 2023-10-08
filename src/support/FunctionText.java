@@ -20,7 +20,7 @@ public class FunctionText {
 	    }
 	    return "Não encontrado";
 	}
-	
+		
     public static String QuebrarLinha(final String texto, final int maximo) {
         try {
             if (texto == null) {

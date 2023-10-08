@@ -2,6 +2,7 @@ package model.register.connect;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,12 +11,13 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import model.register.register.EntryMetricDoubleRegister;
+import model.register.register.EntryMetricDecimalRegister;
 import model.register.register.EntryMetricRegister;
 import model.register.register.EntryMetricTextRegister;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
 import support.FunctionApi;
+import support.FunctionBigDecimal;
 
 public class EntryMetricConnect {
     private ManagerAccess ma;
@@ -30,7 +32,7 @@ public class EntryMetricConnect {
         JSONArray jsonArray = new JSONArray(data);
         if(type=='d') {
         	for (int i = 0; i < jsonArray.length(); i++) {
-        		EntryMetricDoubleRegister register = new EntryMetricDoubleRegister();
+        		EntryMetricDecimalRegister register = new EntryMetricDecimalRegister();
                 registers.add(convert(jsonArray.getJSONObject(i),register));
             }
         }else if(type=='t') {
@@ -54,8 +56,8 @@ public class EntryMetricConnect {
         register.setStockId(jsonObject.getInt("stock_id"));
         register.setDate(LocalDate.parse(jsonObject.getString("date")));
 
-        if (register instanceof EntryMetricDoubleRegister) {
-            ((EntryMetricDoubleRegister) register).setValue(jsonObject.getDouble("value"));
+        if (register instanceof EntryMetricDecimalRegister) {
+            ((EntryMetricDecimalRegister) register).setValue(new BigDecimal(jsonObject.getString("value")));
         } else if (register instanceof EntryMetricTextRegister) {
             ((EntryMetricTextRegister) register).setValue(jsonObject.getString("value"));
         }
@@ -89,7 +91,7 @@ public class EntryMetricConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             EntryMetricRegister register;
             if(type=='d') {
-            	register = new EntryMetricDoubleRegister();
+            	register = new EntryMetricDecimalRegister();
             }else {
             	register = new EntryMetricTextRegister();
             }
@@ -113,12 +115,12 @@ public class EntryMetricConnect {
             
             if(register instanceof EntryMetricTextRegister) {
             	parameters.put("value", String.valueOf(((EntryMetricTextRegister) register).getValue()));
-            }else if(register instanceof EntryMetricDoubleRegister) {
-            	parameters.put("value", String.valueOf(((EntryMetricDoubleRegister) register).getValue()));
+            	parameters.put("type",String.valueOf('t'));
+            }else if(register instanceof EntryMetricDecimalRegister) {
+            	parameters.put("value", String.valueOf(((EntryMetricDecimalRegister) register).getValue()));
+            	parameters.put("type",String.valueOf('d'));
             }
             
-            parameters.put("type", String.valueOf(register.getEntryMetricId()));
-
             String data = DatabaseConnect.start(table, parameters, "put");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
@@ -136,16 +138,16 @@ public class EntryMetricConnect {
             parameters.put("metric_id", String.valueOf(register.getMetricId()));
             parameters.put("stock_id", String.valueOf(register.getStockId()));
             parameters.put("entry_metric_id", String.valueOf(register.getEntryMetricId()));
+            parameters.put("date", register.getDate().toString());  
             
             if(register instanceof EntryMetricTextRegister) {
-            	parameters.put("value", String.valueOf(((EntryMetricTextRegister) register).getValue()));
-            }else if(register instanceof EntryMetricDoubleRegister) {
-            	parameters.put("value", String.valueOf(((EntryMetricDoubleRegister) register).getValue()));
-            }
-            
-            parameters.put("type", String.valueOf(register.getEntryMetricId()));
-            
-            String data = DatabaseConnect.start(table, parameters, "post");            
+            	parameters.put("value", FunctionBigDecimal.bigDecimalToDatabase(((EntryMetricDecimalRegister) register).getValue()));
+            	parameters.put("type",String.valueOf('t'));
+            }else if(register instanceof EntryMetricDecimalRegister) {
+            	parameters.put("value", String.valueOf(((EntryMetricDecimalRegister) register).getValue()));
+            	parameters.put("type",String.valueOf('d'));
+            }            
+            String data = DatabaseConnect.start(table, parameters, "post");   
             return FunctionApi.getId(data);
         }catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "post", e);
@@ -171,6 +173,6 @@ public class EntryMetricConnect {
     }
     
     private char getType(EntryMetricRegister register) {
-    	return register instanceof EntryMetricTextRegister ? 't' : register instanceof EntryMetricDoubleRegister ? 'd' : ' ';
+    	return register instanceof EntryMetricTextRegister ? 't' : register instanceof EntryMetricDecimalRegister ? 'd' : ' ';
     }
 }

@@ -64,12 +64,16 @@ public class CustomTable extends JScrollPane{
             }
         });    	
     	
+    	
+    	
+    	
+    	
     	DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
     	headerRenderer.setFont(Design.getFont(10,true));
         headerRenderer.setBackground(Design.componentsBackground2);
         headerRenderer.setForeground(Design.componentsForeground2);        
         table.getTableHeader().setDefaultRenderer(headerRenderer);
-              	
+                
     	table.setBackground(new Color(0,0,0,0));
     	table.setForeground(Design.componentsForeground);
     	table.setFont(Design.getFont(10,false));
@@ -99,9 +103,13 @@ public class CustomTable extends JScrollPane{
     	table.getColumnModel().getColumn(column).setPreferredWidth(width);
     }
     
+    public void removeRows() {
+    	DefaultTableModel dtm = (DefaultTableModel) table.getModel();
+		dtm.setRowCount(0);
+    }
+    
 	public void setRows(ArrayList<Object[]> rows) {
 		DefaultTableModel dtm = (DefaultTableModel) table.getModel();
-		dtm.setRowCount(0);
 		for (Object[] row: rows) {
 	        dtm.addRow(row);
 		}
@@ -110,7 +118,6 @@ public class CustomTable extends JScrollPane{
 	//remove first to avoid set title
 	public void setRowsRemoveFirst(ArrayList<Object[]> rows) {
 		DefaultTableModel dtm = (DefaultTableModel) table.getModel();
-		dtm.setRowCount(0);
 		for (int i=1;i<rows.size();i++) {
 	        dtm.addRow(rows.get(i));
 		}
@@ -119,6 +126,22 @@ public class CustomTable extends JScrollPane{
 	public void setCellRenderer(ArrayList<Integer> rows,int column,Color background,Color foreground,boolean isBold) {
 		CustomTableCellRenderer cellRenderer = new CustomTableCellRenderer(rows,column,background,foreground,isBold);
 		table.getColumnModel().getColumn(column).setCellRenderer(cellRenderer);
+		table.revalidate();
+		table.repaint();
+	}
+	
+	public void setTitleRenderer(ArrayList<Integer> columns,Color background,Color foreground,boolean isBold) {
+		DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();		
+    	headerRenderer.setFont(Design.getFont(10,isBold));
+        headerRenderer.setBackground(background);
+        headerRenderer.setForeground(foreground);  
+        
+        for(Integer c: columns) {
+        	table.getColumnModel().getColumn(c).setHeaderRenderer(headerRenderer);
+        }
+        
+        revalidate();
+        repaint();	
 	}
     
 }

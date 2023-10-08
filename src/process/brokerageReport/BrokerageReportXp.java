@@ -11,7 +11,7 @@ import model.register.register.CustomerRegister;
 import model.register.register.StockBrokerageRegister;
 import model.register.register.TitleRegister;
 import model.view.register.BrokerageReportView;
-import support.FunctionCurrency;
+import support.FunctionBigDecimal;
 import support.FunctionText;
 
 public class BrokerageReportXp {
@@ -140,7 +140,7 @@ public class BrokerageReportXp {
 	                }
 	                
 	                //title name "MAGAZ LUIZA ON"
-	                String[] p = line.split(" "+parts[2]+" | "+FunctionCurrency.bigDecimalToThousands(register.getQuantity())+" ");
+	                String[] p = line.split(" "+parts[2]+" | "+FunctionBigDecimal.bigDecimalToThousands(register.getQuantity())+" ");
 	                register.setTitleName(p[1]);
 	                
 	                

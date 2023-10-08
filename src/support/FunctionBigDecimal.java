@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-public class FunctionCurrency {
+public class FunctionBigDecimal {
 	
 	public static String bigDecimalToCurrencyBR(BigDecimal value) {
 	    if (value == null) {
@@ -27,6 +27,14 @@ public class FunctionCurrency {
 	public static String bigDecimalToThousands(int value) {
 	    DecimalFormat format = new DecimalFormat("#,###");
 	    return format.format(value);
+	}
+	
+	public static String bigDecimalToDatabase(BigDecimal value) {
+		return value.toString().replace(".",",");
+	}
+	
+	public static BigDecimal stringToBigDecimal(String text) {
+		return new BigDecimal(text.replace("R$ ","").replace(".","").replace(",","."));
 	}
 
 }

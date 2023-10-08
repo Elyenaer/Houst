@@ -2,7 +2,7 @@ package main;
 
 import java.io.IOException;
 
-import frame.stock.importing.StockDataImportFrame;
+import frame.main.InitialScreenFrame;
 
 public class Houst {
 	
@@ -14,9 +14,7 @@ public class Houst {
                     break;
                 }
             }
-            new StockDataImportFrame().setVisible(true);
-            //new MetricRegisterFrame().setVisible(true);
-            //new BrokerageReportImportFrame().setVisible(true);
+            new InitialScreenFrame().setVisible(true);
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(Houst.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {

@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import javax.swing.JFrame;
+
 import components.CustomFrame;
 import components.CustomIconButton;
 import components.CustomLabel;
@@ -14,6 +16,7 @@ import components.CustomTextArea;
 import components.CustomTextField;
 import components.CustomToggleButton;
 import components.LoadingDialog;
+import frame.stock.importing.StockDataImportFrame;
 import model.register.connect.MetricConnect;
 import model.register.register.MetricRegister;
 import setting.desing.DesignIcon;
@@ -32,14 +35,21 @@ public class MetricRegisterFrame extends CustomFrame{
 	private boolean stateNewRegister = true;
 	private MetricRegister register;
 	
-	public MetricRegisterFrame() {
-		init();
+	private StockDataImportFrame stockFrame;
+	
+	public MetricRegisterFrame(JFrame frame) {
+		init(frame);
 	}
 	
-	private void init() {
+	public MetricRegisterFrame(StockDataImportFrame frame) {
+		this.stockFrame = frame;
+		init(frame);
+	}
+	
+	private void init(JFrame frame) {
 		this.setTitle("CADASTRO DE MÉTRICAS");
 		this.setSize(360,415);
-		this.setLocationRelativeTo(null);
+		this.setLocationRelativeTo(frame);
 		register = new MetricRegister();
 	}
 
@@ -339,4 +349,13 @@ public class MetricRegisterFrame extends CustomFrame{
         loadingThread.start();
 	}
 	
+	@Override
+	public void closeScreen() {
+		if(stockFrame!=null) {
+			stockFrame.setEnabled(true);
+			stockFrame.checkMetrics();		
+		}
+		
+		dispose();
+	}
 }

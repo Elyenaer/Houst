@@ -35,7 +35,7 @@ public abstract class CustomFrame extends JFrame{
 	public abstract void initFormat();	
 	public abstract void initEvent();	
 	public abstract void initAdd();
-		
+			
 	private void windowsClosing() {
 		this.addWindowListener((WindowListener) new WindowListener() {			
 			public void windowOpened(WindowEvent e) {}			
