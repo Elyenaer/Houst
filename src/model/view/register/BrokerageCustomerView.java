@@ -7,7 +7,14 @@ public class BrokerageCustomerView {
 	private String code;
 	private int customerId;
 	private int stockBrokerageId;
+	private String cpf;
 	
+	public String getCpf() {
+		return cpf;
+	}
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
 	public int getCustomerId() {
 		return customerId;
 	}

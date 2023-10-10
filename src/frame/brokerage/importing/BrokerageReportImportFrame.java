@@ -118,13 +118,14 @@ public class BrokerageReportImportFrame extends CustomFrame {
 	@Override
 	public void initFormat() {
 		PNbrokerage.setBackground(Design.mainBackground);	
-		TBstock.setColumnWidth(0,80);
-		TBstock.setColumnWidth(1,30);
-		TBstock.setColumnWidth(2,80);
-		TBstock.setColumnWidth(4,40);
-		TBstock.setColumnWidth(5,80);
+		TBstock.setColumnWidth(0,70);
+		TBstock.setColumnWidth(1,20);
+		TBstock.setColumnWidth(2,60);
+		TBstock.setColumnWidth(3,200);
+		TBstock.setColumnWidth(4,30);
+		TBstock.setColumnWidth(5,70);
 		TBstock.setColumnWidth(6,90);
-		TBstock.setColumnWidth(7,30);	
+		TBstock.setColumnWidth(7,20);	
 		BTdeleteDuplicate.setIcon(DesignIcon.error16x16());
 		BTdeleteDuplicate.setVisible(false);
 	}

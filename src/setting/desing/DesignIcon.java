@@ -52,6 +52,10 @@ public class DesignIcon {
 		return loadImageAsIcon("error16x16.png");
 	}
 	
+	public static Icon search16x16() {
+		return loadImageAsIcon("search16x16.png");
+	}
+	
 	public static Icon checked16x16() {
 		return loadImageAsIcon("checked16x16.png");
 	}

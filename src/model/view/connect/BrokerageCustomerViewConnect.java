@@ -43,6 +43,7 @@ public class BrokerageCustomerViewConnect {
         record.setCode(jsonObject.getString("code"));
         record.setCustomerId(jsonObject.getInt("customer_id"));
         record.setStockBrokerageId(jsonObject.getInt("stock_brokerage_id"));
+        record.setCpf(jsonObject.getString("cpf"));
         return record;
     }
 
@@ -70,6 +71,28 @@ public class BrokerageCustomerViewConnect {
             );
 
             String data = DatabaseConnect.start(table, parameters, "getView");
+            return convertRecord(data);
+        } catch (Exception e) {
+            support.Message.Error(this.getClass().getName(), "get", e);
+            return null;
+        }
+    }
+    
+    public BrokerageCustomerView getByCode(String code,int stockBrokerage) {
+        try {
+            Map<String, String> parameters = Map.of(
+                "db_user", ma.getUser(),
+                "db_pass", ma.getPass(),
+                "code", code,
+                "stock_brokerage_id",String.valueOf(stockBrokerage)
+            );
+
+            String data = DatabaseConnect.start(table, parameters, "getView");
+            
+            if(data.equalsIgnoreCase("[]")){
+            	return null;
+            }
+            
             return convertRecord(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "get", e);
