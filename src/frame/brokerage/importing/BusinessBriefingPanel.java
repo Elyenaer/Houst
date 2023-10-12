@@ -15,7 +15,7 @@ public class BusinessBriefingPanel extends CustomPanel{
 	private int fontSize;
 	
 	private ArrayList<Component> components;
-	private JLabel LBdebenturesT,LBdebenturesV,LBspotSalesT,LBspotSalesV,LBspotPurchasesT,
+	private CustomLabel LBdebenturesT,LBdebenturesV,LBspotSalesT,LBspotSalesV,LBspotPurchasesT,
 		LBspotPurchasesV,LBoptionsPurchasesV,LBoptionsPurchasesT,LBoptionsSalesV,LBoptionsSalesT,
 		LBforwardOperationV,LBforwardOperationT,LBvalueOfPublicSecuritiesOperationT,LBvalueOfPublicSecuritiesOperationV,
 		LBoperationValueT,LBoperationValueV;

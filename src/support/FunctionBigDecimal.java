@@ -34,7 +34,11 @@ public class FunctionBigDecimal {
 	}
 	
 	public static BigDecimal stringToBigDecimal(String text) {
-		return new BigDecimal(text.replace("R$ ","").replace(".","").replace(",","."));
+		try {
+			return new BigDecimal(text.replace("R$ ","").replace(".","").replace(",","."));
+		}catch (Exception e) {
+			return null;
+		}		
 	}
 
 }

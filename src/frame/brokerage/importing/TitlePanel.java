@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -31,11 +30,11 @@ public class TitlePanel extends JPanel{
     private CustomLabel LBcustomerCode,LBcustomerCpf,LBcustomerName,LBinvoiceNumber,LBtradingDate,LBjustName;
     private CustomTextField TFinvoiceNumber,TFcode;
     private CustomDateField DFdate;
-    private CustomIconButton BTsearch;
+    private CustomIconButton BTsearch,BTaddTitle;
     
     private BrokerageCustomerView brokerageCustomer;
     private StockBrokerageRegister stockBrokerage;
-    private JFrame parentFrame;
+    private BrokerageReportRegisterFrame parentFrame;
 
     public TitlePanel(int width, int height, int fontSize) {
         this.fontSize = fontSize;
@@ -43,7 +42,7 @@ public class TitlePanel extends JPanel{
         initComponents();
     }
     
-    public TitlePanel(int width, int height, int fontSize,boolean isRegistering,JFrame parentFrame) {
+    public TitlePanel(int width, int height, int fontSize,boolean isRegistering,BrokerageReportRegisterFrame parentFrame) {
     	this.parentFrame = parentFrame;
     	this.isRegistering = isRegistering;
         this.fontSize = fontSize;
@@ -75,10 +74,13 @@ public class TitlePanel extends JPanel{
     	if(isRegistering) {
     		TFcode = new CustomTextField();
     		TFinvoiceNumber = new CustomTextField();
-    		DFdate = new CustomDateField();
-    		BTsearch = new CustomIconButton(DesignIcon.search16x16(),32,32);
+    		DFdate = new CustomDateField();    		
     		LBjustName = new CustomLabel("",fontSize,true);
     	}
+    	
+    	BTsearch = new CustomIconButton(DesignIcon.search16x16(),32,32);
+    	BTaddTitle = new CustomIconButton(DesignIcon.add(),32,32);
+    	
     }
 
     private void initPosition() {
@@ -98,6 +100,7 @@ public class TitlePanel extends JPanel{
     		LBcustomerName.setBounds(230,5,250,20);   
     		LBjustName.setBounds(230,25,250,20); 
     		LBcustomerCpf.setBounds(230,40,150,20); 
+    		BTaddTitle.setBounds(615,78,32,32);    		
     	}else{
     		LBinvoiceNumber.setBounds(495,0,150,20);
     		LBcustomerCode.setBounds(0,90,100,25);
@@ -116,6 +119,7 @@ public class TitlePanel extends JPanel{
     	} else {
     		DFdate.setVisible(false);
         	TFinvoiceNumber.setVisible(false);
+        	BTaddTitle.setVisible(false);
     	}
     	this.setVisible(false);
     }
@@ -130,6 +134,15 @@ public class TitlePanel extends JPanel{
 				}
     		}
     	);
+    	BTaddTitle.addActionListener(
+				new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					 parentFrame.openTitleRegister(null);
+				}
+			}
+		);
     }
 
     private void initAdd() {
@@ -146,6 +159,7 @@ public class TitlePanel extends JPanel{
     		this.add(DFdate); 
     		this.add(BTsearch);
     		this.add(LBjustName);
+    		this.add(BTaddTitle);
     	}    	
     }
 
@@ -158,7 +172,7 @@ public class TitlePanel extends JPanel{
     	LBcustomerCode.setText("CÓDIGO: " + register.getBrokerageCustomerRegister().getCode());
     	LBcustomerCpf.setText("CPF: "+ register.getCustomerRegister().getCpf());
     	LBcustomerName.setText("CLIENTE: " + register.getCustomerRegister().getName()); 
-    	
+    	    	
     	this.setVisible(true);
         this.revalidate();
         this.repaint();
@@ -185,7 +199,8 @@ public class TitlePanel extends JPanel{
 			    	LBinvoiceNumber.setText("Nº");
 			    	LBtradingDate.setText("DATA:");
 			    	DFdate.setVisible(true);
-			    	TFinvoiceNumber.setVisible(true);
+			    	BTaddTitle.setVisible(true);
+			    	TFinvoiceNumber.setVisible(true);			    	
 				}
 				loadingDialog.hideLoading();
 			} catch (IOException e) {				

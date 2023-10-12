@@ -62,11 +62,7 @@ public class CustomTable extends JScrollPane{
             public boolean isCellEditable(final int rowIndex, final int columnIndex) {
                 return this.canEdit[columnIndex];
             }
-        });    	
-    	
-    	
-    	
-    	
+        });    	    	
     	
     	DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
     	headerRenderer.setFont(Design.getFont(10,true));

@@ -3,13 +3,12 @@ package frame.brokerage.importing;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 import components.CustomButton;
@@ -19,7 +18,6 @@ import components.CustomLabel;
 import components.CustomTable;
 import model.register.connect.StockBrokerageConnect;
 import model.register.register.StockBrokerageRegister;
-import model.register.register.StockRegister;
 import model.register.register.TitleRegister;
 import model.view.register.BrokerageReportView;
 import setting.desing.Design;
@@ -43,6 +41,8 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 	
 	private ArrayList<StockBrokerageRegister> stockBrokerageRegisters;
 	
+	private ArrayList<TitleRegister> titles;
+	
 	public BrokerageReportRegisterFrame() {
 		this.setTitle("CADASTRO DE NOTA DE CORRETAGEM");
 		this.setSize(new Dimension(1070,730));
@@ -55,13 +55,13 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 	}
 	
 	public void init() {
-		
+		titles = new ArrayList<TitleRegister>();
 	}	
 	
 	@Override
 	public void initInitiation() {		
 		LBstockBrokerage = new CustomLabel("CORRETORA: ");
-		CBstockBrokerage = new CustomComboBox();
+		CBstockBrokerage = new CustomComboBox();		
 				
 		ArrayList<String> t = new ArrayList<String>();
 		t.add("NEGOCIAÇÃO");
@@ -112,7 +112,7 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		TBstock.setColumnWidth(6,90);
 		TBstock.setColumnWidth(7,20);	
 		BTdeleteDuplicate.setIcon(DesignIcon.error16x16());
-		BTdeleteDuplicate.setVisible(false);
+		BTdeleteDuplicate.setVisible(false);		
 		
 		Thread thread = new Thread(() -> {
 			try{
@@ -147,6 +147,14 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 				}
 			}
 		);
+		TBstock.table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {                   
+                	openTitleRegister(titles.get(TBstock.table.getSelectedRow()));                	
+                }
+            }
+        });
 	}
 	
 	@Override
@@ -195,6 +203,74 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 	        };
 	        dtm.addRow(rowData);
 	    }	
+	}
+	
+	protected void openTitleRegister(TitleRegister t) {
+		this.setEnabled(false);
+		if(t==null) {
+			new TitleRegisterFrame(this).setVisible(true);
+		}else {
+			new TitleRegisterFrame(this,t).setVisible(true);
+		}		
+	}
+	
+	protected void setTitle(TitleRegister newTitle) {
+		titles.add(newTitle);
+		ArrayList<Object[]> rows = new ArrayList<Object[]>();
+		for (TitleRegister title : titles) {
+	        Object[] rowData = {
+	            title.getNegotiation(),
+	            title.getNegotiationType(),
+	            title.getMarketType(),
+	            title.getTitleName(),
+	            title.getQuantity(),
+	            FunctionBigDecimal.bigDecimalToCurrencyBR(title.getPrice()),
+	            FunctionBigDecimal.bigDecimalToCurrencyBR(title.getPriceTotal()),
+	            title.getOperationType()
+	        };
+	        rows.add(rowData);
+	    }	
+		TBstock.removeRows();
+		TBstock.setRows(rows);
+	}
+	
+	protected void updateTitle(TitleRegister newTitle) {
+		ArrayList<Object[]> rows = new ArrayList<Object[]>();
+		for (TitleRegister title : titles) {
+	        Object[] rowData = {
+	            title.getNegotiation(),
+	            title.getNegotiationType(),
+	            title.getMarketType(),
+	            title.getTitleName(),
+	            title.getQuantity(),
+	            FunctionBigDecimal.bigDecimalToCurrencyBR(title.getPrice()),
+	            FunctionBigDecimal.bigDecimalToCurrencyBR(title.getPriceTotal()),
+	            title.getOperationType()
+	        };
+	        rows.add(rowData);
+	    }	
+		TBstock.removeRows();
+		TBstock.setRows(rows);
+	}
+	
+	protected void deleteTitle(TitleRegister removeTitle) {
+		titles.remove(removeTitle);
+		ArrayList<Object[]> rows = new ArrayList<Object[]>();
+		for (TitleRegister title : titles) {
+	        Object[] rowData = {
+	            title.getNegotiation(),
+	            title.getNegotiationType(),
+	            title.getMarketType(),
+	            title.getTitleName(),
+	            title.getQuantity(),
+	            FunctionBigDecimal.bigDecimalToCurrencyBR(title.getPrice()),
+	            FunctionBigDecimal.bigDecimalToCurrencyBR(title.getPriceTotal()),
+	            title.getOperationType()
+	        };
+	        rows.add(rowData);
+	    }	
+		TBstock.removeRows();
+		TBstock.setRows(rows);
 	}
 	
 	private void windowsClosing() {

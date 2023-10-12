@@ -4,7 +4,6 @@ import java.text.ParseException;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.text.MaskFormatter;
-
 import setting.desing.Design;
 import setting.support.TextMask;
 
