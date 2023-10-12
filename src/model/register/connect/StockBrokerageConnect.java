@@ -21,7 +21,7 @@ public class StockBrokerageConnect {
         ma = new ManagerAccess();
     }
 
-    private ArrayList<StockBrokerageRegister> convertArray(String data) {
+    public ArrayList<StockBrokerageRegister> convertArray(String data) {
         ArrayList<StockBrokerageRegister> registers = new ArrayList<StockBrokerageRegister>();
         JSONArray jsonArray = new JSONArray(data);
         for (int i = 0; i < jsonArray.length(); i++) {

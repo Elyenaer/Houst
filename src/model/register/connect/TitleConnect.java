@@ -23,7 +23,7 @@ public class TitleConnect {
         ma = new ManagerAccess();
     }
 
-    private ArrayList<TitleRegister> convertArray(String data) {
+    public ArrayList<TitleRegister> convertArray(String data) {
         ArrayList<TitleRegister> registers = new ArrayList<TitleRegister>();
         JSONArray jsonArray = new JSONArray(data);
         for (int i = 0; i < jsonArray.length(); i++) {

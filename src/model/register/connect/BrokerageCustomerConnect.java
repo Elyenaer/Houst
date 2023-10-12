@@ -22,7 +22,7 @@ public class BrokerageCustomerConnect {
         ma = new ManagerAccess();
     }
 
-    private ArrayList<BrokerageCustomerRegister> convertArray(String data) {
+    public ArrayList<BrokerageCustomerRegister> convertArray(String data) {
         ArrayList<BrokerageCustomerRegister> records = new ArrayList<BrokerageCustomerRegister>();
         JSONArray jsonArray = new JSONArray(data);
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -31,7 +31,7 @@ public class BrokerageCustomerConnect {
         return records;
     }
 
-    private BrokerageCustomerRegister convertRecord(String data) {
+    public BrokerageCustomerRegister convertRecord(String data) {
         JSONArray jsonArray = new JSONArray(data);
         return convert(jsonArray.getJSONObject(0));
     }

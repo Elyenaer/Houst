@@ -12,16 +12,25 @@ public class CustomNumberField extends JTextField {
 	private static final long serialVersionUID = 1L;
 
 	public CustomNumberField() {
-		init();
+		init(12);
     }
 	
-	private void init() {
+	public CustomNumberField(int fontSize) {
+		init(fontSize);
+    }
+	
+	private void init(int fontSize) {
 		setBackground(Design.componentsBackground2);
 		setForeground(Design.componentsForeground2);
+		setFont(Design.getFont(fontSize,false));
 	}
 
     protected Document createDefaultModel() {
 	      return new NumberDocument();
+    }
+    
+    public void setInt(int value) {
+    	this.setText(value+"");
     }
     
     public int getInt() {

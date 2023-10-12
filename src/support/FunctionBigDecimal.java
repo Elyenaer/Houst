@@ -15,6 +15,11 @@ public class FunctionBigDecimal {
 	    return formattedValue;
 	}
 	
+	public static String bigDecimalToCurrency(BigDecimal value) {
+	    DecimalFormat format = new DecimalFormat("#,###.##");
+	    return format.format(value);
+	}
+	
 	public static String bigDecimalToThousands(BigDecimal value) {
 	    if (value == null) {
 	        return "";

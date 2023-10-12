@@ -163,16 +163,33 @@ public class TitlePanel extends JPanel{
     	}    	
     }
 
-    public void setRegister(BrokerageReportView register) {        
+    public void setRegister(BrokerageReportView register) {
         setStockBrokerage(register.getStockBrokerageRegister());
+        LBcustomerCpf.setText("CPF: "+ register.getCustomerRegister().getCpf());
         
-    	LBinvoiceNumber.setText("Nº "+register.getBrokerageReportRegister().getInvoiceNumber());
-    	LBtradingDate.setText("DATA: " + register.getBrokerageReportRegister().getTradingDate());
-    	
-    	LBcustomerCode.setText("CÓDIGO: " + register.getBrokerageCustomerRegister().getCode());
-    	LBcustomerCpf.setText("CPF: "+ register.getCustomerRegister().getCpf());
-    	LBcustomerName.setText("CLIENTE: " + register.getCustomerRegister().getName()); 
-    	    	
+        if(isRegistering) {        	
+        	LBjustName.setText(register.getCustomerRegister().getName());        	
+	    	LBcustomerName.setText("CLIENTE:");
+	    	
+	    	LBinvoiceNumber.setText("Nº");
+	    	TFinvoiceNumber.setText(register.getBrokerageReportRegister().getInvoiceNumber());
+	    	TFinvoiceNumber.setVisible(true);
+	    	
+	    	LBtradingDate.setText("DATA:");
+	    	DFdate.setDate(register.getBrokerageReportRegister().getTradingDate());	    	
+	    	DFdate.setVisible(true);
+	    	
+	    	LBcustomerCode.setText("CÓDIGO:");   
+	    	TFcode.setText(register.getBrokerageCustomerRegister().getCode());
+	    	
+	    	BTaddTitle.setVisible(true);
+        }else {
+        	LBinvoiceNumber.setText("Nº "+register.getBrokerageReportRegister().getInvoiceNumber());
+        	LBtradingDate.setText("DATA: " + register.getBrokerageReportRegister().getTradingDate());        	
+        	LBcustomerCode.setText("CÓDIGO: " + register.getBrokerageCustomerRegister().getCode());        	
+        	LBcustomerName.setText("CLIENTE: " + register.getCustomerRegister().getName());        	
+        }
+            	    	
     	this.setVisible(true);
         this.revalidate();
         this.repaint();

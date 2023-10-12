@@ -9,6 +9,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.text.MaskFormatter;
 
 import setting.desing.Design;
+import support.FunctionDate;
 
 public class CustomDateField extends JFormattedTextField {
 	private static final long serialVersionUID = 1L;
@@ -45,5 +46,9 @@ public class CustomDateField extends JFormattedTextField {
 	    }
 	    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	    return LocalDate.parse(text, dateFormatter);
+	}
+	
+	public void setDate(String date) {
+		setText(FunctionDate.databaseToString(date));
 	}
 }

@@ -15,18 +15,31 @@ public class CustomCurrencyField extends JFormattedTextField{
 	private static final long serialVersionUID = 1L;
 
 	public CustomCurrencyField() {
-        init();
+        init(12);
     }
+	
+	public CustomCurrencyField(int fontSize) {
+		init(fontSize);
+	}
 
-    private void init() {
+    private void init(int fontSize) {
         setHorizontalAlignment(RIGHT);
         setBackground(Design.componentsBackground2);
 		setForeground(Design.componentsForeground2);
+		setFont(Design.getFont(fontSize,false));
     }
     
     protected Document createDefaultModel() {
 	      return new CurrencyMask(9,2);
   }
+    
+    public void clear() {
+    	this.setText("");
+    }
+    
+    public void setValue(BigDecimal value) {
+    	this.setText(FunctionBigDecimal.bigDecimalToCurrency(value));
+    }
     
     public BigDecimal getValue() {
     	return FunctionBigDecimal.stringToBigDecimal(this.getText());

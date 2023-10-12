@@ -7,22 +7,30 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javax.swing.table.DefaultTableModel;
 
 import components.CustomButton;
 import components.CustomComboBox;
 import components.CustomFrame;
+import components.CustomIconButton;
 import components.CustomLabel;
 import components.CustomTable;
+import components.CustomTableRegister;
+import components.LoadingDialog;
 import model.register.connect.StockBrokerageConnect;
 import model.register.register.StockBrokerageRegister;
 import model.register.register.TitleRegister;
+import model.view.connect.BrokerageReportViewBriefingConnect;
 import model.view.register.BrokerageReportView;
+import model.view.register.BrokerageReportViewBriefing;
 import setting.desing.Design;
 import setting.desing.DesignIcon;
 import support.FunctionBigDecimal;
+import support.Message;
 
 public class BrokerageReportRegisterFrame extends CustomFrame {
 	private static final long serialVersionUID = 1L;
@@ -30,8 +38,9 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 			
 	private CustomTable TBstock;	
 	private CustomComboBox CBstockBrokerage;
-	private CustomButton BTsave,BTdeleteDuplicate;
+	private CustomButton BTsave,BTclear;
 	private CustomLabel LBstockBrokerage;
+	private CustomIconButton BTopenTable;
 	
 	private TitlePanel PNtitlePanel;
 	private BusinessBriefingPanel PNbusinessBriefingPanel;
@@ -75,10 +84,12 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		TBstock = new CustomTable(t);
 		
 		BTsave = new CustomButton("SALVAR");
-		BTdeleteDuplicate = new CustomButton("EXCLUIR DUPLICADOS!");
+		BTclear = new CustomButton("EXCLUIR DUPLICADOS!");
+		
+		BTopenTable = new CustomIconButton(DesignIcon.open(),32,32);
 		
 		PNtitlePanel = new TitlePanel(500,200,10,true,this);
-		PNbusinessBriefingPanel = new BusinessBriefingPanel(325,185,9);
+		PNbusinessBriefingPanel = new BusinessBriefingPanel(325,185,9,true);
 		PNclearingPanel = new ClearingPanel(325,100,9);		
 		PNstockPanel = new StockPanel(325,100,9);
 		PNbrokerageExpensesPanel = new BrokerageExpensesPanel(325,185,9);
@@ -89,8 +100,9 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		LBstockBrokerage.setBounds(30,30,120,20);
 		CBstockBrokerage.setBounds(105,30,200,20);
 		
+		BTopenTable.setBounds(310,25,32,32);
 		BTsave.setBounds(1140,650,100,25);	
-		BTdeleteDuplicate.setBounds(930,650,200,25);
+		BTclear.setBounds(930,650,200,25);
 						
 		TBstock.setBounds(30,180,650,465);
 		
@@ -111,9 +123,7 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		TBstock.setColumnWidth(5,70);
 		TBstock.setColumnWidth(6,90);
 		TBstock.setColumnWidth(7,20);	
-		BTdeleteDuplicate.setIcon(DesignIcon.error16x16());
-		BTdeleteDuplicate.setVisible(false);		
-		
+				
 		Thread thread = new Thread(() -> {
 			try{
 				stockBrokerageRegisters = new StockBrokerageConnect().get();
@@ -130,10 +140,22 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 	
 	@Override
 	public void initEvent() {
+		BTopenTable.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openTableRegister();
+			}
+		});
 		BTsave.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				save();
+			}
+		});
+		BTclear.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clear();
 			}
 		});
 		CBstockBrokerage.addActionListener(
@@ -163,7 +185,8 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		this.add(CBstockBrokerage);
 		
 		this.add(BTsave);
-		this.add(BTdeleteDuplicate);
+		this.add(BTclear);
+		this.add(BTopenTable);
 		
 		this.add(TBstock);
 		
@@ -174,6 +197,62 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		this.add(PNbrokerageExpensesPanel);
 	}
 			
+	private void openTableRegister() {
+		ArrayList<String> titles = new ArrayList<String>();
+		titles.add("ID");
+		titles.add("CORRETORA");
+		titles.add("CLIENTE");		
+		titles.add("NOTA");	
+		titles.add("DATA");	
+		CustomTableRegister table = new CustomTableRegister(this,"NOTAS DE CORRETAGEM",titles);
+		
+		LoadingDialog loadingDialog = new LoadingDialog(this,"BUSCANDO REGISTROS");
+        Thread loadingThread = new Thread(() -> {	            
+	        loadingDialog.showLoading();
+	        try {
+	        	ArrayList<BrokerageReportViewBriefing> registers = new BrokerageReportViewBriefingConnect().get();				
+				ArrayList<Object[]> rows = new ArrayList<Object[]>();
+		        for(BrokerageReportViewBriefing r: registers) {
+					Object[] rowData = {
+							r.getId(),
+							r.getStockBrokerageName(),
+							r.getCustomerName(),
+							r.getInvoiceNumber(),
+							r.getDate()
+					};
+					rows.add(rowData);				
+				}
+		        table.setRows(rows);	
+		        
+	            table.setVisible(true);		
+	    		if(table.getSelected()!=null) {
+	    			int id = Integer.parseInt(table.getSelected().toString());    			
+	    			 Optional<BrokerageReportViewBriefing> foundCustomer = registers.stream()
+	    			            .filter(customer -> customer.getId() == id)
+	    			            .findFirst();
+	    			setRegister(foundCustomer.get());
+	    		}    	
+	    		
+	    		loadingDialog.hideLoading();	
+	        }catch(Exception e) {
+				Message.Error(this.getClass().getName(),"openTable", e);
+			}            
+        });	        
+        loadingThread.start();
+	}
+	
+	private void setRegister(BrokerageReportViewBriefing register) {
+		Thread thread = new Thread(()-> {
+			try {
+				BrokerageReportView r = new BrokerageReportViewBriefingConnect().getFullView(register);
+				setRegister(r);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			
+		});
+		thread.start();	
+	}
+	
 	protected void setRegister(BrokerageReportView register) {
 		PNtitlePanel.setRegister(register);
 		PNbusinessBriefingPanel.setRegister(register.getBrokerageReportRegister());
@@ -183,6 +262,10 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		fillTable(register.getTitles());
 	}
 		
+	private void clear() {
+		PNbusinessBriefingPanel.clear();
+	}
+	
 	private void save() {
 		
 	}

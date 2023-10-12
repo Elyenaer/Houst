@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 
+import components.CustomCurrencyField;
 import components.CustomLabel;
 import components.CustomPanel;
 import model.register.register.BrokerageReportRegister;
@@ -13,11 +14,13 @@ import support.FunctionBigDecimal;
 public class BrokerageExpensesPanel extends CustomPanel {
     private static final long serialVersionUID = 1L;
     private int fontSize;
+    private boolean isRegistering = false;
 
     private ArrayList<Component> components;
-    private JLabel LBclearingT, LBclearingV, LBexecutionT, LBexecutionV, LBinHouseExecutionT, LBinHouseExecutionV,
-            LBissT, LBissV, LBirrfT, LBirrfV, LBissPisCofinsT, LBissPisCofinsV,
-            LBtotalBrokerageExpensesT, LBtotalBrokerageExpensesV, LBnetAmountForT, LBnetAmountForV;
+    private CustomLabel LBclearingT, LBclearingV, LBexecutionT, LBexecutionV, LBinHouseExecutionT, LBinHouseExecutionV,
+            LBissT, LBissV, LBirrfT, LBirrfV, LBissPisCofinsT, LBissPisCofinsV,LBtotalBrokerageExpensesT,
+            LBtotalBrokerageExpensesV, LBnetAmountForT, LBnetAmountForV;
+    private CustomCurrencyField CFclearingV,CFexecutionV, CFinHouseExecutionV, CFissV, CFirrfV, CFissPisCofinsV,CFtotalBrokerageExpensesV, CFnetAmountForV;
 
     public BrokerageExpensesPanel(int width, int height, int fontSize) {
         super(width, height);

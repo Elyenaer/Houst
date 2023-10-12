@@ -21,7 +21,7 @@ public class CustomerConnect {
     	ma = new ManagerAccess();
     }
     
-    private ArrayList<CustomerRegister> convertArray(String data) {
+    public ArrayList<CustomerRegister> convertArray(String data) {
         ArrayList<CustomerRegister> registers = new ArrayList<CustomerRegister>();
         JSONArray jsonArray = new JSONArray(data);
         for (int i = 0; i < jsonArray.length(); i++) {

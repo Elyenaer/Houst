@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 
+import components.CustomCurrencyField;
 import components.CustomLabel;
 import components.CustomPanel;
 import model.register.register.BrokerageReportRegister;
@@ -19,6 +20,10 @@ public class BusinessBriefingPanel extends CustomPanel{
 		LBspotPurchasesV,LBoptionsPurchasesV,LBoptionsPurchasesT,LBoptionsSalesV,LBoptionsSalesT,
 		LBforwardOperationV,LBforwardOperationT,LBvalueOfPublicSecuritiesOperationT,LBvalueOfPublicSecuritiesOperationV,
 		LBoperationValueT,LBoperationValueV;
+	private CustomCurrencyField NFdebenturesV,NFspotSalesV,NFspotPurchasesV,NFoptionsPurchasesV,NFoptionsSalesV,
+		NFforwardOperationV,NFvalueOfPublicSecuritiesOperationV,NFoperationValueV;
+	
+	private boolean isRegistering = false;
 	
 	public BusinessBriefingPanel(int width,int height,int fontSize) {
 		super(width, height);
@@ -26,6 +31,14 @@ public class BusinessBriefingPanel extends CustomPanel{
 		init();
         initComponents();
 	}	
+	
+	public BusinessBriefingPanel(int width,int height,int fontSize,boolean isRegistering) {
+		super(width, height);
+		this.isRegistering = isRegistering;
+		this.fontSize = fontSize;
+		init();
+        initComponents();
+	}
 	
 	private void init() {
 		setLayout(null);
@@ -42,70 +55,106 @@ public class BusinessBriefingPanel extends CustomPanel{
 	}
 	
 	private void initInitiation() {		
-		LBdebenturesT = new CustomLabel("Debentures",fontSize,true);
-		LBdebenturesV = new CustomLabel("",fontSize,true);
-		LBdebenturesV.setHorizontalAlignment(JLabel.RIGHT);
-		
-		LBspotSalesT = new CustomLabel("Vendas á vista",fontSize,true);
-		LBspotSalesV = new CustomLabel("",fontSize,true);
-		LBspotSalesV.setHorizontalAlignment(JLabel.RIGHT);
-		
-		LBspotPurchasesT = new CustomLabel("Compras à vista",fontSize,true);
-		LBspotPurchasesV = new CustomLabel("",fontSize,true);
-		LBspotPurchasesV.setHorizontalAlignment(JLabel.RIGHT);
-		
-		LBoptionsPurchasesT = new CustomLabel("Opções de compra",fontSize,true);
-		LBoptionsPurchasesV = new CustomLabel("",fontSize,true);
-		LBoptionsPurchasesV.setHorizontalAlignment(JLabel.RIGHT);
-				
-		LBoptionsSalesT = new CustomLabel("Opções de venda",fontSize,true);
-		LBoptionsSalesV = new CustomLabel("",fontSize,true);
-		LBoptionsSalesV.setHorizontalAlignment(JLabel.RIGHT);
-		
-		LBforwardOperationT = new CustomLabel("Operações à termo",fontSize,true);
-		LBforwardOperationV = new CustomLabel("",fontSize,true);
-		LBforwardOperationV.setHorizontalAlignment(JLabel.RIGHT);
-				
-		LBvalueOfPublicSecuritiesOperationT = new CustomLabel("Valor das opera. c/ titulos públic. (V. Nom.)",fontSize,true);
-		LBvalueOfPublicSecuritiesOperationV = new CustomLabel("",fontSize,true);
-		LBvalueOfPublicSecuritiesOperationV.setHorizontalAlignment(JLabel.RIGHT);
-		
+		LBdebenturesT = new CustomLabel("Debentures",fontSize,true);		
+		LBspotSalesT = new CustomLabel("Vendas á vista",fontSize,true);		
+		LBspotPurchasesT = new CustomLabel("Compras à vista",fontSize,true);		
+		LBoptionsPurchasesT = new CustomLabel("Opções de compra",fontSize,true);				
+		LBoptionsSalesT = new CustomLabel("Opções de venda",fontSize,true);		
+		LBforwardOperationT = new CustomLabel("Operações à termo",fontSize,true);				
+		LBvalueOfPublicSecuritiesOperationT = new CustomLabel("Valor das opera. c/ titulos públic. (V. Nom.)",fontSize,true);		
 		LBoperationValueT = new CustomLabel("Valor das operações",fontSize,true);
-		LBoperationValueV = new CustomLabel("",fontSize,true);
-		LBoperationValueV.setHorizontalAlignment(JLabel.RIGHT);
 		
 		components = new ArrayList<Component>();
 		
-		components.add(LBdebenturesT);
-		components.add(LBdebenturesV);
-		
-		components.add(LBspotSalesT);
-		components.add(LBspotSalesV);
-		
-		components.add(LBspotPurchasesT);
-		components.add(LBspotPurchasesV);
-		
-		components.add(LBoptionsPurchasesT);
-		components.add(LBoptionsPurchasesV);
-		
-		components.add(LBoptionsSalesT);
-		components.add(LBoptionsSalesV);		
-		
-		components.add(LBforwardOperationT);
-		components.add(LBforwardOperationV);
-				
-		components.add(LBvalueOfPublicSecuritiesOperationT);
-		components.add(LBvalueOfPublicSecuritiesOperationV);
-		
-		components.add(LBoperationValueT);
-		components.add(LBoperationValueV);
+		if(!isRegistering) {
+			LBdebenturesV = new CustomLabel("",fontSize,true);
+			LBdebenturesV.setHorizontalAlignment(JLabel.RIGHT);
+			
+			LBspotSalesV = new CustomLabel("",fontSize,true);
+			LBspotSalesV.setHorizontalAlignment(JLabel.RIGHT);
+			
+			LBspotPurchasesV = new CustomLabel("",fontSize,true);
+			LBspotPurchasesV.setHorizontalAlignment(JLabel.RIGHT);
+			
+			LBoptionsPurchasesV = new CustomLabel("",fontSize,true);
+			LBoptionsPurchasesV.setHorizontalAlignment(JLabel.RIGHT);
+					
+			LBoptionsSalesV = new CustomLabel("",fontSize,true);
+			LBoptionsSalesV.setHorizontalAlignment(JLabel.RIGHT);
+			
+			LBforwardOperationV = new CustomLabel("",fontSize,true);
+			LBforwardOperationV.setHorizontalAlignment(JLabel.RIGHT);
+					
+			LBvalueOfPublicSecuritiesOperationV = new CustomLabel("",fontSize,true);
+			LBvalueOfPublicSecuritiesOperationV.setHorizontalAlignment(JLabel.RIGHT);
+			
+			LBoperationValueV = new CustomLabel("",fontSize,true);
+			LBoperationValueV.setHorizontalAlignment(JLabel.RIGHT);
+			
+			components.add(LBdebenturesT);
+			components.add(LBdebenturesV);
+			
+			components.add(LBspotSalesT);
+			components.add(LBspotSalesV);
+			
+			components.add(LBspotPurchasesT);
+			components.add(LBspotPurchasesV);
+			
+			components.add(LBoptionsPurchasesT);
+			components.add(LBoptionsPurchasesV);
+			
+			components.add(LBoptionsSalesT);
+			components.add(LBoptionsSalesV);		
+			
+			components.add(LBforwardOperationT);
+			components.add(LBforwardOperationV);
+					
+			components.add(LBvalueOfPublicSecuritiesOperationT);
+			components.add(LBvalueOfPublicSecuritiesOperationV);
+			
+			components.add(LBoperationValueT);
+			components.add(LBoperationValueV);
+		}else {
+			NFdebenturesV = new CustomCurrencyField(10);		
+			NFspotSalesV = new CustomCurrencyField(10);		
+			NFspotPurchasesV = new CustomCurrencyField(10);			
+			NFoptionsPurchasesV = new CustomCurrencyField(10);					
+			NFoptionsSalesV = new CustomCurrencyField(10);			
+			NFforwardOperationV = new CustomCurrencyField(10);						
+			NFvalueOfPublicSecuritiesOperationV = new CustomCurrencyField(10);				
+			NFoperationValueV = new CustomCurrencyField(10);	
+			
+			components.add(LBdebenturesT);
+			components.add(NFdebenturesV);
+			
+			components.add(LBspotSalesT);
+			components.add(NFspotSalesV);
+			
+			components.add(LBspotPurchasesT);
+			components.add(NFspotPurchasesV);
+			
+			components.add(LBoptionsPurchasesT);
+			components.add(NFoptionsPurchasesV);
+			
+			components.add(LBoptionsSalesT);
+			components.add(NFoptionsSalesV);		
+			
+			components.add(LBforwardOperationT);
+			components.add(NFforwardOperationV);
+					
+			components.add(LBvalueOfPublicSecuritiesOperationT);
+			components.add(NFvalueOfPublicSecuritiesOperationV);
+			
+			components.add(LBoperationValueT);
+			components.add(NFoperationValueV);
+		}
 	}
 	
 	private void initPosition() {
 		int y = 20;
 		for(int i=0;i<components.size();i+=2) {
 			components.get(i).setBounds(12,y,200,15);
-			components.get(i+1).setBounds(215,y,100,15);
+			components.get(i+1).setBounds(215,y-2,100,20);
 			y += 20;
 		}
 	}
@@ -124,15 +173,41 @@ public class BusinessBriefingPanel extends CustomPanel{
 		}
 	}
 	
-	public void setRegister(BrokerageReportRegister register) {			
-		LBdebenturesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getDebentures()));		
-		LBspotSalesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getSpotSales()));		
-		LBspotPurchasesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getSpotPurchases()));		
-		LBoptionsPurchasesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getOptionsPurchases()));					
-		LBoptionsSalesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getOptionsSales()));			
-		LBforwardOperationV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getForwardOperation()));				
-		LBvalueOfPublicSecuritiesOperationV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getValueOfPublicSecuritiesOperation()));		
-		LBoperationValueV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getOperationValue()));			
+	public void setRegister(BrokerageReportRegister register) {		
+		if(!isRegistering) {
+			LBdebenturesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getDebentures()));		
+			LBspotSalesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getSpotSales()));		
+			LBspotPurchasesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getSpotPurchases()));		
+			LBoptionsPurchasesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getOptionsPurchases()));					
+			LBoptionsSalesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getOptionsSales()));			
+			LBforwardOperationV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getForwardOperation()));				
+			LBvalueOfPublicSecuritiesOperationV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getValueOfPublicSecuritiesOperation()));		
+			LBoperationValueV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getOperationValue()));		
+		}else {
+			NFdebenturesV.setValue(register.getDebentures());		
+			NFspotSalesV.setValue(register.getSpotSales());		
+			NFspotPurchasesV.setValue(register.getSpotPurchases());		
+			NFoptionsPurchasesV.setValue(register.getOptionsPurchases());					
+			NFoptionsSalesV.setValue(register.getOptionsSales());			
+			NFforwardOperationV.setValue(register.getForwardOperation());				
+			NFvalueOfPublicSecuritiesOperationV.setValue(register.getValueOfPublicSecuritiesOperation());		
+			NFoperationValueV.setValue(register.getOperationValue());	
+		}
+					
+		this.revalidate();
+		this.repaint();
+	}
+	
+	public void clear() {
+		NFdebenturesV.clear();		
+		NFspotSalesV.clear();					
+		NFspotPurchasesV.clear();				
+		NFoptionsPurchasesV.clear();								
+		NFoptionsSalesV.clear();						
+		NFforwardOperationV.clear();								
+		NFvalueOfPublicSecuritiesOperationV.clear();					
+		NFoperationValueV.clear();				
+		
 		this.revalidate();
 		this.repaint();
 	}
