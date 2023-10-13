@@ -11,6 +11,7 @@ import model.register.register.CustomerRegister;
 import model.register.register.StockBrokerageRegister;
 import model.register.register.TitleRegister;
 import model.view.register.BrokerageReportView;
+import support.FunctionDate;
 import support.FunctionText;
 
 public class BrokerageReportGenial {
@@ -166,7 +167,7 @@ public class BrokerageReportGenial {
 			register.setInvoiceNumber(text.split("\n")[2].split(" ")[0]);
 			
 			//trading data "data pregao"
-			register.setTradingDate(text.split("\n")[2].split(" ")[2]);
+			register.setTradingDate(FunctionDate.standardBRToLocalDate(text.split("\n")[2].split(" ")[2]));
 			
 			//get part of text with data
 			text = text.substring(text.indexOf("Resumo dos Negócios Resumo Financeiro D/C"),text.indexOf("(*) - Observ"));
@@ -303,7 +304,7 @@ public class BrokerageReportGenial {
 				register.setTotalBrokerageExpenses(new BigDecimal(lines[100].split("\n")[1].replace(".","").replace(",",".")));
 							
 				//net amount for date "liquido para data"
-				register.setNetAmountForDate(lines[103].split("\n")[1]);
+				register.setNetAmountForDate(FunctionDate.standardBRToLocalDate(lines[103].split("\n")[1]));
 				
 				//net amount for value "liquido para valor"
 				if(lines[105].split("\n")[0].equalsIgnoreCase("C")) {
@@ -332,7 +333,7 @@ public class BrokerageReportGenial {
 				register.setTotalBrokerageExpenses(new BigDecimal(lines[93].split("\n")[1].replace(".","").replace(",",".")));
 						
 				//net amount for date "liquido para data"
-				register.setNetAmountForDate(lines[96].split("\n")[1]);
+				register.setNetAmountForDate(FunctionDate.standardBRToLocalDate(lines[96].split("\n")[1]));
 				
 				//net amount for value "liquido para valor"
 				if(lines[98].split("\n")[0].equalsIgnoreCase("C")) {

@@ -115,14 +115,14 @@ public class BusinessBriefingPanel extends CustomPanel{
 			components.add(LBoperationValueT);
 			components.add(LBoperationValueV);
 		}else {
-			NFdebenturesV = new CustomCurrencyField(10);		
-			NFspotSalesV = new CustomCurrencyField(10);		
-			NFspotPurchasesV = new CustomCurrencyField(10);			
-			NFoptionsPurchasesV = new CustomCurrencyField(10);					
-			NFoptionsSalesV = new CustomCurrencyField(10);			
-			NFforwardOperationV = new CustomCurrencyField(10);						
-			NFvalueOfPublicSecuritiesOperationV = new CustomCurrencyField(10);				
-			NFoperationValueV = new CustomCurrencyField(10);	
+			NFdebenturesV = new CustomCurrencyField(9);		
+			NFspotSalesV = new CustomCurrencyField(9);		
+			NFspotPurchasesV = new CustomCurrencyField(9);			
+			NFoptionsPurchasesV = new CustomCurrencyField(9);					
+			NFoptionsSalesV = new CustomCurrencyField(9);			
+			NFforwardOperationV = new CustomCurrencyField(9);						
+			NFvalueOfPublicSecuritiesOperationV = new CustomCurrencyField(9);				
+			NFoperationValueV = new CustomCurrencyField(9);	
 			
 			components.add(LBdebenturesT);
 			components.add(NFdebenturesV);
@@ -151,11 +151,18 @@ public class BusinessBriefingPanel extends CustomPanel{
 	}
 	
 	private void initPosition() {
-		int y = 20;
+		int y1 = 20;
+    	int y2 = 20;
+    	int height = 15;
+		if(isRegistering) {
+			y2 = 18;
+			height = 20;
+		}		
 		for(int i=0;i<components.size();i+=2) {
-			components.get(i).setBounds(12,y,200,15);
-			components.get(i+1).setBounds(215,y-2,100,20);
-			y += 20;
+			components.get(i).setBounds(12,y1,200,15);
+			components.get(i+1).setBounds(215,y2,100,height);
+			y1 += 20;
+			y2 += 20;
 		}
 	}
 	
@@ -199,14 +206,11 @@ public class BusinessBriefingPanel extends CustomPanel{
 	}
 	
 	public void clear() {
-		NFdebenturesV.clear();		
-		NFspotSalesV.clear();					
-		NFspotPurchasesV.clear();				
-		NFoptionsPurchasesV.clear();								
-		NFoptionsSalesV.clear();						
-		NFforwardOperationV.clear();								
-		NFvalueOfPublicSecuritiesOperationV.clear();					
-		NFoperationValueV.clear();				
+    	for (int i = 0; i < components.size(); i++) {
+    		if(components.get(i) instanceof CustomCurrencyField) {
+    			((CustomCurrencyField) components.get(i)).clear();
+    		}
+        }
 		
 		this.revalidate();
 		this.repaint();

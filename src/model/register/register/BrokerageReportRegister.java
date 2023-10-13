@@ -1,13 +1,14 @@
 package model.register.register;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class BrokerageReportRegister {
 	//brokerage data
 	private int stockBrokerageId;
 	private int brokerageCustomerId;
 	private String invoiceNumber;
-	private String tradingDate;
+	private LocalDate tradingDate;
 	//business briefing
 	private BigDecimal debentures;
 	private BigDecimal spotSales;
@@ -36,7 +37,7 @@ public class BrokerageReportRegister {
 	private BigDecimal irrf;
 	private BigDecimal issPisCofins;
 	private BigDecimal totalBrokerageExpenses;
-	private String netAmountForDate;
+	private LocalDate netAmountForDate;
 	private BigDecimal netAmountFor;
 		
 	public int getStockBrokerageId() {
@@ -56,12 +57,6 @@ public class BrokerageReportRegister {
 	}
 	public void setInvoiceNumber(String invoiceNumber) {
 		this.invoiceNumber = invoiceNumber;
-	}
-	public String getTradingDate() {
-		return tradingDate;
-	}
-	public void setTradingDate(String tradingDate) {
-		this.tradingDate = tradingDate;
 	}
 	public BigDecimal getDebentures() {
 		return debentures;
@@ -208,17 +203,23 @@ public class BrokerageReportRegister {
 	public void setTotalBrokerageExpenses(BigDecimal totalBrokerageExpenses) {
 		this.totalBrokerageExpenses = totalBrokerageExpenses;
 	}
-	public String getNetAmountForDate() {
-		return netAmountForDate;
-	}
-	public void setNetAmountForDate(String netAmountForDate) {
-		this.netAmountForDate = netAmountForDate;
-	}
 	public BigDecimal getNetAmountFor() {
 		return netAmountFor;
 	}
 	public void setNetAmountFor(BigDecimal netAmountFor) {
 		this.netAmountFor = netAmountFor;
+	}
+	public LocalDate getTradingDate() {
+		return tradingDate;
+	}
+	public void setTradingDate(LocalDate tradingDate) {
+		this.tradingDate = tradingDate;
+	}
+	public LocalDate getNetAmountForDate() {
+		return netAmountForDate;
+	}
+	public void setNetAmountForDate(LocalDate netAmountForDate) {
+		this.netAmountForDate = netAmountForDate;
 	}
 		
 }

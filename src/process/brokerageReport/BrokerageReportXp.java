@@ -12,6 +12,7 @@ import model.register.register.StockBrokerageRegister;
 import model.register.register.TitleRegister;
 import model.view.register.BrokerageReportView;
 import support.FunctionBigDecimal;
+import support.FunctionDate;
 import support.FunctionText;
 import support.Message;
 
@@ -187,7 +188,7 @@ public class BrokerageReportXp {
 			register.setInvoiceNumber(text.split("\n")[2].split(" ")[0]);
 			
 			//trading data "data pregao"
-			register.setTradingDate(text.split("\n")[2].split(" ")[2]);
+			register.setTradingDate(FunctionDate.standardBRToLocalDate(text.split("\n")[2].split(" ")[2]));
 			
 			//get part of text with data
 			text = text.substring(text.indexOf("cios Resumo Financeiro"),text.indexOf("(*) Observa"));
@@ -367,7 +368,7 @@ public class BrokerageReportXp {
 			register.setTotalBrokerageExpenses(new BigDecimal(lines[97].replace(".","").replace(",",".")));
 						
 			//net amount for date "liquido para data"
-			register.setNetAmountForDate(lines[100]);
+			register.setNetAmountForDate(FunctionDate.standardBRToLocalDate(lines[100]));
 			
 			//net amount for value "liquido para valor"
 			if(lines[102].split("\n")[0].equalsIgnoreCase("C")) {
@@ -502,7 +503,7 @@ public class BrokerageReportXp {
 			register.setTotalBrokerageExpenses(new BigDecimal(lines[98].replace(".","").replace(",",".")));
 						
 			//net amount for date "liquido para data"
-			register.setNetAmountForDate(lines[101]);
+			register.setNetAmountForDate(FunctionDate.standardBRToLocalDate(lines[101]));
 			
 			//net amount for value "liquido para valor"
 			if(lines[103].split("\n")[0].equalsIgnoreCase("C")) {
@@ -636,7 +637,7 @@ public class BrokerageReportXp {
 			register.setTotalBrokerageExpenses(new BigDecimal(lines[97].replace(".","").replace(",",".")));
 						
 			//net amount for date "liquido para data"
-			register.setNetAmountForDate(lines[100]);
+			register.setNetAmountForDate(FunctionDate.standardBRToLocalDate(lines[100]));
 			
 			//net amount for value "liquido para valor"
 			if(lines[102].split("\n")[0].equalsIgnoreCase("C")) {
@@ -770,7 +771,7 @@ public class BrokerageReportXp {
 			register.setTotalBrokerageExpenses(new BigDecimal(lines[96].replace(".","").replace(",",".")));
 						
 			//net amount for date "liquido para data"
-			register.setNetAmountForDate(lines[99]);
+			register.setNetAmountForDate(FunctionDate.standardBRToLocalDate(lines[99]));
 			
 			//net amount for value "liquido para valor"
 			if(lines[101].split("\n")[0].equalsIgnoreCase("C")) {

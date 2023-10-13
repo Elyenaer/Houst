@@ -15,13 +15,18 @@ public class CustomDateField extends JFormattedTextField {
 	private static final long serialVersionUID = 1L;
 
 	public CustomDateField() {
-        init();
+        init(12);
     }
 	
-	private void init(){
+	public CustomDateField(int fontSize) {
+        init(fontSize);
+    }
+	
+	private void init(int fontSize){
 		setDateFormat("##/##/####");
 		setBackground(Design.componentsBackground2);
 		setForeground(Design.componentsForeground2);
+		setFont(Design.getFont(fontSize,false));
 	 }
 
     private void setDateFormat(String format) {
@@ -50,5 +55,20 @@ public class CustomDateField extends JFormattedTextField {
 	
 	public void setDate(String date) {
 		setText(FunctionDate.databaseToString(date));
+	}
+	
+	public void setDate(LocalDate date) {
+		try {
+	        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	        String formattedDate = date.format(dateFormatter);
+
+	        setText(formattedDate);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }		
+	}
+	
+	public void clear() {
+		setText("");
 	}
 }

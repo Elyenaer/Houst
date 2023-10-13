@@ -226,4 +226,20 @@ public class TitlePanel extends JPanel{
     	});
     	thread.start();
     }
+
+    public void clear() {
+    	LBstockBrokerage.clear();
+        LBcustomerCode.setText("");
+        LBcustomerCpf.setText("");
+        LBcustomerName.setText("");
+        LBinvoiceNumber.setText("");
+        LBtradingDate.setText("");
+        LBjustName.setText("");
+        TFinvoiceNumber.setText("");
+        TFcode.setText("");
+        TFcode.setVisible(false);
+        DFdate.clear();;
+        BTsearch.setVisible(false);
+        BTaddTitle.setVisible(false);
+    }
 }

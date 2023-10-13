@@ -25,6 +25,10 @@ public class CustomIconLabel extends JLabel {
         revalidate();
     }
     
+    public void clear(){
+    	setText("");
+    	setIcon(null);
+    }
     
 
 }

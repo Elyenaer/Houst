@@ -35,12 +35,12 @@ import support.Message;
 public class BrokerageReportRegisterFrame extends CustomFrame {
 	private static final long serialVersionUID = 1L;
 	protected BrokerageReportBriefing registers;
+	private boolean newRegister = true;
 			
 	private CustomTable TBstock;	
 	private CustomComboBox CBstockBrokerage;
-	private CustomButton BTsave,BTclear;
 	private CustomLabel LBstockBrokerage;
-	private CustomIconButton BTopenTable;
+	private CustomIconButton BTopenTable,BTsave,BTclear,BTdelete;
 	
 	private TitlePanel PNtitlePanel;
 	private BusinessBriefingPanel PNbusinessBriefingPanel;
@@ -83,16 +83,17 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		t.add("D/C");
 		TBstock = new CustomTable(t);
 		
-		BTsave = new CustomButton("SALVAR");
-		BTclear = new CustomButton("EXCLUIR DUPLICADOS!");
+		BTsave = new CustomIconButton(DesignIcon.add(),32,32);
+		BTclear = new CustomIconButton(DesignIcon.clear(),32,32);
+		BTdelete = new CustomIconButton(DesignIcon.delete(),32,32);
 		
 		BTopenTable = new CustomIconButton(DesignIcon.open(),32,32);
 		
 		PNtitlePanel = new TitlePanel(500,200,10,true,this);
 		PNbusinessBriefingPanel = new BusinessBriefingPanel(325,185,9,true);
-		PNclearingPanel = new ClearingPanel(325,100,9);		
-		PNstockPanel = new StockPanel(325,100,9);
-		PNbrokerageExpensesPanel = new BrokerageExpensesPanel(325,185,9);
+		PNclearingPanel = new ClearingPanel(325,100,9,true);		
+		PNstockPanel = new StockPanel(325,100,9,true);
+		PNbrokerageExpensesPanel = new BrokerageExpensesPanel(325,185,9,true);
 	}
 	
 	@Override
@@ -101,8 +102,10 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		CBstockBrokerage.setBounds(105,30,200,20);
 		
 		BTopenTable.setBounds(310,25,32,32);
-		BTsave.setBounds(1140,650,100,25);	
-		BTclear.setBounds(930,650,200,25);
+		
+		BTsave.setBounds(1000,640,32,32);	
+		BTclear.setBounds(960,640,32,32);
+		BTdelete.setBounds(920,640,32,32);
 						
 		TBstock.setBounds(30,180,650,465);
 		
@@ -149,13 +152,24 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		BTsave.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				save();
+				if(newRegister) {
+					save();
+				}else {
+					update();
+				}
+				
 			}
 		});
 		BTclear.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				clear();
+			}
+		});		
+		BTdelete.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				delete();
 			}
 		});
 		CBstockBrokerage.addActionListener(
@@ -187,6 +201,7 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		this.add(BTsave);
 		this.add(BTclear);
 		this.add(BTopenTable);
+		this.add(BTdelete);
 		
 		this.add(TBstock);
 		
@@ -196,7 +211,7 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		this.add(PNstockPanel);
 		this.add(PNbrokerageExpensesPanel);
 	}
-			
+//			
 	private void openTableRegister() {
 		ArrayList<String> titles = new ArrayList<String>();
 		titles.add("ID");
@@ -263,11 +278,36 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 	}
 		
 	private void clear() {
+		newRegister = true;
 		PNbusinessBriefingPanel.clear();
+		PNbrokerageExpensesPanel.clear();
+		PNclearingPanel.clear();
+		PNstockPanel.clear();
+		PNtitlePanel.clear();
+		CBstockBrokerage.setSelectedIndex(0);
+		PNbusinessBriefingPanel.setVisible(false);
+		PNbrokerageExpensesPanel.setVisible(false);
+		PNclearingPanel.setVisible(false);
+		PNstockPanel.setVisible(false);
+		TBstock.setVisible(false);
 	}
 	
 	private void save() {
-		
+		Thread thread = new Thread(()->{
+			
+		});
+	}
+	
+	private void delete() {
+		Thread thread = new Thread(()->{
+			
+		});
+	}
+	
+	private void update() {
+		Thread thread = new Thread(()->{
+			
+		});
 	}
 	
 	private void fillTable(ArrayList<TitleRegister> titles) {

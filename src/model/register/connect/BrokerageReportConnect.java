@@ -44,7 +44,7 @@ public class BrokerageReportConnect {
         register.setStockBrokerageId(jsonObject.getInt("stock_brokerage_id"));
         register.setBrokerageCustomerId(jsonObject.getInt("brokerage_customer_id"));
         register.setInvoiceNumber(jsonObject.getString("invoice_number"));
-        register.setTradingDate(jsonObject.getString("trading_date"));
+        register.setTradingDate(FunctionDate.databaseToLocalDate(jsonObject.getString("trading_date")));
         register.setDebentures(new BigDecimal(jsonObject.getString("debentures")));
         register.setSpotSales(new BigDecimal(jsonObject.getString("spot_sales")));
         register.setSpotPurchases(new BigDecimal(jsonObject.getString("spot_purchases")));
@@ -69,7 +69,7 @@ public class BrokerageReportConnect {
         register.setIrrf(new BigDecimal(jsonObject.getString("irrf")));
         register.setIssPisCofins(new BigDecimal(jsonObject.getString("iss_pis_cofins")));
         register.setTotalBrokerageExpenses(new BigDecimal(jsonObject.getString("total_brokerage_expenses")));
-        register.setNetAmountForDate(jsonObject.getString("net_amount_for_date"));
+        register.setNetAmountForDate(FunctionDate.databaseToLocalDate(jsonObject.getString("net_amount_for_date")));
         register.setNetAmountFor(new BigDecimal(jsonObject.getString("net_amount_for")));
         return register;
     }
@@ -163,7 +163,7 @@ public class BrokerageReportConnect {
             parameters.put("stock_brokerage_id", String.valueOf(register.getStockBrokerageId()));
             parameters.put("brokerage_customer_id", String.valueOf(register.getBrokerageCustomerId()));
             parameters.put("invoice_number", register.getInvoiceNumber());
-            parameters.put("trading_date", FunctionDate.StringToDatabase(register.getTradingDate()));
+            parameters.put("trading_date", FunctionDate.localDateToDatabase(register.getTradingDate()));
             parameters.put("debentures", register.getDebentures().toString());
             parameters.put("spot_sales", register.getSpotSales().toString());
             parameters.put("spot_purchases", register.getSpotPurchases().toString());
@@ -188,7 +188,7 @@ public class BrokerageReportConnect {
             parameters.put("irrf", register.getIrrf().toString());
             parameters.put("iss_pis_cofins", register.getIssPisCofins().toString());
             parameters.put("total_brokerage_expenses", register.getTotalBrokerageExpenses().toString());
-            parameters.put("net_amount_for_date", FunctionDate.StringToDatabase(register.getNetAmountForDate()));
+            parameters.put("net_amount_for_date", FunctionDate.localDateToDatabase(register.getNetAmountForDate()));
             parameters.put("net_amount_for", register.getNetAmountFor().toString());
 
             String data = DatabaseConnect.start(table, parameters, "put");
@@ -208,7 +208,7 @@ public class BrokerageReportConnect {
             parameters.put("stock_brokerage_id", String.valueOf(register.getStockBrokerageId()));
             parameters.put("brokerage_customer_id", String.valueOf(register.getBrokerageCustomerId()));
             parameters.put("invoice_number", register.getInvoiceNumber());
-            parameters.put("trading_date", FunctionDate.StringToDatabase(register.getTradingDate()));
+            parameters.put("trading_date", FunctionDate.localDateToDatabase(register.getTradingDate()));
             parameters.put("debentures", register.getDebentures().toString());
             parameters.put("spot_sales", register.getSpotSales().toString());
             parameters.put("spot_purchases", register.getSpotPurchases().toString());
@@ -233,7 +233,7 @@ public class BrokerageReportConnect {
             parameters.put("irrf", register.getIrrf().toString());
             parameters.put("iss_pis_cofins", register.getIssPisCofins().toString());
             parameters.put("total_brokerage_expenses", register.getTotalBrokerageExpenses().toString());
-            parameters.put("net_amount_for_date", FunctionDate.StringToDatabase(register.getNetAmountForDate()));
+            parameters.put("net_amount_for_date", FunctionDate.localDateToDatabase(register.getNetAmountForDate()));
             parameters.put("net_amount_for", register.getNetAmountFor().toString());
             
             String data = DatabaseConnect.start(table, parameters, "post");
