@@ -45,7 +45,11 @@ public class TitleRegister {
 		return deadline;
 	}
 	public void setDeadline(String deadline) {
-		this.deadline = deadline;
+		if(deadline==null || deadline.equalsIgnoreCase("null")) {
+			this.deadline = "";
+		}else {
+			this.deadline = deadline;
+		}		
 	}
 	public String getNegotiation() {
 		return negotiation;

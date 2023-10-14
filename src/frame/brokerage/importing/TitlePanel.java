@@ -13,6 +13,7 @@ import components.CustomIconLabel;
 import components.CustomLabel;
 import components.CustomTextField;
 import components.LoadingDialog;
+import model.register.register.BrokerageReportRegister;
 import model.register.register.StockBrokerageRegister;
 import model.view.connect.BrokerageCustomerViewConnect;
 import model.view.register.BrokerageCustomerView;
@@ -65,7 +66,7 @@ public class TitlePanel extends JPanel{
 
     private void initInitiation() {
     	LBstockBrokerage = new CustomIconLabel(null,350,60);    	
-    	LBcustomerCode = new CustomLabel("CÃ“DIGO:",fontSize, true);
+    	LBcustomerCode = new CustomLabel("CÓDIGO:",fontSize, true);
     	LBcustomerCpf = new CustomLabel("",fontSize, true);
     	LBcustomerName = new CustomLabel("",fontSize+4, true);
     	LBinvoiceNumber = new CustomLabel("",fontSize, true);
@@ -163,6 +164,15 @@ public class TitlePanel extends JPanel{
     	}    	
     }
 
+    public BrokerageReportRegister getRegister(BrokerageReportRegister register) {
+    	register.setStockBrokerageId(stockBrokerage.getId());
+    	register.setBrokerageCustomerId(brokerageCustomer.getBrokerageCustomerId());
+    	register.setInvoiceNumber(TFinvoiceNumber.getText());
+    	register.setTradingDate(DFdate.getDate());
+    	
+    	return register;
+    }
+    
     public void setRegister(BrokerageReportView register) {
         setStockBrokerage(register.getStockBrokerageRegister());
         LBcustomerCpf.setText("CPF: "+ register.getCustomerRegister().getCpf());
@@ -171,7 +181,7 @@ public class TitlePanel extends JPanel{
         	LBjustName.setText(register.getCustomerRegister().getName());        	
 	    	LBcustomerName.setText("CLIENTE:");
 	    	
-	    	LBinvoiceNumber.setText("NÂº");
+	    	LBinvoiceNumber.setText("Nº");
 	    	TFinvoiceNumber.setText(register.getBrokerageReportRegister().getInvoiceNumber());
 	    	TFinvoiceNumber.setVisible(true);
 	    	
@@ -179,14 +189,16 @@ public class TitlePanel extends JPanel{
 	    	DFdate.setDate(register.getBrokerageReportRegister().getTradingDate());	    	
 	    	DFdate.setVisible(true);
 	    	
-	    	LBcustomerCode.setText("CÃ“DIGO:");   
+	    	LBcustomerCode.setText("CÓDIGO:");   
 	    	TFcode.setText(register.getBrokerageCustomerRegister().getCode());
+	    	TFcode.setVisible(true);
+	    	TFcode.setEnabled(false);
 	    	
 	    	BTaddTitle.setVisible(true);
         }else {
-        	LBinvoiceNumber.setText("NÂº "+register.getBrokerageReportRegister().getInvoiceNumber());
+        	LBinvoiceNumber.setText("Nº "+register.getBrokerageReportRegister().getInvoiceNumber());
         	LBtradingDate.setText("DATA: " + register.getBrokerageReportRegister().getTradingDate());        	
-        	LBcustomerCode.setText("CÃ“DIGO: " + register.getBrokerageCustomerRegister().getCode());        	
+        	LBcustomerCode.setText("CÓDIGO: " + register.getBrokerageCustomerRegister().getCode());        	
         	LBcustomerName.setText("CLIENTE: " + register.getCustomerRegister().getName());        	
         }
             	    	
@@ -198,6 +210,9 @@ public class TitlePanel extends JPanel{
     public void setStockBrokerage(StockBrokerageRegister register) {
     	this.stockBrokerage = register;
     	LBstockBrokerage.setIcon(DesignIcon.stockBrokerageIcon(register));
+    	TFcode.setVisible(true);
+    	BTsearch.setVisible(true);
+    	LBcustomerCode.setVisible(true);
     	this.setVisible(true);    	
     }
     
@@ -208,16 +223,18 @@ public class TitlePanel extends JPanel{
     			loadingDialog.showLoading();
 				brokerageCustomer = new BrokerageCustomerViewConnect().getByCode(TFcode.getText(),stockBrokerage.getId());
 				if(brokerageCustomer==null) {
-					Message.Warning("CÃ“DIGO NÃƒO ENCONTRADO!",true);
+					Message.Warning("CÓDIGO NÃO ENCONTRADO!",true);
 				}else {
 					LBcustomerCpf.setText("CPF: "+ brokerageCustomer.getCpf());
 			    	LBjustName.setText(brokerageCustomer.getCustomerName());
 			    	LBcustomerName.setText("CLIENTE:");
-			    	LBinvoiceNumber.setText("NÂº");
+			    	LBinvoiceNumber.setText("Nº");
 			    	LBtradingDate.setText("DATA:");
 			    	DFdate.setVisible(true);
 			    	BTaddTitle.setVisible(true);
-			    	TFinvoiceNumber.setVisible(true);			    	
+			    	TFinvoiceNumber.setVisible(true);	
+			    	TFcode.setEnabled(false);
+			    	parentFrame.setStockBrokerageEnabled(false);
 				}
 				loadingDialog.hideLoading();
 			} catch (IOException e) {				
@@ -236,9 +253,12 @@ public class TitlePanel extends JPanel{
         LBtradingDate.setText("");
         LBjustName.setText("");
         TFinvoiceNumber.setText("");
+        TFinvoiceNumber.setVisible(false);
         TFcode.setText("");
         TFcode.setVisible(false);
-        DFdate.clear();;
+        TFcode.setEnabled(true);
+        DFdate.clear();
+        DFdate.setVisible(false);
         BTsearch.setVisible(false);
         BTaddTitle.setVisible(false);
     }

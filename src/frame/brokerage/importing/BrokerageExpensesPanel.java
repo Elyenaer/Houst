@@ -55,13 +55,13 @@ public class BrokerageExpensesPanel extends CustomPanel {
 
     private void initInitiation() {
         LBclearingT = new CustomLabel("Clearing", fontSize, true);
-        LBexecutionT = new CustomLabel("ExecuÃ§Ã£o", fontSize, true);
-        LBinHouseExecutionT = new CustomLabel("ExecuÃ§Ã£o casa", fontSize, true);
+        LBexecutionT = new CustomLabel("Execução", fontSize, true);
+        LBinHouseExecutionT = new CustomLabel("Execução casa", fontSize, true);
         LBissT = new CustomLabel("ISS", fontSize, true);
-        LBirrfT = new CustomLabel("IRRF s/ operaÃ§Ãµes, base", fontSize, true);
+        LBirrfT = new CustomLabel("IRRF s/ operações, base", fontSize, true);
         LBissPisCofinsT = new CustomLabel("ISS PIS COFINS", fontSize, true);
         LBtotalBrokerageExpensesT = new CustomLabel("Total corretagem/Despesas", fontSize, true);
-        LBnetAmountForT = new CustomLabel("LÃ­quido para", fontSize, true);
+        LBnetAmountForT = new CustomLabel("Líquido para", fontSize, true);
 
         components = new ArrayList<Component>();
         

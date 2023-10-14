@@ -51,8 +51,8 @@ public class ClearingPanel extends CustomPanel {
     }
 
     private void initInitiation() {
-    	LBnetValueOperationT = new CustomLabel("Valor lÃ­quido da operaÃ§Ã£o", fontSize, true);
-        LBsettlementFeeT = new CustomLabel("Taxa de liquidaÃ§Ã£o", fontSize, true);
+    	LBnetValueOperationT = new CustomLabel("Valor líquido da operação", fontSize, true);
+        LBsettlementFeeT = new CustomLabel("Taxa de liquidação", fontSize, true);
         LBregistrationFeeT = new CustomLabel("Taxa de registro", fontSize, true);
         LBtotalCBLC_T = new CustomLabel("Total CBLC", fontSize, true);
         

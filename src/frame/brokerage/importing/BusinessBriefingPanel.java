@@ -56,13 +56,13 @@ public class BusinessBriefingPanel extends CustomPanel{
 	
 	private void initInitiation() {		
 		LBdebenturesT = new CustomLabel("Debentures",fontSize,true);		
-		LBspotSalesT = new CustomLabel("Vendas Ã¡ vista",fontSize,true);		
-		LBspotPurchasesT = new CustomLabel("Compras Ã  vista",fontSize,true);		
-		LBoptionsPurchasesT = new CustomLabel("OpÃ§Ãµes de compra",fontSize,true);				
-		LBoptionsSalesT = new CustomLabel("OpÃ§Ãµes de venda",fontSize,true);		
-		LBforwardOperationT = new CustomLabel("OperaÃ§Ãµes Ã  termo",fontSize,true);				
-		LBvalueOfPublicSecuritiesOperationT = new CustomLabel("Valor das opera. c/ titulos pÃºblic. (V. Nom.)",fontSize,true);		
-		LBoperationValueT = new CustomLabel("Valor das operaÃ§Ãµes",fontSize,true);
+		LBspotSalesT = new CustomLabel("Vendas à vista",fontSize,true);		
+		LBspotPurchasesT = new CustomLabel("Compras à  vista",fontSize,true);		
+		LBoptionsPurchasesT = new CustomLabel("Opções de compra",fontSize,true);				
+		LBoptionsSalesT = new CustomLabel("Opções de venda",fontSize,true);		
+		LBforwardOperationT = new CustomLabel("Operações à  termo",fontSize,true);				
+		LBvalueOfPublicSecuritiesOperationT = new CustomLabel("Valor das opera. c/ titulos públic. (V. Nom.)",fontSize,true);		
+		LBoperationValueT = new CustomLabel("Valor das operações",fontSize,true);
 		
 		components = new ArrayList<Component>();
 		
@@ -178,6 +178,16 @@ public class BusinessBriefingPanel extends CustomPanel{
 		for(int i=0;i<components.size();i++) {
 			this.add(components.get(i));
 		}
+	}
+	
+	public BrokerageReportRegister getRegister(BrokerageReportRegister register) {
+		register.setDebentures(NFdebenturesV.getValue());
+		register.setSpotSales(NFspotSalesV.getValue());
+		register.setSpotPurchases(NFspotPurchasesV.getValue());
+		register.setOptionsPurchases(NFoptionsPurchasesV.getValue());
+		register.setOptionsSales(NFoptionsSalesV.getValue());
+		
+		return register;
 	}
 	
 	public void setRegister(BrokerageReportRegister register) {		

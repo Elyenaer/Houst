@@ -42,7 +42,7 @@ public class TitleRegisterFrame extends CustomFrame{
 	
 	private void init(BrokerageReportRegisterFrame parentFrame){
 		this.parentFrame = parentFrame;
-		this.setTitle("NEG√ìCIOS REALIZADOS");
+		this.setTitle("NEG”CIOS REALIZADOS");
 		this.setSize(440,300);
 		this.setLocationRelativeTo(parentFrame);
 		if(newRegister) {
@@ -58,7 +58,7 @@ public class TitleRegisterFrame extends CustomFrame{
 		LBq = new CustomLabel("Q:");
 		TFq = new CustomTextField();
 		
-		LBnegotiation = new CustomLabel("NEGOCIA√á√ÉO:");
+		LBnegotiation = new CustomLabel("NEGOCIA«√O:");
 		CBnegotiation = new CustomComboBox();
 		
 		LBnegotiationType = new CustomLabel("C/V:");
@@ -70,16 +70,16 @@ public class TitleRegisterFrame extends CustomFrame{
 		LBdeadline = new CustomLabel("PRAZO:");
 		TFdeadline = new CustomTextField();
 		
-		LBtitleName = new CustomLabel("T√çTULO:");
+		LBtitleName = new CustomLabel("TÕTULO:");
 		TFtitleName = new CustomTextField();
 		
 		LBquantity = new CustomLabel("QUANTIDADE:");
 		NFquantity = new CustomNumberField();
 		
-		LBprice = new CustomLabel("PRE√áO/AJUSTE:");
+		LBprice = new CustomLabel("PRE«O/AJUSTE:");
 		CFprice = new CustomCurrencyField();
 		
-		LBpriceTotal = new CustomLabel("VALOR OPERA√á√ÉO:");
+		LBpriceTotal = new CustomLabel("VALOR OPERA«√O:");
 		CFpriceTotal = new CustomCurrencyField();
 		
 		LBoperatoinType = new CustomLabel("D/C:");
@@ -222,35 +222,35 @@ public class TitleRegisterFrame extends CustomFrame{
 	
 	private boolean getRegister() {		
 		if(CBnegotiation.getSelectedIndex()<1) {
-			Message.Warning("NEGOCIA√á√ÉO INV√ÅLIDA!",true);
+			Message.Warning("NEGOCIA«√O INV¡LIDA!",true);
 			return false;
 		}
 		if(CBnegotiationType.getSelectedIndex()<1) {
-			Message.Warning("TIPO DE NEGOCIA√á√ÉO INV√ÅLIDAO!",true);
+			Message.Warning("TIPO DE NEGOCIA«√O INV¡LIDAO!",true);
 			return false;		
 		}
 		if(CBmarketType.getSelectedIndex()<1) {
-			Message.Warning("TIPO DE INV√ÅLIDO!",true);
+			Message.Warning("TIPO DE INV¡LIDO!",true);
 			return false;
 		}
 		if(CBoperatoinType.getSelectedIndex()<1) {
-			Message.Warning("TIPO DE OPERA√á√ÉO INV√ÅLIDO!",true);
+			Message.Warning("TIPO DE OPERA«√O INV¡LIDO!",true);
 			return false;
 		}
 		if(TFtitleName.getText().equalsIgnoreCase("")) {
-			Message.Warning("ESPECIFICA√á√ÉO DO T√çTULO INV√ÅLIDO!",true);
+			Message.Warning("ESPECIFICA«√O DO TÕTULO INV¡LIDO!",true);
 			return false;
 		}
 		if(NFquantity.getText().equalsIgnoreCase("")) {
-			Message.Warning("QUANTIDADE INV√ÅLIDA!",true);
+			Message.Warning("QUANTIDADE INV¡LIDA!",true);
 			return false;
 		}
 		if(CFprice.getText().equalsIgnoreCase("")) {
-			Message.Warning("PRE√áO/AJUSTE INV√ÅLIDO!",true);
+			Message.Warning("PRE«O/AJUSTE INV¡LIDO!",true);
 			return false;
 		}
 		if(CFpriceTotal.getText().equalsIgnoreCase("")) {
-			Message.Warning("VALOR DA OPERA√á√ÉO/AJUSTE INV√ÅLIDO!",true);
+			Message.Warning("VALOR DA OPERA«√O/AJUSTE INV¡LIDO!",true);
 			return false;
 		}
 		try {

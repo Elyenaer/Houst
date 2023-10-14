@@ -51,7 +51,7 @@ public class StockPanel extends CustomPanel {
     }
 
     private void initInitiation() {        
-        LBtermOptionsFeeT = new CustomLabel("Taxa de OpÃ§Ãµes a Termo", fontSize, true);
+        LBtermOptionsFeeT = new CustomLabel("Taxa de Opções a Termo", fontSize, true);
         LBanaFeeT = new CustomLabel("Taxa ANA", fontSize, true);
         LBemolumentsT = new CustomLabel("Emolumentos", fontSize, true);
         LBtotalBovespaT = new CustomLabel("Total Bovespa", fontSize, true);

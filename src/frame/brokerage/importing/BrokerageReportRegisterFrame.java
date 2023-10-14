@@ -13,7 +13,6 @@ import java.util.Optional;
 
 import javax.swing.table.DefaultTableModel;
 
-import components.CustomButton;
 import components.CustomComboBox;
 import components.CustomFrame;
 import components.CustomIconButton;
@@ -21,7 +20,10 @@ import components.CustomLabel;
 import components.CustomTable;
 import components.CustomTableRegister;
 import components.LoadingDialog;
+import model.register.connect.BrokerageReportConnect;
 import model.register.connect.StockBrokerageConnect;
+import model.register.connect.TitleConnect;
+import model.register.register.BrokerageReportRegister;
 import model.register.register.StockBrokerageRegister;
 import model.register.register.TitleRegister;
 import model.view.connect.BrokerageReportViewBriefingConnect;
@@ -34,8 +36,9 @@ import support.Message;
 
 public class BrokerageReportRegisterFrame extends CustomFrame {
 	private static final long serialVersionUID = 1L;
-	protected BrokerageReportBriefing registers;
+	protected BrokerageReportBriefing brokerageRegister;
 	private boolean newRegister = true;
+	private BrokerageReportView register;
 			
 	private CustomTable TBstock;	
 	private CustomComboBox CBstockBrokerage;
@@ -65,6 +68,7 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 	
 	public void init() {
 		titles = new ArrayList<TitleRegister>();
+		register = new BrokerageReportView();
 	}	
 	
 	@Override
@@ -73,13 +77,13 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		CBstockBrokerage = new CustomComboBox();		
 				
 		ArrayList<String> t = new ArrayList<String>();
-		t.add("NEGOCIA√á√ÉO");
+		t.add("NEGOCIA«√O");
 		t.add("C/V");
 		t.add("TIPO MERC.");
-		t.add("ESPECIFICA√á√ÉO DO T√çTULO");
+		t.add("ESPECIFICA«√O DO TÕTULO");
 		t.add("QD");
-		t.add("PRE√áO");
-		t.add("OPERA√á√ÉO");
+		t.add("PRE«O");
+		t.add("OPERA«√O");
 		t.add("D/C");
 		TBstock = new CustomTable(t);
 		
@@ -139,6 +143,8 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 			}
 		});
 		thread.start();
+		
+		BTdelete.setVisible(false);
 	}
 	
 	@Override
@@ -186,7 +192,7 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		TBstock.table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {                   
+                if (e.getClickCount() == 2) {   
                 	openTitleRegister(titles.get(TBstock.table.getSelectedRow()));                	
                 }
             }
@@ -211,7 +217,7 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		this.add(PNstockPanel);
 		this.add(PNbrokerageExpensesPanel);
 	}
-//			
+	
 	private void openTableRegister() {
 		ArrayList<String> titles = new ArrayList<String>();
 		titles.add("ID");
@@ -256,7 +262,7 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
         loadingThread.start();
 	}
 	
-	private void setRegister(BrokerageReportViewBriefing register) {
+	private void setRegister(BrokerageReportViewBriefing register) {		
 		Thread thread = new Thread(()-> {
 			try {
 				BrokerageReportView r = new BrokerageReportViewBriefingConnect().getFullView(register);
@@ -266,15 +272,23 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 			}			
 		});
 		thread.start();	
+		this.newRegister = false;
+		BTdelete.setVisible(true);
+		BTsave.setScaleIcon(DesignIcon.save());
 	}
 	
 	protected void setRegister(BrokerageReportView register) {
+		this.register = register;
+		setStockBrokerageEnabled(false);
+		TBstock.setVisible(true);
+		CBstockBrokerage.setSelectedItem(register.getStockBrokerageRegister().getName());
 		PNtitlePanel.setRegister(register);
 		PNbusinessBriefingPanel.setRegister(register.getBrokerageReportRegister());
 		PNclearingPanel.setRegister(register.getBrokerageReportRegister());
 		PNstockPanel.setRegister(register.getBrokerageReportRegister());
 		PNbrokerageExpensesPanel.setRegister(register.getBrokerageReportRegister());
-		fillTable(register.getTitles());
+		titles = register.getTitles();
+		fillTable();
 	}
 		
 	private void clear() {
@@ -289,28 +303,68 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		PNbrokerageExpensesPanel.setVisible(false);
 		PNclearingPanel.setVisible(false);
 		PNstockPanel.setVisible(false);
-		TBstock.setVisible(false);
+		TBstock.setVisible(false);	
+		setStockBrokerageEnabled(true);
+	}
+	
+	protected void setStockBrokerageEnabled(boolean enable) {
+		this.CBstockBrokerage.setEnabled(enable);
+	}
+	
+	private BrokerageReportView getRegister() {
+		try{
+			BrokerageReportRegister brokerageReportRegister = new BrokerageReportRegister();
+			brokerageReportRegister = PNtitlePanel.getRegister(brokerageReportRegister);
+			brokerageReportRegister = PNbrokerageExpensesPanel.getRegister(brokerageReportRegister);
+			brokerageReportRegister = PNbusinessBriefingPanel.getRegister(brokerageReportRegister);
+			brokerageReportRegister = PNclearingPanel.getRegister(brokerageReportRegister);
+			brokerageReportRegister = PNstockPanel.getRegister(brokerageReportRegister);
+			register.setBrokerageReportRegister(brokerageReportRegister);
+			
+			register.setTitles(titles);
+					
+			return register;
+		}catch(Exception e) {
+			Message.Error(this.getClass().getName(),"getRegister", e);
+			return null;
+		}
 	}
 	
 	private void save() {
 		Thread thread = new Thread(()->{
-			
+			BrokerageReportView register = getRegister();
+			if(register!=null) {
+				try {
+					LoadingDialog loadingDialog = new LoadingDialog(this,"SALVANDO");
+					loadingDialog.showLoading();
+					int id = new BrokerageReportConnect().post(register.getBrokerageReportRegister());
+					TitleConnect titleConnect = new TitleConnect();					
+					for(TitleRegister t: register.getTitles()) {
+						t.setBrokerageReportId(id);
+						titleConnect.post(t);
+					}
+					loadingDialog.hideLoading();
+					Message.Success("NOTA CADASTRADA COM SUCESSO!");
+				} catch (IOException e) {
+					Message.Error(this.getClass().getName(),"save", e);
+				}
+			}
 		});
+		thread.start();
 	}
 	
 	private void delete() {
 		Thread thread = new Thread(()->{
 			
 		});
+		thread.start();
 	}
 	
 	private void update() {
-		Thread thread = new Thread(()->{
-			
-		});
+		
 	}
 	
-	private void fillTable(ArrayList<TitleRegister> titles) {
+	private void fillTable() {
 		DefaultTableModel dtm = (DefaultTableModel) TBstock.table.getModel();
 		dtm.setRowCount(0);
 		for (TitleRegister title : titles) {
