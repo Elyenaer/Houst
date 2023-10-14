@@ -74,13 +74,13 @@ public class BrokerageReportImportFrame extends CustomFrame {
 		SPbrokerage.add(PNbrokerage);
 		
 		ArrayList<String> t = new ArrayList<String>();
-		t.add("NEGOCIA√á√ÉO");
+		t.add("NEGOCIA«√O");
 		t.add("C/V");
 		t.add("TIPO MERC.");
-		t.add("ESPECIFICA√á√ÉO DO T√çTULO");
+		t.add("ESPECIFICA«√O DO TÕTULO");
 		t.add("QD");
-		t.add("PRE√áO");
-		t.add("OPERA√á√ÉO");
+		t.add("PRE«O");
+		t.add("OPERA«√O");
 		t.add("D/C");
 		TBstock = new CustomTable(t);
 		
@@ -282,7 +282,7 @@ public class BrokerageReportImportFrame extends CustomFrame {
 		ArrayList<BrokerageReportView> brokerageReportRegisters = new ArrayList<BrokerageReportView>();
 		for(BrokerageReportBriefing b: registers) {
 			if(b.getRegister()==null) {
-				Message.Warning("RESOLVA AS PEND√äNCIAS ANTES DE SALVAR",true);
+				Message.Warning("RESOLVA AS PEND NCIAS ANTES DE SALVAR",true);
 				return;
 			}else {
 				brokerageReportRegisters.add(b.getRegister());

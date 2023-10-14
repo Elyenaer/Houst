@@ -1,4 +1,4 @@
-package support;
+package setting.support;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -2,10 +2,13 @@ package setting;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 public class DatabaseConnect {
@@ -75,4 +78,15 @@ public class DatabaseConnect {
 		}		
 	}
 
+	public static boolean isInternetAvailable() {
+        try {
+            InetAddress address = InetAddress.getByName("www.google.com");
+            return address.isReachable(20000);
+        } catch (UnknownHostException e) {
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+	
 }

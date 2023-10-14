@@ -41,6 +41,7 @@ public class BrokerageReportConnect {
 
     public BrokerageReportRegister convert(JSONObject jsonObject) {
         BrokerageReportRegister register = new BrokerageReportRegister();
+        register.setBrokerageReportId(jsonObject.getInt("brokerage_report_id"));
         register.setStockBrokerageId(jsonObject.getInt("stock_brokerage_id"));
         register.setBrokerageCustomerId(jsonObject.getInt("brokerage_customer_id"));
         register.setInvoiceNumber(jsonObject.getString("invoice_number"));
@@ -160,6 +161,7 @@ public class BrokerageReportConnect {
             parameters.put("db_user", ma.getUser());
             parameters.put("db_pass", ma.getPass());
             
+            parameters.put("brokerage_report_id", String.valueOf(register.getBrokerageReportId()));
             parameters.put("stock_brokerage_id", String.valueOf(register.getStockBrokerageId()));
             parameters.put("brokerage_customer_id", String.valueOf(register.getBrokerageCustomerId()));
             parameters.put("invoice_number", register.getInvoiceNumber());
@@ -192,6 +194,7 @@ public class BrokerageReportConnect {
             parameters.put("net_amount_for", register.getNetAmountFor().toString());
 
             String data = DatabaseConnect.start(table, parameters, "put");
+            
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "put", e);
@@ -200,7 +203,7 @@ public class BrokerageReportConnect {
     }
 
     public int post(BrokerageReportRegister register) {
-        try {
+    	try {
             Map<String, String> parameters = new HashMap<>();
             parameters.put("db_user", ma.getUser());
             parameters.put("db_pass", ma.getPass());
@@ -237,9 +240,9 @@ public class BrokerageReportConnect {
             parameters.put("net_amount_for", register.getNetAmountFor().toString());
             
             String data = DatabaseConnect.start(table, parameters, "post");
-            
+                        
             return FunctionApi.getId(data);
-        } catch (Exception e) {
+       	} catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "post", e);
             return 0;
         }
@@ -250,9 +253,10 @@ public class BrokerageReportConnect {
             Map<String, String> parameters = Map.of(
                     "db_user", ma.getUser(),
                     "db_pass", ma.getPass(),
-                    "id", String.valueOf(register.getStockBrokerageId())
+                    "brokerage_report_id", String.valueOf(register.getBrokerageReportId())
             );
             String data = DatabaseConnect.start(table, parameters, "delete");
+            
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "delete", e);

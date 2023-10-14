@@ -330,7 +330,7 @@ public class CustomerRegisterFrame extends CustomFrame{
 		titles.add("ID");
 		titles.add("NOME");
 		titles.add("CPF");		
-		CustomTableRegister table = new CustomTableRegister(this,"CLIENTES",titles);
+		CustomTableRegister table = new CustomTableRegister(this,"CLIENTES",titles,500,400);
 		
 		LoadingDialog loadingDialog = new LoadingDialog(this,"BUSCANDO REGISTROS");
         Thread loadingThread = new Thread(() -> {	            

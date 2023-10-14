@@ -13,6 +13,7 @@ import model.register.register.BrokerageCustomerRegister;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
 import support.FunctionApi;
+import support.Message;
 
 public class BrokerageCustomerConnect {
     private ManagerAccess ma;
@@ -55,7 +56,7 @@ public class BrokerageCustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -71,7 +72,7 @@ public class BrokerageCustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertRecord(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "getById", e);
+            Message.Error(this.getClass().getName(), "getById", e);
             return null;
         }
     }
@@ -87,7 +88,7 @@ public class BrokerageCustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "getByCustomerId", e);
+            Message.Error(this.getClass().getName(), "getByCustomerId", e);
             return null;
         }
     }
@@ -103,7 +104,7 @@ public class BrokerageCustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "getByStockBrokerage", e);
+            Message.Error(this.getClass().getName(), "getByStockBrokerage", e);
             return null;
         }
     }
@@ -153,7 +154,7 @@ public class BrokerageCustomerConnect {
             if(cont<10) {
             	return checkRegister(register,cont++);
             }else {
-            	support.Message.Error(this.getClass().getName(), "checkRegister", e);
+            	Message.Error(this.getClass().getName(), "checkRegister", e);
             	return 0;
             }            
         }
@@ -174,7 +175,7 @@ public class BrokerageCustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "put");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "put", e);
+            Message.Error(this.getClass().getName(), "put", e);
             return false;
         }
     }
@@ -192,7 +193,7 @@ public class BrokerageCustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "post");
             return FunctionApi.getId(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "post", e);
+            Message.Error(this.getClass().getName(), "post", e);
             return 0;
         }
     }
@@ -207,7 +208,7 @@ public class BrokerageCustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "delete");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "delete", e);
+            Message.Error(this.getClass().getName(), "delete", e);
             return false;
         }
     }

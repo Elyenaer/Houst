@@ -34,6 +34,7 @@ public class TitlePanel extends JPanel{
     private CustomIconButton BTsearch,BTaddTitle;
     
     private BrokerageCustomerView brokerageCustomer;
+    private BrokerageReportView brokerageReportView;
     private StockBrokerageRegister stockBrokerage;
     private BrokerageReportRegisterFrame parentFrame;
 
@@ -166,18 +167,24 @@ public class TitlePanel extends JPanel{
 
     public BrokerageReportRegister getRegister(BrokerageReportRegister register) {
     	register.setStockBrokerageId(stockBrokerage.getId());
-    	register.setBrokerageCustomerId(brokerageCustomer.getBrokerageCustomerId());
+    	register.setBrokerageCustomerId(brokerageReportView.getBrokerageCustomerRegister().getBrokerageCustomerId());
     	register.setInvoiceNumber(TFinvoiceNumber.getText());
     	register.setTradingDate(DFdate.getDate());
     	
     	return register;
     }
     
+    public int getBrokerageCustomerId() {
+    	return brokerageCustomer.getBrokerageCustomerId();
+    }
+    
     public void setRegister(BrokerageReportView register) {
         setStockBrokerage(register.getStockBrokerageRegister());
         LBcustomerCpf.setText("CPF: "+ register.getCustomerRegister().getCpf());
         
-        if(isRegistering) {        	
+        if(isRegistering) {          
+        	brokerageReportView = register;
+        	
         	LBjustName.setText(register.getCustomerRegister().getName());        	
 	    	LBcustomerName.setText("CLIENTE:");
 	    	
@@ -189,12 +196,13 @@ public class TitlePanel extends JPanel{
 	    	DFdate.setDate(register.getBrokerageReportRegister().getTradingDate());	    	
 	    	DFdate.setVisible(true);
 	    	
-	    	LBcustomerCode.setText("CÓDIGO:");   
+	    	LBcustomerCode.setVisible(true);
 	    	TFcode.setText(register.getBrokerageCustomerRegister().getCode());
 	    	TFcode.setVisible(true);
 	    	TFcode.setEnabled(false);
 	    	
 	    	BTaddTitle.setVisible(true);
+	    	BTsearch.setEnabled(false);
         }else {
         	LBinvoiceNumber.setText("Nº "+register.getBrokerageReportRegister().getInvoiceNumber());
         	LBtradingDate.setText("DATA: " + register.getBrokerageReportRegister().getTradingDate());        	
@@ -212,7 +220,8 @@ public class TitlePanel extends JPanel{
     	LBstockBrokerage.setIcon(DesignIcon.stockBrokerageIcon(register));
     	TFcode.setVisible(true);
     	BTsearch.setVisible(true);
-    	LBcustomerCode.setVisible(true);
+    	BTsearch.setEnabled(true);;
+    	LBcustomerCode.setVisible(true);    	
     	this.setVisible(true);    	
     }
     
@@ -234,6 +243,7 @@ public class TitlePanel extends JPanel{
 			    	BTaddTitle.setVisible(true);
 			    	TFinvoiceNumber.setVisible(true);	
 			    	TFcode.setEnabled(false);
+			    	BTsearch.setEnabled(false);
 			    	parentFrame.setStockBrokerageEnabled(false);
 				}
 				loadingDialog.hideLoading();
@@ -246,7 +256,7 @@ public class TitlePanel extends JPanel{
 
     public void clear() {
     	LBstockBrokerage.clear();
-        LBcustomerCode.setText("");
+        LBcustomerCode.setVisible(false);
         LBcustomerCpf.setText("");
         LBcustomerName.setText("");
         LBinvoiceNumber.setText("");

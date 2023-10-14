@@ -160,7 +160,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
             return false;
         }
         if (TFcode.getText().equalsIgnoreCase("")) {
-            Message.Warning("C√ìDIGO INV√ÅLIDO!", false);
+            Message.Warning("C”DIGO INV¡LIDO!", false);
             return false;
         }
         StockBrokerageRegister selectedBrokerage = stockBrokerageRegisters.get(CBstockBrokerage.getSelectedIndex());
@@ -224,7 +224,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
 
     private void delete() {
         try {
-            if (!Message.Options("CONFIRMA A EXCLUS√ÉO?")) {
+            if (!Message.Options("CONFIRMA A EXCLUS√O?")) {
                 return;
             }
             if (getRegister()) {
@@ -234,7 +234,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
                     try {
                         if (new BrokerageCustomerConnect().delete(register)) {
                             loadingDialog.hideLoading();
-                            Message.Success("CLIENTE NA CORRETORA EXCLU√çDO COM SUCESSO!");
+                            Message.Success("CLIENTE NA CORRETORA EXCLUÕDO COM SUCESSO!");
                             closeScreen();
                         }
                     } catch (Exception e) {

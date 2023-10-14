@@ -145,6 +145,11 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		thread.start();
 		
 		BTdelete.setVisible(false);
+		PNbusinessBriefingPanel.setVisible(false);
+		PNbrokerageExpensesPanel.setVisible(false);
+		PNclearingPanel.setVisible(false);
+		PNstockPanel.setVisible(false);
+		TBstock.setVisible(false);
 	}
 	
 	@Override
@@ -225,7 +230,13 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		titles.add("CLIENTE");		
 		titles.add("NOTA");	
 		titles.add("DATA");	
-		CustomTableRegister table = new CustomTableRegister(this,"NOTAS DE CORRETAGEM",titles);
+		CustomTableRegister table = new CustomTableRegister(this,"NOTAS DE CORRETAGEM",titles,800,500);
+		
+		table.setColumnWidth(0,30);
+		table.setColumnWidth(1,150);
+		table.setColumnWidth(2,200);
+		table.setColumnWidth(3,80);
+		table.setColumnWidth(4,80);
 		
 		LoadingDialog loadingDialog = new LoadingDialog(this,"BUSCANDO REGISTROS");
         Thread loadingThread = new Thread(() -> {	            
@@ -303,17 +314,34 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 		PNbrokerageExpensesPanel.setVisible(false);
 		PNclearingPanel.setVisible(false);
 		PNstockPanel.setVisible(false);
+		
 		TBstock.setVisible(false);	
-		setStockBrokerageEnabled(true);
+		TBstock.removeRows();
+		titles = new ArrayList<>();
+		
+		BTdelete.setVisible(false);
+		BTsave.setScaleIcon(DesignIcon.add());
+		
+		setStockBrokerageEnabled(true);		
 	}
 	
 	protected void setStockBrokerageEnabled(boolean enable) {
 		this.CBstockBrokerage.setEnabled(enable);
+		TBstock.setVisible(!enable);
+		PNbusinessBriefingPanel.setVisible(!enable);
+		PNbrokerageExpensesPanel.setVisible(!enable);
+		PNclearingPanel.setVisible(!enable);
+		PNstockPanel.setVisible(!enable);
 	}
 	
 	private BrokerageReportView getRegister() {
 		try{
-			BrokerageReportRegister brokerageReportRegister = new BrokerageReportRegister();
+			if(titles.size()<1) {
+				Message.Warning("NENHUMA NEGOCIAÇÃO CADASTRADA!",true);
+				return null;
+			}
+			
+			BrokerageReportRegister brokerageReportRegister = register.getBrokerageReportRegister();
 			brokerageReportRegister = PNtitlePanel.getRegister(brokerageReportRegister);
 			brokerageReportRegister = PNbrokerageExpensesPanel.getRegister(brokerageReportRegister);
 			brokerageReportRegister = PNbusinessBriefingPanel.getRegister(brokerageReportRegister);
@@ -337,12 +365,20 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 				try {
 					LoadingDialog loadingDialog = new LoadingDialog(this,"SALVANDO");
 					loadingDialog.showLoading();
+					BrokerageReportConnect connect = new BrokerageReportConnect();
+					if(connect.checkRegister(register.getBrokerageReportRegister())) {
+						loadingDialog.hideLoading();
+						Message.Warning("JÁ EXISTE UMA NOTA COM ESSE NÚMERO PARA ESSA CORRETORA!",true);
+						return;
+					}					
 					int id = new BrokerageReportConnect().post(register.getBrokerageReportRegister());
 					TitleConnect titleConnect = new TitleConnect();					
 					for(TitleRegister t: register.getTitles()) {
 						t.setBrokerageReportId(id);
+						t.setBrokerageCustomerId(PNtitlePanel.getBrokerageCustomerId());
 						titleConnect.post(t);
 					}
+					clear();
 					loadingDialog.hideLoading();
 					Message.Success("NOTA CADASTRADA COM SUCESSO!");
 				} catch (IOException e) {
@@ -355,13 +391,77 @@ public class BrokerageReportRegisterFrame extends CustomFrame {
 	
 	private void delete() {
 		Thread thread = new Thread(()->{
-			
+			if(!Message.Options("VOCÊ TEM CERTEZA QUE DESEJA EXCLUIR ESSA NOTA E AS NEGOCIAÇÕES VINCULADAS?")) {
+				return;
+			}
+			try {
+				LoadingDialog loadingDialog = new LoadingDialog(this,"EXCLUINDO");
+				loadingDialog.showLoading();
+				TitleConnect titleConnect = new TitleConnect();
+				for(TitleRegister t: titles) {
+					titleConnect.delete(t);
+				}
+				new BrokerageReportConnect().delete(register.getBrokerageReportRegister());
+				clear();
+				loadingDialog.hideLoading();
+				Message.Success("NOTA EXCLUÍDA COM SUCESSO!");
+			} catch (IOException e) {
+				Message.Error(this.getClass().getName(),"delete", e);
+			}						
 		});
 		thread.start();
 	}
 	
 	private void update() {
-		
+		Thread thread = new Thread(()->{
+			try {
+				BrokerageReportView register = getRegister();
+				if(register!=null) {
+					LoadingDialog loadingDialog = new LoadingDialog(this,"ATUALIZANDO");
+					loadingDialog.showLoading();
+					TitleConnect titleConnect = new TitleConnect();
+					
+					//check if some register was deleted
+					ArrayList<TitleRegister> oldList = titleConnect.getByBrokerageReportId(register.getBrokerageReportRegister().getBrokerageReportId());
+					ArrayList<TitleRegister> deleted = new ArrayList<TitleRegister>();
+					for(TitleRegister old : oldList) {	
+						boolean found = false;
+			            for (TitleRegister current : register.getTitles()) {
+			                if (current.getTitleId() == old.getTitleId()) {		
+			                	found = true;
+			                    break;
+			                }
+			            }
+				        if(!found) {
+				        	deleted.add(old);
+				        }
+				    }
+					//delete on database register was deleted
+					for(TitleRegister t: deleted) {
+						titleConnect.delete(t);
+					}
+					
+					//update or save new register
+					for(TitleRegister t: register.getTitles()) {
+						if(t.getTitleId()>0) {
+							titleConnect.put(t);
+						}else {
+							t.setBrokerageReportId(register.getBrokerageReportRegister().getBrokerageReportId());
+							t.setBrokerageCustomerId(register.getBrokerageCustomerRegister().getBrokerageCustomerId());
+							titleConnect.post(t);
+						}						
+					}
+					
+					new BrokerageReportConnect().put(register.getBrokerageReportRegister());
+					clear();
+					loadingDialog.hideLoading();
+					Message.Success("NOTA ATUALIZADA COM SUCESSO!");
+				}				
+			} catch (IOException e) {
+				Message.Error(this.getClass().getName(),"delete", e);
+			}						
+		});
+		thread.start();
 	}
 	
 	private void fillTable() {

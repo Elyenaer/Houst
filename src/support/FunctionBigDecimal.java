@@ -16,7 +16,7 @@ public class FunctionBigDecimal {
 	}
 	
 	public static String bigDecimalToCurrency(BigDecimal value) {
-	    DecimalFormat format = new DecimalFormat("#,###.##");
+	    DecimalFormat format = new DecimalFormat("#,##0.00");
 	    return format.format(value);
 	}
 	

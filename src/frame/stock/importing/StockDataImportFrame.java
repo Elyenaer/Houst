@@ -50,7 +50,7 @@ public class StockDataImportFrame extends CustomFrame{
 	}
 	
 	private void init() {		
-		setTitle("M√âTRICAS IMPORT");
+		setTitle("M…TRICAS IMPORT");
 		setSize(1200,700);
 		setLocationRelativeTo(null);
 	}
@@ -61,7 +61,7 @@ public class StockDataImportFrame extends CustomFrame{
 		
 		BTimport = new CustomButton("IMPORT");
 		BTsave = new CustomButton("ENVIAR DADOS");
-		BTregisterMetric = new CustomButton("CADASTRAR M√âTRICAS");
+		BTregisterMetric = new CustomButton("CADASTRAR M…TRICAS");
 		
 		LBdate = new CustomLabel("DATA DOS DADOS:");
 		DFdate = new CustomDateField();
@@ -213,7 +213,7 @@ public class StockDataImportFrame extends CustomFrame{
 		try {
 			LocalDate date = DFdate.getDate();
 			if(date==null) {
-				Message.Warning("DATA INV√ÅLIDA!",true);
+				Message.Warning("DATA INV¡LIDA!",true);
 				return false;
 			}	
 			entries = new ArrayList<EntryMetricRegister>();			

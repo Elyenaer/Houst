@@ -22,7 +22,7 @@ public class BusinessBriefingPanel extends CustomPanel{
 		LBoperationValueT,LBoperationValueV;
 	private CustomCurrencyField NFdebenturesV,NFspotSalesV,NFspotPurchasesV,NFoptionsPurchasesV,NFoptionsSalesV,
 		NFforwardOperationV,NFvalueOfPublicSecuritiesOperationV,NFoperationValueV;
-	
+
 	private boolean isRegistering = false;
 	
 	public BusinessBriefingPanel(int width,int height,int fontSize) {
@@ -186,7 +186,10 @@ public class BusinessBriefingPanel extends CustomPanel{
 		register.setSpotPurchases(NFspotPurchasesV.getValue());
 		register.setOptionsPurchases(NFoptionsPurchasesV.getValue());
 		register.setOptionsSales(NFoptionsSalesV.getValue());
-		
+		register.setForwardOperation(NFforwardOperationV.getValue());
+		register.setValueOfPublicSecuritiesOperation(NFvalueOfPublicSecuritiesOperationV.getValue());
+		register.setOperationValue(NFoperationValueV.getValue());
+				
 		return register;
 	}
 	

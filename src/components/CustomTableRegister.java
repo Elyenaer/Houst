@@ -16,10 +16,10 @@ public class CustomTableRegister extends JDialog{
 	private CustomTable table;
 	private Object selected;
 	
-	public CustomTableRegister(JFrame parent,String title, ArrayList<String> titles) {
+	public CustomTableRegister(JFrame parent,String title, ArrayList<String> titles,int width,int height) {
 		table = new CustomTable(titles);
 		setTitle(title);
-		setSize(500, 400);
+		setSize(width,height);
         setLocationRelativeTo(parent); 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);  
         setModal(true);

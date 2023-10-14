@@ -3,8 +3,8 @@ package process.brokerageReport;
 import java.util.ArrayList;
 
 import model.view.register.BrokerageReportView;
+import setting.support.PdfImport;
 import support.Message;
-import support.PdfImport;
 
 public class BrokerageReportProcess {
 	

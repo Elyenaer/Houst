@@ -69,6 +69,23 @@ public class TitleConnect {
             return null;
         }
     }
+    
+    public ArrayList<TitleRegister> getByBrokerageReportId(int brokerageReportId) {
+        try {
+            Map<String, String> parameters = Map.of(
+                    "db_user", ma.getUser(),
+                    "db_pass", ma.getPass(),
+                    
+                    "brokerage_report_id", String.valueOf(brokerageReportId)
+            );
+
+            String data = DatabaseConnect.start(table, parameters, "get");
+            return convertArray(data);
+        } catch (Exception e) {
+            support.Message.Error(this.getClass().getName(), "get", e);
+            return null;
+        }
+    }
 
     public TitleRegister get(int id) {
         try {
@@ -106,6 +123,7 @@ public class TitleConnect {
             parameters.put("title_id", String.valueOf(register.getTitleId()));
 
             String data = DatabaseConnect.start(table, parameters, "put");
+            
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "put", e);
@@ -132,7 +150,8 @@ public class TitleConnect {
             parameters.put("price_total", register.getPriceTotal().toString());
             parameters.put("operation_type", String.valueOf(register.getOperationType()));
             
-            String data = DatabaseConnect.start(table, parameters, "post");            
+            String data = DatabaseConnect.start(table, parameters, "post");   
+                                    
             return FunctionApi.getId(data);
         } catch (Exception e) {
             support.Message.Error(this.getClass().getName(), "post", e);

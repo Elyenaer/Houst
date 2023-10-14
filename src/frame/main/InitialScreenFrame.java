@@ -14,21 +14,25 @@ import components.CustomMenu;
 import components.CustomMenuBar;
 import components.CustomMenuItem;
 import frame.brokerage.importing.BrokerageReportImportFrame;
+import frame.brokerage.importing.BrokerageReportRegisterFrame;
 import frame.register.MetricRegisterFrame;
 import frame.stock.importing.StockDataImportFrame;
+import setting.DatabaseConnect;
 import setting.desing.Design;
 import setting.desing.DesignIcon;
+import support.Message;
 
 public class InitialScreenFrame extends CustomFrame{
 	private static final long serialVersionUID = 1L;
 	
 	private CustomMenuBar menuBar;
 	private CustomMenu menuImport,menuRegister;
-	private CustomMenuItem MIbrokerageImport,MIstockImport,MIcustomer,MImetric;
+	private CustomMenuItem MIbrokerageImport,MIstockImport,MIcustomer,MImetric,MIbrokerageRegister;
 	
 	public InitialScreenFrame() {
 		super();
 		init();
+		checkInternet();
 	}
 		
 	private void init() {
@@ -63,11 +67,12 @@ public class InitialScreenFrame extends CustomFrame{
 		
 		menuImport = new CustomMenu("IMPORT");
 		MIbrokerageImport = new CustomMenuItem("NOTAS DE CORRETAGEM");
-		MIstockImport = new CustomMenuItem("MÃ‰TRICAS");
+		MIstockImport = new CustomMenuItem("MÉTRICAS");
 		
 		menuRegister = new CustomMenu("CADASTRO");
-		MIcustomer = new CustomMenuItem("CLIENTES",100,25);
-		MImetric =  new CustomMenuItem("MÃ‰TRICAS",100,25);
+		MIcustomer = new CustomMenuItem("CLIENTES",200,25);
+		MImetric =  new CustomMenuItem("MÉTRICAS",200,25);
+		MIbrokerageRegister = new CustomMenuItem("NOTAS DE CORRETAGEM",200,25);
 	}
 
 	@Override
@@ -94,6 +99,12 @@ public class InitialScreenFrame extends CustomFrame{
 				new MetricRegisterFrame(null).setVisible(true);
 			}
 		});
+		MIbrokerageRegister.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new BrokerageReportRegisterFrame().setVisible(true);
+			}
+		});
 		MIbrokerageImport.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -115,10 +126,27 @@ public class InitialScreenFrame extends CustomFrame{
 		menuBar.add(menuRegister);
 		menuRegister.add(MIcustomer);
 		menuRegister.add(MImetric);
+		menuRegister.add(MIbrokerageRegister);
 		
 		menuBar.add(menuImport);
 		menuImport.add(MIbrokerageImport);
 		menuImport.add(MIstockImport);
+	}
+	
+	private void checkInternet() {
+		Thread thread = new Thread(()->{
+			while(true) {
+				if(!DatabaseConnect.isInternetAvailable()) {
+					Message.Warning("SEM CONEXÃO COM O BANCO DE DADOS, VERIFIQUE COM A INTERNET",true);
+				}
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		thread.start();
 	}
 	
 	@Override

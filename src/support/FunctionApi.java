@@ -15,16 +15,24 @@ public class FunctionApi {
 	}
 	
 	public static boolean getSuccess(String response) {
-	    try {
-	        JSONObject jsonObject = new JSONObject(response);
+		JSONObject jsonObject = new JSONObject(response);
+	    try {	        
 	        if(jsonObject.getBoolean("success")){
 	        	return true;
 	        }else {
 	        	return false;
 	        }
 	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return false;
+	    	try {
+	    		if(jsonObject.getString("success").equalsIgnoreCase("true")){
+		        	return true;
+		        }else {
+		        	return false;
+		        }
+	    	}catch (Exception e1) {
+	    		Message.Error("support","FunctionApi","getSucces","response: " + jsonObject + "\nErro: " + e1.getMessage());
+		        return false;
+			}	        
 	    }
 	}
 }

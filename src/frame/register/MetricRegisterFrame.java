@@ -47,7 +47,7 @@ public class MetricRegisterFrame extends CustomFrame{
 	}
 	
 	private void init(JFrame frame) {
-		this.setTitle("CADASTRO DE M√âTRICAS");
+		this.setTitle("CADASTRO DE M…TRICAS");
 		this.setSize(360,415);
 		this.setLocationRelativeTo(frame);
 		register = new MetricRegister();
@@ -55,9 +55,9 @@ public class MetricRegisterFrame extends CustomFrame{
 
 	@Override
 	public void initInitiation() {
-		LBtitleImport = new CustomLabel("T√çTULO IMPORT:");
+		LBtitleImport = new CustomLabel("TÕTULO IMPORT:");
 		LBname = new CustomLabel("NOME:");
-		LBdescription = new CustomLabel("DESCRI√á√ÉO:");
+		LBdescription = new CustomLabel("DESCRI«√O:");
 		LBstatus = new CustomLabel("STATUS");
 		
 		TFtitleImport = new CustomTextField();
@@ -182,17 +182,17 @@ public class MetricRegisterFrame extends CustomFrame{
 		register.setName(TFname.getText());
 		register.setDescription(TAdescription.getText());
 		if(register.getName().equalsIgnoreCase("")) {
-			Message.Warning("NOME INV√ÅLIDO!",true);
+			Message.Warning("NOME INV¡LIDO!",true);
 			return false;
 		}
 		register.setTitleImport(TFtitleImport.getText());
 		if(register.getTitleImport().equalsIgnoreCase("")) {
-			Message.Warning("T√çTULO IMPORT INV√ÅLIDO!",true);
+			Message.Warning("TÕTULO IMPORT INV¡LIDO!",true);
 			return false;
 		}
 		String type = RBtype.getSelected();
 		if(type==null) {
-			Message.Warning("SELECIONE UM TIPO DE VARI√ÅVEL",true);
+			Message.Warning("SELECIONE UM TIPO DE VARI¡VEL",true);
 			return false;			
 		}else {
 			if(type.equalsIgnoreCase("TEXTO")) {
@@ -243,7 +243,7 @@ public class MetricRegisterFrame extends CustomFrame{
 			        this.setEnabled(false);
 			        try {	
 			        	new MetricConnect().post(register);	
-			        	Message.Success("M√âTRICA SALVA COM SUCESSO!");
+			        	Message.Success("M…TRICA SALVA COM SUCESSO!");
 			        	clear();
 			        }catch (Exception e) {
 			        	Message.Error(this.getClass().getName(),"save", e);
@@ -260,7 +260,7 @@ public class MetricRegisterFrame extends CustomFrame{
 	
 	private void delete() {
 		try {				
-			if(!Message.Options("CONFIRMA A EXCLUS√ÉO DA M√âTRICA " + register.getName() + "?")) {
+			if(!Message.Options("CONFIRMA A EXCLUS√O DA M…TRICA " + register.getName() + "?")) {
 				return;
 			}					
 			LoadingDialog loadingDialog = new LoadingDialog(this,"EXCLUINDO");
@@ -269,7 +269,7 @@ public class MetricRegisterFrame extends CustomFrame{
 		        this.setEnabled(false);
 		        try {			        	
 					if(new MetricConnect().delete(register)) {							
-						Message.Success("CLIENTE EXCLU√çDO COM SUCESSO!");
+						Message.Success("CLIENTE EXCLUÕDO COM SUCESSO!");
 						clear();
 					}						    
 		        }catch (Exception e) {
@@ -293,7 +293,7 @@ public class MetricRegisterFrame extends CustomFrame{
 			        try {			        	
 						if(new MetricConnect().put(register)) {
 							loadingDialog.hideLoading(); 
-							Message.Success("M√âTRICA ATUALIZADA COM SUCESSO!");
+							Message.Success("M…TRICA ATUALIZADA COM SUCESSO!");
 						}			
 						clear();					    
 			        }catch (Exception e) {
@@ -311,9 +311,9 @@ public class MetricRegisterFrame extends CustomFrame{
 		ArrayList<String> titles = new ArrayList<String>();
 		titles.add("ID");
 		titles.add("NOME");
-		titles.add("T√çTULO IMPORT");		
+		titles.add("TÕTULO IMPORT");		
 		titles.add("STATUS");	
-		CustomTableRegister table = new CustomTableRegister(this,"M√âTRICAS",titles);
+		CustomTableRegister table = new CustomTableRegister(this,"M…TRICAS",titles,500,400);
 		
 		LoadingDialog loadingDialog = new LoadingDialog(this,"BUSCANDO REGISTROS");
         Thread loadingThread = new Thread(() -> {	            

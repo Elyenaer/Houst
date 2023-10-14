@@ -68,6 +68,24 @@ public class StockBrokerageConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertRegister(data);
         } catch (Exception e) {
+            return get(id,0);
+        }
+    }
+    
+    private StockBrokerageRegister get(int id,int cont) {
+        try {
+            Map<String, String> parameters = Map.of(
+                    "db_user", ma.getUser(),
+                    "db_pass", ma.getPass(),
+                    "stock_brokerage_id", String.valueOf(id)
+            );
+
+            String data = DatabaseConnect.start(table, parameters, "get");
+            return convertRegister(data);
+        } catch (Exception e) {
+        	if(cont<10) {
+        		get(id, cont++);
+        	}
             support.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }

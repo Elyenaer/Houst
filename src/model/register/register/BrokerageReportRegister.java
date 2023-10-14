@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 public class BrokerageReportRegister {
 	//brokerage data
+	private int brokerageReportId;	
 	private int stockBrokerageId;
 	private int brokerageCustomerId;
 	private String invoiceNumber;
@@ -39,7 +40,13 @@ public class BrokerageReportRegister {
 	private BigDecimal totalBrokerageExpenses;
 	private LocalDate netAmountForDate;
 	private BigDecimal netAmountFor;
-		
+	
+	public int getBrokerageReportId() {
+		return brokerageReportId;
+	}
+	public void setBrokerageReportId(int brokerageReportId) {
+		this.brokerageReportId = brokerageReportId;
+	}	
 	public int getStockBrokerageId() {
 		return stockBrokerageId;
 	}

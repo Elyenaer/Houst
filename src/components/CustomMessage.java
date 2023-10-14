@@ -39,7 +39,7 @@ public class CustomMessage extends JDialog {
         iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(iconLabel, BorderLayout.CENTER);
         if (type == MessageType.confirm) {
-            this.setTitle("CONFIRMA√á√ÉO");
+            this.setTitle("CONFIRMA«√O");
             iconLabel.setIcon(UIManager.getIcon("OptionPane.optionIcon"));
         } else if (type == MessageType.error) {
         	iconLabel.setText("");
@@ -61,7 +61,7 @@ public class CustomMessage extends JDialog {
             this.setTitle("ALERTA");
             iconLabel.setIcon(UIManager.getIcon("OptionPane.warningIcon"));
         } else if (type == MessageType.information) {
-            this.setTitle("INFORMA√á√ÉO");
+            this.setTitle("INFORMA«√O");
             iconLabel.setIcon(UIManager.getIcon("OptionPane.informationIcon"));
         } else if (type == MessageType.successful) {
             this.setTitle("SUCESSO");

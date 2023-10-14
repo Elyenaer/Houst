@@ -205,11 +205,11 @@ public class BrokerageExpensesPanel extends CustomPanel {
             LBexecutionV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getExecution()));
             LBinHouseExecutionV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getInHouseExecution()));
             LBissV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getIss()));
-            LBirrfT.setText("I.R.R.F s/ operaÃ§Ãµes, base "+FunctionBigDecimal.bigDecimalToCurrencyBR(register.getIrrfBase()));
+            LBirrfT.setText("I.R.R.F s/ operações, base "+FunctionBigDecimal.bigDecimalToCurrencyBR(register.getIrrfBase()));
             LBirrfV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getIrrf()));
             LBissPisCofinsV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getIssPisCofins()));
             LBtotalBrokerageExpensesV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getTotalBrokerageExpenses()));
-            LBnetAmountForT.setText("LÃ­quido para "+register.getNetAmountForDate());
+            LBnetAmountForT.setText("Líquido para "+register.getNetAmountForDate());
             LBnetAmountForV.setText(FunctionBigDecimal.bigDecimalToCurrencyBR(register.getNetAmountFor()));
     	}
 
@@ -240,6 +240,9 @@ public class BrokerageExpensesPanel extends CustomPanel {
     			((CustomDateField) components.get(i)).clear();
     		}
         }
+    	
+    	CFirrfBase.clear();
+		DFnetAmountForV.clear();
     	
     	this.revalidate();
 		this.repaint();
