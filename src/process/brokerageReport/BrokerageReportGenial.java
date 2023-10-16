@@ -31,12 +31,12 @@ public class BrokerageReportGenial {
 		register.setBrokerageCustomerRegister(getBrokerageCustomer(text));
 		register.setCustomerRegister(getCustomer(text));
 		register.setTitles(getTitles(text));
-				
+		
 		//we need change for database
 		StockBrokerageRegister brokerageRegister = new StockBrokerageRegister();
 		brokerageRegister.setId(1);
 		brokerageRegister.setName("GENIAL INVESTIMENTOS");	
-		
+				
 		register.setStockBrokerageRegister(brokerageRegister);		
 		register.getBrokerageReportRegister().setStockBrokerageId(brokerageRegister.getId());
 		register.getBrokerageCustomerRegister().setStockBrokerageId(brokerageRegister.getId());
@@ -48,7 +48,7 @@ public class BrokerageReportGenial {
 		try {			
 			CustomerRegister register = new CustomerRegister();		
 			
-			String regexName = "\\d{6}-\\d\\s([A-Z√Å√â√ç√ì√ö√á√É][A-Z√Å√â√ç√ì√ö√á√É a-z√°√©√≠√≥√∫√ß√£]+\\s[A-Z√Å√â√ç√ì√ö√á√É][A-Z√Å√â√ç√ì√ö√á√É a-z√°√©√≠√≥√∫√ß√£]+)\\s\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}";
+			String regexName = "\\d{6}-\\d\\s([A-Z¡…Õ”⁄«√][A-Z¡…Õ”⁄«√ a-z·ÈÌÛ˙Á„]+\\s[A-Z¡…Õ”⁄«√][A-Z¡…Õ”⁄«√ a-z·ÈÌÛ˙Á„]+)\\s\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}";
 	        String name = FunctionText.extractInfo(text, regexName);
 	        register.setName(name);
 	        
@@ -81,11 +81,11 @@ public class BrokerageReportGenial {
 
 	        /*
 	        System.out.println("-----------Brokerage Customer-------------");
-	        System.out.println("C√≥digo: " + register.getCode());*/
+	        System.out.println("CÛdigo: " + register.getCode());*/
 	        
 			return register;
 		}catch(Exception e) {
-			support.Message.Error(this.getClass().getName(),"getCustomer",e);
+			support.Message.Error(this.getClass().getName(),"BrokerageCustomerRegister",e);
 			return null;
 		}
 	}
@@ -111,7 +111,7 @@ public class BrokerageReportGenial {
 	                //negotiation type C/V
 	                register.setNegotiationType(parts[1].charAt(0));
 	                
-	                //market type "FRACION√ÅRIO","VISTA"
+	                //market type "FRACIONARIO","VISTA"
 	                register.setMarketType(parts[2]);
 	                	                
 	                //quantity
@@ -170,7 +170,7 @@ public class BrokerageReportGenial {
 			register.setTradingDate(FunctionDate.standardBRToLocalDate(text.split("\n")[2].split(" ")[2]));
 			
 			//get part of text with data
-			text = text.substring(text.indexOf("Resumo dos Neg√≥cios Resumo Financeiro D/C"),text.indexOf("(*) - Observ"));
+			text = text.substring(text.indexOf("Resumo dos NegÛcios Resumo Financeiro D/C"),text.indexOf("(*) - Observ"));
 			
 			String[] lines = text.split(" ");
 			
@@ -363,7 +363,7 @@ public class BrokerageReportGenial {
 			System.out.println("Total Bovespa: " + register.getTotalBovespa());
 			System.out.println("Clearing: " + register.getClearing());
 			System.out.println("In-House Execution: " + register.getInHouseExecution());
-			System.out.println("ISS S√£o Paulo: " + register.getIss());
+			System.out.println("ISS S„o Paulo: " + register.getIss());
 			System.out.println("IRRF Base: " + register.getIrrfBase());
 			System.out.println("IRRF: " + register.getIrrf());
 			System.out.println("ISS PIS COFINS: " + register.getIssPisCofins());
@@ -373,8 +373,8 @@ public class BrokerageReportGenial {
 				
 			return register;
 		}catch (Exception e) {
-			support.Message.Error(this.getClass().getName(),"getCustomer",e);
+			support.Message.Error(this.getClass().getName(),"getBusinessBriefing",e);
 			return null;
-		}	
+		}
 	}
 }

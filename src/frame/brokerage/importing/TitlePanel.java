@@ -217,12 +217,14 @@ public class TitlePanel extends JPanel{
     
     public void setStockBrokerage(StockBrokerageRegister register) {
     	this.stockBrokerage = register;
-    	LBstockBrokerage.setIcon(DesignIcon.stockBrokerageIcon(register));
-    	TFcode.setVisible(true);
+    	LBstockBrokerage.setIcon(DesignIcon.stockBrokerageIcon(register));    	
     	BTsearch.setVisible(true);
     	BTsearch.setEnabled(true);;
-    	LBcustomerCode.setVisible(true);    	
-    	this.setVisible(true);    	
+    	LBcustomerCode.setVisible(true);   
+    	this.setVisible(true); 
+    	if(isRegistering) {
+    		TFcode.setVisible(true);
+    	}
     }
     
     public void setBrokerageCustomer() {
