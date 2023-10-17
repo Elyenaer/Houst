@@ -16,7 +16,7 @@ public class BrokerageReportProcess {
 			return new BrokerageReportGenial().get(text);
 		}	
 		
-		Message.Warning("CORRETORA N√ÉO ENCONTRADA!",false);
+		Message.Warning("CORRETORA N√O ENCONTRADA!",false);
 		
 		return null;
 	}

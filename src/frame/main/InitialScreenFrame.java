@@ -15,6 +15,7 @@ import components.CustomMenuBar;
 import components.CustomMenuItem;
 import frame.brokerage.importing.BrokerageReportImportFrame;
 import frame.brokerage.importing.BrokerageReportRegisterFrame;
+import frame.register.CustomerRegisterFrame;
 import frame.register.MetricRegisterFrame;
 import frame.stock.importing.StockDataImportFrame;
 import setting.DatabaseConnect;
@@ -82,7 +83,7 @@ public class InitialScreenFrame extends CustomFrame{
 
 	@Override
 	public void initFormat() {
-		MIcustomer.setEnabled(false);
+		
 	}
 	
 	@Override
@@ -90,7 +91,7 @@ public class InitialScreenFrame extends CustomFrame{
 		MIcustomer.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//new CustomerRegisterFrame(null,null,0, null).setVisible(true);
+				new CustomerRegisterFrame().setVisible(true);
 			}
 		});
 		MImetric.addActionListener(new ActionListener() {			

@@ -161,7 +161,7 @@ public class BrokerageReportBriefing extends JPanel {
 			try {
 				if(new BrokerageReportConnect().checkRegister(register.getBrokerageReportRegister())) {
 					LBcheck.setIcon(DesignIcon.error16x16());
-					LBcheck.setText("J√Å SALVO!");		
+					LBcheck.setText("J¡ SALVO!");		
 					brokerageReportImportFrame.setBtDeleteDuplicatesVisible();
 				}else {
 					invoiceOk = true;

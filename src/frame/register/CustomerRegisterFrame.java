@@ -51,6 +51,11 @@ public class CustomerRegisterFrame extends CustomFrame{
 		init(customer, code, stockBrokerageId, frame);
 	}
 	
+	public CustomerRegisterFrame() {
+		super();
+		init();
+	}
+	
 	public void init(CustomerRegister register,String code,int stockBrokerageId,BrokerageReportImportFrame frame) {		
 		this.frame = frame;
 		this.stockBrokerageId = stockBrokerageId;
@@ -58,6 +63,13 @@ public class CustomerRegisterFrame extends CustomFrame{
 		frame.setEnabled(false);
 		setTitle("CADASTRO DE CLIENTE");
 		setRegister(register);	
+		reOrganize();
+		setLocationRelativeTo(frame);
+	}
+	
+	private void init() {
+		customer = new CustomerRegister();
+		setTitle("CADASTRO DE CLIENTE");
 		reOrganize();
 		setLocationRelativeTo(frame);
 	}
@@ -192,6 +204,7 @@ public class CustomerRegisterFrame extends CustomFrame{
 					};
 					rows.add(row);
 				}
+				TBbrokerageCustomer.removeRows();
 				TBbrokerageCustomer.setRows(rows);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -389,8 +402,10 @@ public class CustomerRegisterFrame extends CustomFrame{
 
 	@Override
 	public void closeScreen() {
-		this.frame.setEnabled(true);
-		this.frame.checkPanels();
+		if(frame!=null) {
+			this.frame.setEnabled(true);
+			this.frame.checkPanels();
+		}		
 		this.dispose();
 	}
 		

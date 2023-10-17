@@ -53,7 +53,7 @@ public class BrokerageReportXp {
 		register.setBrokerageReportRegister(getBusinessBriefing(text));
 		register.setCustomerRegister(getCustomer(text));
 		register.setBrokerageCustomerRegister(getBrokerageCustomer(text));		
-				
+						
 		//we need change for database
 		StockBrokerageRegister brokerageRegister = new StockBrokerageRegister();
 		brokerageRegister.setId(stockBrokerageId);
@@ -91,13 +91,9 @@ public class BrokerageReportXp {
  	private BrokerageCustomerRegister getBrokerageCustomer(String text) {
 		try {
 			BrokerageCustomerRegister register = new BrokerageCustomerRegister();
-			
-	        String regexCode = "(\\d{6}-\\d{1})";
-	        String code = FunctionText.extractInfo(text, regexCode);
-	        register.setCode(code);
-	        
+			register.setCode(text.split("\n")[11].split(" ")[0]);	        
 	        register.setStockBrokerageId(stockBrokerageId);
-
+	        
 	        /*
 	        System.out.println("-----------Brokerage Customer-------------");
 	        System.out.println("Código: ->" + register.getCode() + "<-");*/
@@ -130,7 +126,7 @@ public class BrokerageReportXp {
 	                //negotiation type C/V
 	                register.setNegotiationType(parts[1].charAt(0));
 	                
-	                //market type "FRACIONÁRIO","VISTA"
+	                //market type "FRACIONARIO","VISTA"
 	                register.setMarketType(parts[2]);
 	                	                
 	                //quantity

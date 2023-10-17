@@ -18,7 +18,7 @@ public class FunctionText {
 	            return matcher.group(1);
 	        }
 	    }
-	    return "N√£o encontrado";
+	    return "N„o encontrado";
 	}
 		
     public static String QuebrarLinha(final String texto, final int maximo) {
@@ -47,7 +47,7 @@ public class FunctionText {
             return resultado;
         }
         catch (Exception e) {
-            return "Texto Inv√°lido!";
+            return "Texto Inv·lido!";
         }
     }
     
@@ -85,7 +85,7 @@ public class FunctionText {
             return "<html>" + QuebrarLinha(texto, maximo).replaceAll("\n", "<br>") + "<html>";
         }
         catch (Exception e) {
-            return "Texto Inv√°lido!";
+            return "Texto Inv·lido!";
         }
     }
     

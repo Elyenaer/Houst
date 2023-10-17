@@ -68,7 +68,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
 	public void initInitiation() {
 		LBstockBrokerage = new CustomLabel("CORRETORA:");
 		LBcustomer = new CustomLabel("");
-		LBcode = new CustomLabel("CÃ“DIGO:");
+		LBcode = new CustomLabel("CÓDIGO:");
 		
 		CBstockBrokerage = new CustomComboBox();
 		TFcode = new CustomTextField();	
@@ -99,6 +99,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
 		Thread loadingThread = new Thread(() -> {	        		        	
 			try {
 				stockBrokerageRegisters =  new StockBrokerageConnect().get();
+				CBstockBrokerage.addItem("");
 				for(StockBrokerageRegister s: stockBrokerageRegisters) {
 					CBstockBrokerage.addItem(s.getName());
 				}
@@ -155,7 +156,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
 	}
 	
     private boolean getRegister() {
-        if (CBstockBrokerage.getSelectedIndex() == -1) {
+        if (CBstockBrokerage.getSelectedIndex() < 1) {
             Message.Warning("SELECIONE UMA CORRETORA!", false);
             return false;
         }
@@ -163,7 +164,7 @@ public class BrokerageCustomerRegisterFrame extends CustomFrame{
             Message.Warning("CÓDIGO INVÁLIDO!", false);
             return false;
         }
-        StockBrokerageRegister selectedBrokerage = stockBrokerageRegisters.get(CBstockBrokerage.getSelectedIndex());
+        StockBrokerageRegister selectedBrokerage = stockBrokerageRegisters.get(CBstockBrokerage.getSelectedIndex()-1);
         register.setCustomerId(customerRegister.getId());
         register.setStockBrokerageId(selectedBrokerage.getId());
         register.setCode(TFcode.getText());
