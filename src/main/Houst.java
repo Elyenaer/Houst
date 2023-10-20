@@ -2,7 +2,7 @@ package main;
 
 import java.io.IOException;
 
-import frame.main.InitialScreenFrame;
+import frame.register.PropertyRegisterFrame;
 public class Houst {
 	
 	public static void main(String[] args) throws IOException {
@@ -13,7 +13,7 @@ public class Houst {
                     break;
                 }
             }
-            new InitialScreenFrame().setVisible(true);
+            new PropertyRegisterFrame().setVisible(true);
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(Houst.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
