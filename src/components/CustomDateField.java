@@ -45,12 +45,17 @@ public class CustomDateField extends JFormattedTextField {
     }
 	
 	public LocalDate getDate() {
-	    String text = getText();
-	    if (text == null || text.isEmpty()) {
-	        return null; 
-	    }
-	    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	    return LocalDate.parse(text, dateFormatter);
+		try {
+			String text = getText();
+		    if (text == null || text.isEmpty()) {
+		        return null; 
+		    }
+		    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		    return LocalDate.parse(text, dateFormatter);
+		}catch (Exception e) {
+			return null;
+		}
+	    
 	}
 	
 	public void setDate(String date) {

@@ -42,6 +42,8 @@ public class EntryPropertyConnect {
         register.setEntryPropertyId(jsonObject.getInt("entry_property_id"));
         register.setCustomerId(jsonObject.getInt("customer_id"));
         register.setPropertyId(jsonObject.getInt("property_id"));
+        register.setName(jsonObject.getString("name"));
+        register.setDescription(jsonObject.getString("description"));
         register.setBuyDate(LocalDate.parse(jsonObject.getString("buy_date")));
         register.setSellDate(LocalDate.parse(jsonObject.getString("sell_date")));
         return register;
@@ -85,6 +87,8 @@ public class EntryPropertyConnect {
             parameters.put("db_pass", ma.getPass());
             parameters.put("customer_id", String.valueOf(register.getCustomerId()));
             parameters.put("property_id", String.valueOf(register.getPropertyId()));
+            parameters.put("name",register.getName());
+            parameters.put("description",register.getDescription());
             parameters.put("buy_date", register.getBuyDate().toString());
             parameters.put("sell_date", register.getSellDate().toString());
             parameters.put("entry_property_id", String.valueOf(register.getEntryPropertyId()));
@@ -104,6 +108,8 @@ public class EntryPropertyConnect {
             parameters.put("db_pass", ma.getPass());
             parameters.put("customer_id", String.valueOf(register.getCustomerId()));
             parameters.put("property_id", String.valueOf(register.getPropertyId()));
+            parameters.put("name",register.getName());
+            parameters.put("description",register.getDescription());
             parameters.put("buy_date", register.getBuyDate().toString());
             parameters.put("sell_date", register.getSellDate().toString());
 
