@@ -1,12 +1,14 @@
 package model.register.register;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 public class EntryPropertyValueRegister {
 	private int entryPropertyValueId;
 	private int entryPropertyId;
 	private int year;
 	private BigDecimal value;
+	
 	public int getEntryPropertyValueId() {
 		return entryPropertyValueId;
 	}
@@ -31,5 +33,21 @@ public class EntryPropertyValueRegister {
 	public void setValue(BigDecimal value) {
 		this.value = value;
 	}
+	
+	public static int findMinYear(ArrayList<EntryPropertyValueRegister> list) {
+        if (list.isEmpty()) {
+            return 0;
+        }
+
+        int minYear = list.get(0).getYear();
+        
+        for (EntryPropertyValueRegister entry : list) {
+            if (entry.getYear() < minYear) {
+                minYear = entry.getYear();
+            }
+        }
+
+        return minYear;
+    }
 	
 }

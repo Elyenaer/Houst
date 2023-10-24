@@ -1,5 +1,7 @@
 package frame.register;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import components.CustomComboBox;
@@ -7,9 +9,12 @@ import components.CustomCurrencyField;
 import components.CustomFrame;
 import components.CustomIconButton;
 import components.CustomLabel;
+import components.LoadingDialog;
+import model.register.connect.EntryPropertyConnect;
+import model.register.connect.EntryPropertyValueConnect;
 import model.register.register.EntryPropertyValueRegister;
 import setting.desing.DesignIcon;
-import support.Message;
+import setting.function.Message;
 
 public class EntryValueRegisterFrame extends CustomFrame {
 	private static final long serialVersionUID = 1L;
@@ -22,13 +27,20 @@ public class EntryValueRegisterFrame extends CustomFrame {
 	private CustomCurrencyField TFvalue;
 	private CustomIconButton BTsave,BTdelete;
 	
-	public EntryValueRegisterFrame(PropertyRegisterFrame frame,ArrayList<Integer> yearsAvailable) {
-		this.frame = frame;
-		this.yearsAvailable = yearsAvailable;
-		init();
+	public EntryValueRegisterFrame(int id,PropertyRegisterFrame frame,ArrayList<Integer> yearsAvailable) {
+		this.register = new EntryPropertyValueRegister();
+		register.setEntryPropertyId(id);
+		init(register,frame,yearsAvailable);
 	}
 	
-	private void init() {
+	public EntryValueRegisterFrame(EntryPropertyValueRegister register,PropertyRegisterFrame frame,ArrayList<Integer> yearsAvailable) {		
+		init(register,frame,yearsAvailable);
+	}
+	
+	private void init(EntryPropertyValueRegister register,PropertyRegisterFrame frame,ArrayList<Integer> yearsAvailable) {
+		this.register = register;	
+		this.frame = frame;
+		this.yearsAvailable = yearsAvailable;
 		this.setTitle("VALORES");
 		this.setSize(250,190);
 		this.setLocationRelativeTo(frame);
@@ -73,7 +85,13 @@ public class EntryValueRegisterFrame extends CustomFrame {
 
 	@Override
 	public void initEvent() {
-		
+		BTsave.addActionListener(				
+			new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				save();
+			}
+		});
 	}
 
 	@Override
@@ -98,8 +116,31 @@ public class EntryValueRegisterFrame extends CustomFrame {
 			return false;
 		}
 		
-		
+		register.setYear(yearsAvailable.get(CByear.getSelectedIndex()-1));
+		register.setValue(TFvalue.getValue());
 		
 		return true;
+	}
+	
+	private void save() {
+		if(getRegister()) {
+			LoadingDialog loadingDialog = new LoadingDialog(this,"SALVANDO");
+	        Thread loadingThread = new Thread(() -> {	            
+		        loadingDialog.showLoading();
+		        this.setEnabled(false);
+		        try {	
+		        	int id = new EntryPropertyValueConnect().post(register);
+		        	Message.Success("VALOR CADASTRADO!");
+		        	register.setEntryPropertyValueId(id);
+		        	frame.setValue(register);
+					this.dispose();
+		        }catch (Exception e) {
+		        	Message.Error(this.getClass().getName(),"save", e);
+				}	
+		        this.setEnabled(true);
+		        loadingDialog.hideLoading();
+	        });	        
+	        loadingThread.start();			
+		}
 	}
 }

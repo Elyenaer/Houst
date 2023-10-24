@@ -1,4 +1,4 @@
-package support;
+package setting.function;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

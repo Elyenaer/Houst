@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import model.view.register.BrokerageCustomerView;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
-import support.FunctionApi;
+import setting.function.FunctionApi;
 
 public class BrokerageCustomerViewConnect {
     private ManagerAccess ma;
@@ -57,7 +57,7 @@ public class BrokerageCustomerViewConnect {
             String data = DatabaseConnect.start(table, parameters, "getView");
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -73,7 +73,7 @@ public class BrokerageCustomerViewConnect {
             String data = DatabaseConnect.start(table, parameters, "getView");
             return convertRecord(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -95,7 +95,7 @@ public class BrokerageCustomerViewConnect {
             
             return convertRecord(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -110,7 +110,7 @@ public class BrokerageCustomerViewConnect {
             String data = DatabaseConnect.start(table, parameters, "getView");
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "getByCustomerId", e);
+            setting.function.Message.Error(this.getClass().getName(), "getByCustomerId", e);
             return null;
         }
     }
@@ -126,7 +126,7 @@ public class BrokerageCustomerViewConnect {
             String data = DatabaseConnect.start(table, parameters, "getView");
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "getByStockBrokerage", e);
+            setting.function.Message.Error(this.getClass().getName(), "getByStockBrokerage", e);
             return null;
         }
     }
@@ -146,7 +146,7 @@ public class BrokerageCustomerViewConnect {
             String data = DatabaseConnect.start(table, parameters, "put");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "put", e);
+            setting.function.Message.Error(this.getClass().getName(), "put", e);
             return false;
         }
     }
@@ -164,7 +164,7 @@ public class BrokerageCustomerViewConnect {
             String data = DatabaseConnect.start(table, parameters, "post");
             return FunctionApi.getId(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "post", e);
+            setting.function.Message.Error(this.getClass().getName(), "post", e);
             return 0;
         }
     }
@@ -179,7 +179,7 @@ public class BrokerageCustomerViewConnect {
             String data = DatabaseConnect.start(table, parameters, "delete");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "delete", e);
+            setting.function.Message.Error(this.getClass().getName(), "delete", e);
             return false;
         }
     }

@@ -11,10 +11,10 @@ import model.register.register.CustomerRegister;
 import model.register.register.StockBrokerageRegister;
 import model.register.register.TitleRegister;
 import model.view.register.BrokerageReportView;
-import support.FunctionBigDecimal;
-import support.FunctionDate;
-import support.FunctionText;
-import support.Message;
+import setting.function.FunctionBigDecimal;
+import setting.function.FunctionDate;
+import setting.function.FunctionText;
+import setting.function.Message;
 
 public class BrokerageReportXp {
 	private int stockBrokerageId = 2; //XP INVESTIMENTOS
@@ -83,7 +83,7 @@ public class BrokerageReportXp {
 	        
 			return register;
 		}catch(Exception e) {
-			support.Message.Error(this.getClass().getName(),"getCustomer",e);
+			setting.function.Message.Error(this.getClass().getName(),"getCustomer",e);
 			return null;
 		}
 	}
@@ -100,7 +100,7 @@ public class BrokerageReportXp {
 	        
 			return register;
 		}catch(Exception e) {
-			support.Message.Error(this.getClass().getName(),"getCustomer",e);
+			setting.function.Message.Error(this.getClass().getName(),"getCustomer",e);
 			return null;
 		}
 	}
@@ -170,7 +170,7 @@ public class BrokerageReportXp {
 	        }
 	        return registers;
 		}catch(Exception e) {
-			support.Message.Error(this.getClass().getName(),"getTitles",e);
+			setting.function.Message.Error(this.getClass().getName(),"getTitles",e);
 			return null;
 		}
 		
@@ -240,7 +240,7 @@ public class BrokerageReportXp {
 				
 			return register;
 		}catch (Exception e) {
-			support.Message.Error(this.getClass().getName(),"getBusinessBriefing",e);
+			setting.function.Message.Error(this.getClass().getName(),"getBusinessBriefing",e);
 			return null;
 		}
 	}

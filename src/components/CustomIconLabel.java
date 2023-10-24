@@ -2,7 +2,9 @@ package components;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
-import support.FunctionIcon;
+
+import setting.function.FunctionIcon;
+
 import java.awt.Dimension;
 
 public class CustomIconLabel extends JLabel {

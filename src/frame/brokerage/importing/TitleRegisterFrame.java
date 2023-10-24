@@ -12,7 +12,7 @@ import components.CustomNumberField;
 import components.CustomTextField;
 import model.register.register.TitleRegister;
 import setting.desing.DesignIcon;
-import support.Message;
+import setting.function.Message;
 
 public class TitleRegisterFrame extends CustomFrame{
 	private static final long serialVersionUID = 1L;

@@ -31,8 +31,8 @@ import model.view.register.BrokerageReportView;
 import model.view.register.BrokerageReportViewBriefing;
 import setting.desing.Design;
 import setting.desing.DesignIcon;
-import support.FunctionBigDecimal;
-import support.Message;
+import setting.function.FunctionBigDecimal;
+import setting.function.Message;
 
 public class BrokerageReportRegisterFrame extends CustomFrame {
 	private static final long serialVersionUID = 1L;

@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import setting.desing.Design;
-import support.FunctionText;
+import setting.function.FunctionText;
 
 public class CustomPanel extends JPanel{
 	private static final long serialVersionUID = 1L;

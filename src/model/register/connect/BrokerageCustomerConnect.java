@@ -12,8 +12,8 @@ import org.json.JSONObject;
 import model.register.register.BrokerageCustomerRegister;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
-import support.FunctionApi;
-import support.Message;
+import setting.function.FunctionApi;
+import setting.function.Message;
 
 public class BrokerageCustomerConnect {
     private ManagerAccess ma;

@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import model.register.register.EntryPropertyRegister;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
-import support.FunctionApi;
+import setting.function.FunctionApi;
 
 public class EntryPropertyConnect {
     private ManagerAccess ma;
@@ -59,7 +59,7 @@ public class EntryPropertyConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -75,7 +75,7 @@ public class EntryPropertyConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertRegister(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -90,13 +90,13 @@ public class EntryPropertyConnect {
             parameters.put("name",register.getName());
             parameters.put("description",register.getDescription());
             parameters.put("buy_date", register.getBuyDate().toString());
-            parameters.put("sell_date", register.getSellDate().toString());
+            parameters.put("sell_date", register.getSellDate() != null ? register.getSellDate().toString() : "");
             parameters.put("entry_property_id", String.valueOf(register.getEntryPropertyId()));
 
             String data = DatabaseConnect.start(table, parameters, "put");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "put", e);
+            setting.function.Message.Error(this.getClass().getName(), "put", e);
             return false;
         }
     }
@@ -111,12 +111,12 @@ public class EntryPropertyConnect {
             parameters.put("name",register.getName());
             parameters.put("description",register.getDescription());
             parameters.put("buy_date", register.getBuyDate().toString());
-            parameters.put("sell_date", register.getSellDate().toString());
+            parameters.put("sell_date", register.getSellDate() != null ? register.getSellDate().toString() : "");
 
             String data = DatabaseConnect.start(table, parameters, "post");
             return FunctionApi.getId(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "post", e);
+            setting.function.Message.Error(this.getClass().getName(), "post", e);
             return 0;
         }
     }
@@ -131,7 +131,7 @@ public class EntryPropertyConnect {
             String data = DatabaseConnect.start(table, parameters, "delete");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "delete", e);
+            setting.function.Message.Error(this.getClass().getName(), "delete", e);
             return false;
         }
     }

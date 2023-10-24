@@ -10,7 +10,7 @@ import components.CustomLabel;
 import components.CustomPanel;
 import model.register.register.BrokerageReportRegister;
 import setting.desing.Design;
-import support.FunctionBigDecimal;
+import setting.function.FunctionBigDecimal;
 
 public class BrokerageExpensesPanel extends CustomPanel {
     private static final long serialVersionUID = 1L;

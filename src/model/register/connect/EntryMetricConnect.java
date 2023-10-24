@@ -16,8 +16,8 @@ import model.register.register.EntryMetricRegister;
 import model.register.register.EntryMetricTextRegister;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
-import support.FunctionApi;
-import support.FunctionBigDecimal;
+import setting.function.FunctionApi;
+import setting.function.FunctionBigDecimal;
 
 public class EntryMetricConnect {
     private ManagerAccess ma;
@@ -75,7 +75,7 @@ public class EntryMetricConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertArray(data,type);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -97,7 +97,7 @@ public class EntryMetricConnect {
             }
             return convertRegister(data,register);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -124,7 +124,7 @@ public class EntryMetricConnect {
             String data = DatabaseConnect.start(table, parameters, "put");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "put", e);
+            setting.function.Message.Error(this.getClass().getName(), "put", e);
             return false;
         }
     }
@@ -150,7 +150,7 @@ public class EntryMetricConnect {
             String data = DatabaseConnect.start(table, parameters, "post");   
             return FunctionApi.getId(data);
         }catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "post", e);
+            setting.function.Message.Error(this.getClass().getName(), "post", e);
             return 0;
         }
     }
@@ -167,7 +167,7 @@ public class EntryMetricConnect {
             String data = DatabaseConnect.start(table, parameters, "delete");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "delete", e);
+            setting.function.Message.Error(this.getClass().getName(), "delete", e);
             return false;
         }
     }

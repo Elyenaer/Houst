@@ -28,8 +28,8 @@ import model.view.register.BrokerageReportView;
 import process.brokerageReport.BrokerageReportProcess;
 import setting.desing.Design;
 import setting.desing.DesignIcon;
-import support.FunctionBigDecimal;
-import support.Message;
+import setting.function.FunctionBigDecimal;
+import setting.function.Message;
 
 public class BrokerageReportImportFrame extends CustomFrame {
 	private static final long serialVersionUID = 1L;
@@ -231,7 +231,7 @@ public class BrokerageReportImportFrame extends CustomFrame {
 	        });	        
 	        loadingThread.start();    
 		}catch(Exception e) {
-			support.Message.Error(this.getClass().getName(),"importBrokerage",e);
+			setting.function.Message.Error(this.getClass().getName(),"importBrokerage",e);
 		}
 	}
 	
@@ -254,7 +254,7 @@ public class BrokerageReportImportFrame extends CustomFrame {
 	        	registers.get(0).setSelected();
 	        }	        
 	    } catch (Exception e) {
-	        support.Message.Error(this.getClass().getName(), "setPanels", e);
+	        setting.function.Message.Error(this.getClass().getName(), "setPanels", e);
 	    }
 	}
 	

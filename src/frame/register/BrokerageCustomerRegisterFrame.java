@@ -18,7 +18,7 @@ import model.register.register.CustomerRegister;
 import model.register.register.StockBrokerageRegister;
 import model.view.register.BrokerageCustomerView;
 import setting.desing.DesignIcon;
-import support.Message;
+import setting.function.Message;
 
 public class BrokerageCustomerRegisterFrame extends CustomFrame{
 	private static final long serialVersionUID = 1L;

@@ -27,7 +27,7 @@ import model.register.register.CustomerRegister;
 import model.view.register.BrokerageReportView;
 import setting.desing.Design;
 import setting.desing.DesignIcon;
-import support.Message;
+import setting.function.Message;
 
 public class BrokerageReportBriefing extends JPanel {
 	private static final long serialVersionUID = 1L;

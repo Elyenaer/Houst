@@ -27,8 +27,8 @@ import model.register.register.EntryMetricRegister;
 import model.register.register.EntryMetricTextRegister;
 import process.stockData.StockDataProcess;
 import setting.desing.Design;
-import support.FunctionBigDecimal;
-import support.Message;
+import setting.function.FunctionBigDecimal;
+import setting.function.Message;
 
 public class StockDataImportFrame extends CustomFrame{
 	private static final long serialVersionUID = 1L;
@@ -138,7 +138,7 @@ public class StockDataImportFrame extends CustomFrame{
 	        });	        
 	        loadingThread.start();    
 		}catch(Exception e) {
-			support.Message.Error(this.getClass().getName(),"importBrokerage",e);
+			setting.function.Message.Error(this.getClass().getName(),"importBrokerage",e);
 		}
 	}
 	

@@ -11,8 +11,8 @@ import model.register.register.CustomerRegister;
 import model.register.register.StockBrokerageRegister;
 import model.register.register.TitleRegister;
 import model.view.register.BrokerageReportView;
-import support.FunctionDate;
-import support.FunctionText;
+import setting.function.FunctionDate;
+import setting.function.FunctionText;
 
 public class BrokerageReportGenial {
 	
@@ -63,7 +63,7 @@ public class BrokerageReportGenial {
 	        
 			return register;
 		}catch(Exception e) {
-			support.Message.Error(this.getClass().getName(),"getCustomer",e);
+			setting.function.Message.Error(this.getClass().getName(),"getCustomer",e);
 			return null;
 		}
 	}
@@ -85,7 +85,7 @@ public class BrokerageReportGenial {
 	        
 			return register;
 		}catch(Exception e) {
-			support.Message.Error(this.getClass().getName(),"BrokerageCustomerRegister",e);
+			setting.function.Message.Error(this.getClass().getName(),"BrokerageCustomerRegister",e);
 			return null;
 		}
 	}
@@ -153,7 +153,7 @@ public class BrokerageReportGenial {
 	        }
 	        return registers;
 		}catch(Exception e) {
-			support.Message.Error(this.getClass().getName(),"getTitles",e);
+			setting.function.Message.Error(this.getClass().getName(),"getTitles",e);
 			return null;
 		}
 		
@@ -373,7 +373,7 @@ public class BrokerageReportGenial {
 				
 			return register;
 		}catch (Exception e) {
-			support.Message.Error(this.getClass().getName(),"getBusinessBriefing",e);
+			setting.function.Message.Error(this.getClass().getName(),"getBusinessBriefing",e);
 			return null;
 		}
 	}

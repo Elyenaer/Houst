@@ -9,7 +9,7 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 import setting.desing.Design;
-import support.FunctionBigDecimal;
+import setting.function.FunctionBigDecimal;
 
 public class CustomCurrencyField extends JFormattedTextField{
 	private static final long serialVersionUID = 1L;

@@ -21,7 +21,7 @@ import frame.stock.importing.StockDataImportFrame;
 import setting.DatabaseConnect;
 import setting.desing.Design;
 import setting.desing.DesignIcon;
-import support.Message;
+import setting.function.Message;
 
 public class InitialScreenFrame extends CustomFrame{
 	private static final long serialVersionUID = 1L;

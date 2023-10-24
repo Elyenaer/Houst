@@ -1,4 +1,4 @@
-package support;
+package setting.function;
 
 import org.json.JSONObject;
 
@@ -9,7 +9,7 @@ public class FunctionApi {
 	        JSONObject jsonObject = new JSONObject(response);
 	        return jsonObject.getInt("id");
 	    } catch (Exception e) {
-	        e.printStackTrace();
+	    	System.err.println("Erro api -> " + response + "\n\n Exception -> " + e.getMessage());
 	        return 0;
 	    }
 	}

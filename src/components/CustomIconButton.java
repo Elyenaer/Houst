@@ -4,7 +4,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 
 import setting.desing.Design;
-import support.FunctionIcon;
+import setting.function.FunctionIcon;
 
 public class CustomIconButton extends JButton {
     private static final long serialVersionUID = 1L;

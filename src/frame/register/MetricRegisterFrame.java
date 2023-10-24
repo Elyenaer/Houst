@@ -20,7 +20,7 @@ import frame.stock.importing.StockDataImportFrame;
 import model.register.connect.MetricConnect;
 import model.register.register.MetricRegister;
 import setting.desing.DesignIcon;
-import support.Message;
+import setting.function.Message;
 
 public class MetricRegisterFrame extends CustomFrame{
 	private static final long serialVersionUID = 1L;

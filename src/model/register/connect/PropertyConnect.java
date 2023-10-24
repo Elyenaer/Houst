@@ -51,7 +51,7 @@ public class PropertyConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -67,7 +67,7 @@ public class PropertyConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertRegister(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }

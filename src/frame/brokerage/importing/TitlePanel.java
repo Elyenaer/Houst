@@ -20,7 +20,7 @@ import model.view.register.BrokerageCustomerView;
 import model.view.register.BrokerageReportView;
 import setting.desing.Design;
 import setting.desing.DesignIcon;
-import support.Message;
+import setting.function.Message;
 
 public class TitlePanel extends JPanel{
 	private static final long serialVersionUID = 1L;

@@ -17,7 +17,7 @@ import model.view.register.BrokerageReportView;
 import model.view.register.BrokerageReportViewBriefing;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
-import support.FunctionDate;
+import setting.function.FunctionDate;
 
 public class BrokerageReportViewBriefingConnect {
 	private ManagerAccess ma;
@@ -65,7 +65,7 @@ public class BrokerageReportViewBriefingConnect {
                         
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -81,7 +81,7 @@ public class BrokerageReportViewBriefingConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertRegister(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -109,7 +109,7 @@ public class BrokerageReportViewBriefingConnect {
             
             return view;
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }

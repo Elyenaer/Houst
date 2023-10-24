@@ -20,7 +20,7 @@ public class PdfImport {
             pdfReader.close();
     		return text;
     	}catch (IOException e) {
-    		support.Message.Error("custom","PdfImport","getTextPages",e.getMessage());
+    		setting.function.Message.Error("custom","PdfImport","getTextPages",e.getMessage());
             return null;
         }    	
     }

@@ -25,9 +25,9 @@ import model.register.register.CustomerRegister;
 import model.view.connect.BrokerageCustomerViewConnect;
 import model.view.register.BrokerageCustomerView;
 import setting.desing.DesignIcon;
+import setting.function.Message;
+import setting.function.Valid;
 import setting.support.TextMask;
-import support.Message;
-import support.Valid;
 
 public class CustomerRegisterFrame extends CustomFrame{
 	private static final long serialVersionUID = 1L;

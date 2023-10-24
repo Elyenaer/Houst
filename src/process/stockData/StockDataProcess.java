@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-import support.Message;
+import setting.function.Message;
 
 public class StockDataProcess {
 	

@@ -1,4 +1,4 @@
-package support;
+package setting.function;
 
 import java.awt.Font;
 import java.awt.FontMetrics;

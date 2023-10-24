@@ -1,4 +1,4 @@
-package support;
+package setting.function;
 
 public class Valid {
 	

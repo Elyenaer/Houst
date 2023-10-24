@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import model.register.register.CustomerRegister;
 import setting.DatabaseConnect;
 import setting.ManagerAccess;
-import support.FunctionApi;
+import setting.function.FunctionApi;
 
 public class CustomerConnect { 
 	private ManagerAccess ma;
@@ -57,7 +57,7 @@ public class CustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertArray(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -73,7 +73,7 @@ public class CustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "get");
             return convertRegister(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -92,7 +92,7 @@ public class CustomerConnect {
             }
             return convertRegister(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "get", e);
+            setting.function.Message.Error(this.getClass().getName(), "get", e);
             return null;
         }
     }
@@ -111,7 +111,7 @@ public class CustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "put");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "put", e);
+            setting.function.Message.Error(this.getClass().getName(), "put", e);
             return false;
         }
     }
@@ -128,7 +128,7 @@ public class CustomerConnect {
             String data = DatabaseConnect.start(table, parameters, "post");
             return FunctionApi.getId(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "post", e);
+            setting.function.Message.Error(this.getClass().getName(), "post", e);
             return 0;
         }
     }
@@ -143,7 +143,7 @@ public class CustomerConnect {
             String data = DatabaseConnect.start(table,parameters,"delete");
             return FunctionApi.getSuccess(data);
         } catch (Exception e) {
-            support.Message.Error(this.getClass().getName(), "delete", e);
+            setting.function.Message.Error(this.getClass().getName(), "delete", e);
             return false;
         }
     }
